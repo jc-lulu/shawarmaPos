@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,41 +13,50 @@
             display: flex;
             background-color: #f9f5d7;
         }
+
         .container {
             display: flex;
             width: 100%;
         }
-        
+
         .main-content {
             width: 80%;
             padding: 20px;
         }
+
         .main-content h1 {
             font-size: 24px;
             margin-bottom: 20px;
         }
+
         .search-bar {
             display: flex;
             align-items: center;
             gap: 10px;
             margin-bottom: 20px;
         }
+
         .search-bar input {
             padding: 10px;
             width: 300px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .search-bar button, .search-bar select {
+
+        .search-bar button,
+        .search-bar select {
             padding: 10px;
             background-color: #f4e04d;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
-        .search-bar button:hover, .search-bar select:hover {
+
+        .search-bar button:hover,
+        .search-bar select:hover {
             background-color: #ff8c00;
         }
+
         .data-table {
             width: 100%;
             height: 400px;
@@ -55,6 +65,7 @@
             overflow: auto;
             padding: 10px;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -62,10 +73,13 @@
             text-align: center;
             table-layout: fixed;
         }
-        th, td {
+
+        th,
+        td {
             padding: 10px;
             border: 1px solid #ccc;
         }
+
         thead th {
             position: sticky;
             top: 0;
@@ -73,6 +87,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <?php include 'sidebar.php'; ?>
@@ -123,4 +138,5 @@
         </div>
     </div>
 </body>
+
 </html>
