@@ -30,12 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <!-- Add jQuery before SweetAlert2 -->
-    <script src="assets/jquery-3.6.0.min.js"></script>
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- SweetAlert2 -->
-    <script src="assets/sweetalert.js"></script>
+
+    <?php include('header/header.php') ?>
     <!-- custom css -->
     <link href="styles/login.css" rel="stylesheet">
 </head>
