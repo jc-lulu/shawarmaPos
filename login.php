@@ -1,6 +1,7 @@
 <?php
 include('cedric_dbConnection.php');
 
+$message = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -12,13 +13,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = $result->fetch_assoc();
         $hashed_password = $row['password'];
         if (password_verify($password, $hashed_password)) {
-            echo "Login successful";
-            header('Location: menu.php');
+            $message = "Login successful";
         } else {
-            echo "Wrong password";
+            $message = "Wrong email or password";
         }
     } else {
-        echo "Email not found";
+        $message = "Wrong email or password";
     }
     $connection->close();
 }
@@ -29,10 +29,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account</title>
+    <title>Login Page</title>
+
+    <!-- Add jQuery before SweetAlert2 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <style>
     /* Reset styles */
     * {
@@ -123,6 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </style>
 
 <body>
+
     <form method="Post" id="log-form"></form>
     <div class="container-fluid vh-100 d-flex">
         <!-- Image Section -->
@@ -139,17 +148,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="password" class="form-control" id="password" placeholder="Password" form="log-form" name="password" required>
                     <label for="password">Password</label>
                 </div>
-                <button type="submit" class="btn btn-custom w-100" form="log-form">Sign Up</button>
+                <button type="submit" class="btn btn-custom w-100" form="log-form">Sign In</button>
             </div>
         </div>
     </div>
 
-    <!-- <script>
+    <script>
+        $(document).ready(function() {
+            var message = "<?php echo $message; ?>";
+            if (message !== '') {
+                Swal.fire({
+                    title: message === "Login successful" ? 'Success!' : 'Error',
+                    text: message,
+                    icon: message === "Login successful" ? 'success' : 'error',
+                    timer: 1000,
+                    timerProgressBar: true,
+                    showConfirmButton: true
+                }).then(function() {
+                    if (message === "Login successful") {
+                        // setTimeout(function() {
+                        window.location.href = 'menu.php';
+                        // }, 1000); 
+                    }
+                });
+            }
+        });
+
         function togglePassword() {
             var passwordInput = document.getElementById("password");
             passwordInput.type = passwordInput.type === "password" ? "text" : "password";
         }
-    </script> -->
+    </script>
 </body>
 
 </html>

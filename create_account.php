@@ -1,50 +1,57 @@
 <?php
+session_start();
 include('cedric_dbConnection.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $email = $_POST['email'];
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
 
     if (!empty($username) && !empty($email) && !empty($password)) {
-        $sqlemail = "SELECT username, email FROM userstable WHERE email = '$email'";
-        $emailresult = $connection->query($sqlemail);
+        $stmt = $connection->prepare("SELECT username, email FROM userstable WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-        if ($emailresult->num_rows > 0) {
-            $row = $emailresult->fetch_assoc();
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
             if ($username == $row['username']) {
-                $modalTitle = 'Alert.';
-                $modalMessage = 'Username already exists!';
-                $modalColor = '#BD5B5B';
+                $_SESSION['modalTitle'] = 'Alert.';
+                $_SESSION['modalMessage'] = 'Username already exists!';
+                $_SESSION['modalColor'] = '#BD5B5B';
             } else if ($email == $row['email']) {
-                $modalTitle = 'Alert';
-                $modalMessage = 'Email already exists!';
-                $modalColor = '#BD5B5B';
+                $_SESSION['modalTitle'] = 'Alert';
+                $_SESSION['modalMessage'] = 'Email already exists!';
+                $_SESSION['modalColor'] = '#BD5B5B';
             }
         } else {
-            $password = password_hash($password, PASSWORD_DEFAULT);
+            // Hash the password
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            $sql = "INSERT INTO userstable (username, email, password) VALUES ('$username', '$email', '$password')";
-            $result = $connection->query($sql);
+            $stmt = $connection->prepare("INSERT INTO userstable (username, email, password) VALUES (?, ?, ?)");
+            $stmt->bind_param("sss", $username, $email, $hashedPassword);
 
-            if ($result) {
-                $modalTitle = 'Success';
-                $modalMessage = 'Account created successfully!';
-                $modalColor = '#4CAF50';
-                $redirect = true;
+            if ($stmt->execute()) {
+                $_SESSION['modalTitle'] = 'Success';
+                $_SESSION['modalMessage'] = 'Account created successfully!';
+                $_SESSION['modalColor'] = '#4CAF50';
+                $_SESSION['redirect'] = true;
             } else {
-                $modalTitle = 'Error';
-                $modalMessage = 'Error creating account';
-                $modalColor = '#BD5B5B';
+                $_SESSION['modalTitle'] = 'Error';
+                $_SESSION['modalMessage'] = 'Error creating account';
+                $_SESSION['modalColor'] = '#BD5B5B';
             }
         }
     } else {
-        $modalTitle = 'Warning';
-        $modalMessage = 'All fields are required!';
-        $modalColor = '#FFA500';
+        $_SESSION['modalTitle'] = 'Warning';
+        $_SESSION['modalMessage'] = 'All fields are required!';
+        $_SESSION['modalColor'] = '#FFA500';
     }
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -169,14 +176,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <span class="char-counter" style="font-size: .80rem; color: #999;">ex: juan@gmail.com</span>
                     <label for="email">Email</label>
                 </div>
+                <!-- Password Input -->
                 <div class="form-floating mb-3 password-container">
                     <input type="password" class="form-control" id="password" placeholder="Password" form="create-form" name="password" minlength="8" maxlength="20" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}" required>
                     <label for="password">Password</label>
                 </div>
+
+                <!-- Show Password Checkbox -->
                 <div class="col-mb-3 pb-3 show-password">
                     <input type="checkbox" id="showpassword" name="showpassword" value="true">
                     <label for="showpassword"> Show Password</label><br>
-                    <span class="char-counter" style="font-size: .80rem; color: #999;">8-20 characters, with at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.</span>
+                    <span class="char-counter" style="font-size: .80rem; color: #999;">
+                        8-20 characters, with at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.
+                    </span>
                 </div>
                 <button type="submit" class="btn btn-custom w-100" form="create-form">Sign Up</button>
                 <div class="form-check mt-3">
@@ -189,19 +201,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- Image Section -->
         <div class="image-section"></div>
     </div>
+
+    <!-- Password toggle script -->
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('password');
+            const showPasswordCheckbox = document.getElementById('showpassword');
+
+            showPasswordCheckbox.addEventListener('change', function() {
+                passwordInput.type = this.checked ? 'text' : 'password';
+            });
+        });
+
         $(document).ready(function() {
             // iziModal
             $("#modal").iziModal({
-                title: '<?php echo $modalTitle; ?>',
-                subtitle: '<?php echo $modalMessage; ?>',
-                headerColor: '<?php echo $modalColor; ?>',
+                title: <?php echo json_encode($_SESSION['modalTitle'] ?? ''); ?>,
+                subtitle: <?php echo json_encode($_SESSION['modalMessage'] ?? ''); ?>,
+                headerColor: <?php echo json_encode($_SESSION['modalColor'] ?? ''); ?>,
                 width: 400,
                 timeoutProgressbar: true,
                 transitionIn: 'fadeInDown',
                 timeout: 3000,
                 radius: 10,
-                // padding: 10,
                 autoHeight: true,
                 bodyOverflow: true,
                 onOpening: function(modal) {
@@ -212,18 +234,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             });
 
-            <?php if ($_SERVER["REQUEST_METHOD"] == "POST") { ?>
+            // Open modal if session is set
+            <?php if (isset($_SESSION['modalTitle'])): ?>
                 $("#modal").iziModal('open');
 
-
-                <?php if (isset($redirect) && $redirect) { ?>
+                <?php if (isset($_SESSION['redirect']) && $_SESSION['redirect']): ?>
                     setTimeout(function() {
                         window.location.href = 'login.php';
                     }, 3000);
-                <?php } ?>
-            <?php } ?>
+                <?php endif; ?>
+
+                <?php
+                // Clear session data after use
+                unset($_SESSION['modalTitle'], $_SESSION['modalMessage'], $_SESSION['modalColor'], $_SESSION['redirect']);
+                ?>
+            <?php endif; ?>
         });
     </script>
+
 </body>
 
 </html>

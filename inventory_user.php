@@ -5,6 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/sweetalert.js"></script>
+    <!-- jQuery (required) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- iziModal -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.6.1/css/iziModal.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.6.1/js/iziModal.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -94,13 +102,13 @@
         <div class="main-content">
             <h1>INVENTORY</h1>
             <div class="search-bar">
-                <input type="text" placeholder="Search Product">
-                <button>🔍</button>
+                <input type="text" placeholder="Search Product Name">
                 <select>
                     <option value="">Filter</option>
                     <option value="category1">Category 1</option>
                     <option value="category2">Category 2</option>
                 </select>
+                <button class="btn primary">Add Product</button>
             </div>
             <div class="data-table">
                 <table>
