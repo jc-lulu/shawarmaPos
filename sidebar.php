@@ -33,6 +33,7 @@
 <div class="sidebar">
     <img src="assets/logo.avif" alt="Logo">
     <button ><a href="menu.php">Menu</a></button>
+    <button ><a href="transaction.php">Transaction</a></button>
     <button ><a href="inventory_user.php">Inventory</a></button>
     <button ><a href="ordered_history.php">Ordered History</a></button>
     <button ><a href="reports.php">Reports</a></button>

@@ -5,106 +5,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
             background-color: #f9f5d7;
         }
 
-        .container {
-            display: flex;
-            width: 100%;
-        }
-
-        .main-content {
-            width: 80%;
-            padding: 20px;
-        }
-
-        .main-content h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .search-bar {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .search-bar input {
-            padding: 10px;
-            width: 300px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .search-bar button,
-        .search-bar select {
-            padding: 10px;
-            background-color: #f4e04d;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .search-bar button:hover,
-        .search-bar select:hover {
-            background-color: #ff8c00;
-        }
-
         .data-table {
-            width: 100%;
-            height: 400px;
+            max-height: 400px;
+            overflow-y: auto;
             background-color: #d9d9d9;
             border-radius: 5px;
-            overflow: auto;
             padding: 10px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-            text-align: center;
-            table-layout: fixed;
-        }
-
-        th,
-        td {
-            padding: 10px;
-            border: 1px solid #ccc;
         }
 
         thead th {
             position: sticky;
             top: 0;
             background-color: #ff8c00;
+            color: white;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
+    <div class="container-fluid d-flex">
         <?php include 'sidebar.php'; ?>
-        <div class="main-content">
-            <h1>INVENTORY</h1>
-            <div class="search-bar">
-                <input type="text" placeholder="Search Product">
-                <button>🔍</button>
-                <select>
-                    <option value="">Filter</option>
-                    <option value="category1">Category 1</option>
-                    <option value="category2">Category 2</option>
-                </select>
+        
+        <div class="container py-3">
+            <h1 class="mb-4">INVENTORY</h1>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Search Product">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-warning w-100">🔍</button>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select">
+                        <option value="">Filter</option>
+                        <option value="category1">Category 1</option>
+                        <option value="category2">Category 2</option>
+                    </select>
+                </div>
             </div>
+
             <div class="data-table">
-                <table>
-                    <thead>
+                <table class="table table-bordered table-hover text-center">
+                    <thead class="table-warning">
                         <tr>
                             <th style="width: 10%;">ID</th>
                             <th style="width: 25%;">Name</th>
@@ -114,7 +66,7 @@
                             <th style="width: 20%;">Date</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-light">
                         <tr>
                             <td>1</td>
                             <td>Sample Product</td>
@@ -137,6 +89,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

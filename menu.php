@@ -5,128 +5,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POS System</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
             background-color: #f9f5d7;
         }
 
-        .container {
-            display: flex;
-            flex: 1;
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 20px;
-        }
-
-        .menu-header {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            margin-bottom: 20px;
-        }
-
-        .search-bar {
-            display: flex;
-            gap: 10px;
-        }
-
-        .search-bar input {
-            padding: 10px;
-            width: 250px;
-            border: 1px solid #ccc;
+        .invoice {
+            height: 85vh;
+            background-color: #d9ead3;
             border-radius: 5px;
         }
 
-        .category-buttons {
-            margin-top: 10px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .category-buttons button {
-            padding: 10px;
-            background-color: #ffa500;
-            border: none;
+        .menu-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
             border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .category-buttons button:hover {
-            background-color: #ff8c00;
-        }
-
-        .menu-items {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .menu-item {
-            text-align: center;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
         }
 
         .menu-item button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .menu-item button:hover {
-            background-color: #45a049;
-        }
-
-        .invoice {
-            width: 25%;
-            padding: 20px;
-            background-color: #d9ead3;
-            border-radius: 5px;
-            margin-left: auto;
-            height: 85vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .invoice h3 {
-            text-align: center;
-        }
-
-        .invoice-list {
-            flex-grow: 1;
-            overflow-y: auto;
-        }
-
-        .place-order {
-            padding: 15px;
-            background-color: #f4e04d;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 18px;
-            align-self: center;
+            width: 100%;
         }
 
         .quantity {
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin-top: 5px;
         }
 
         .quantity button {
@@ -140,44 +47,66 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container-fluid d-flex">
         <?php include 'sidebar.php'; ?>
-        <div class="main-content">
-            <div class="menu-header">
-                <h2>Menu</h2>
-                <div class="search-bar">
-                    <input type="text" placeholder="Search Food">
-                    <button>Search</button>
+
+        <div class="container-fluid p-3">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <h2>Menu</h2>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search Food">
+                            <button class="btn btn-warning">🔍</button>
+                        </div>
+                        <div class="btn-group mt-3">
+                            <button class="btn btn-warning">All</button>
+                            <button class="btn btn-warning">Shawarma</button>
+                            <button class="btn btn-warning">Burgers</button>
+                            <button class="btn btn-warning">Fries</button>
+                            <button class="btn btn-warning">Drinks</button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card menu-item p-2">
+                                <img src="cat.jpg" alt="Food">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Siopao</h5>
+                                    <p class="card-text">$100</p>
+                                    <button class="btn btn-success" onclick="addToInvoice('Siopao', 100)">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card menu-item p-2">
+                                <img src="cat.jpg" alt="Food">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Label of Food</h5>
+                                    <p class="card-text">$Price</p>
+                                    <button class="btn btn-success" onclick="addToInvoice('Label of Food', Price)">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Add more menu items as needed -->
+                    </div>
                 </div>
-                <div class="category-buttons">
-                    <button>All</button>
-                    <button>Shawarma</button>
-                    <button>Burgers</button>
-                    <button>Fries</button>
-                    <button>Drinks</button>
+
+                <div class="col-md-4">
+                    <div class="invoice p-3 d-flex flex-column">
+                        <h3 class="text-center">Invoice</h3>
+                        <div id="invoice-list" class="flex-grow-1 overflow-auto"></div>
+                        <button class="btn btn-warning w-100">Place Order</button>
+                    </div>
                 </div>
             </div>
-            <div class="menu-items">
-                <div class="menu-item">
-                    <img src="cat.jpg" alt="Food">
-                    <p>Siopao</p>
-                    <p>$100</p>
-                    <button onclick="addToInvoice('Siopao', 100)">Add</button>
-                </div>
-                <div class="menu-item">
-                    <img src="cat.jpg" alt="Food">
-                    <p>Label of Food</p>
-                    <p>$Price</p>
-                    <button onclick="addToInvoice('Label of Food', Price)">Add</button>
-                </div>
-            </div>
-        </div>
-        <div class="invoice">
-            <h3>Invoice</h3>
-            <div class="invoice-list" id="invoice-list"></div>
-            <button class="place-order">Place Order</button>
         </div>
     </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
         let invoice = {};
 
@@ -198,6 +127,7 @@
             invoiceList.innerHTML = '';
             for (const [name, data] of Object.entries(invoice)) {
                 const item = document.createElement('div');
+                item.classList.add('text-center', 'p-2', 'border-bottom');
                 item.innerHTML = `
                     <p>${name} - $${data.price} x <span>${data.quantity}</span></p>
                     <div class='quantity'>
