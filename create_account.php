@@ -7,35 +7,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
+    $_SESSION['form_data'] = ['username' => $username, 'email' => $email];
+
     if (!empty($username) && !empty($email) && !empty($password)) {
-        $stmt = $connection->prepare("SELECT username, email FROM userstable WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
+
+        $sql = "SELECT username, email FROM userstable WHERE username = '$username' OR email = '$email'";
+        $result = $connection->query($sql);
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             if ($username == $row['username']) {
-                $_SESSION['modalTitle'] = 'Alert.';
-                $_SESSION['modalMessage'] = 'Username already exists!';
+                $_SESSION['modalTitle'] = 'Username already exists!';
+                $_SESSION['modalMessage'] = '';
                 $_SESSION['modalColor'] = '#BD5B5B';
-            } else if ($email == $row['email']) {
-                $_SESSION['modalTitle'] = 'Alert';
-                $_SESSION['modalMessage'] = 'Email already exists!';
+            }
+
+            if ($email == $row['email']) {
+                $_SESSION['modalTitle'] = 'Email already exists!';
+                $_SESSION['modalMessage'] = '';
                 $_SESSION['modalColor'] = '#BD5B5B';
             }
         } else {
-            // Hash the password
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $sql = "INSERT INTO userstable (username, email, password, role) VALUES ('$username', '$email', '$hashedPassword', 1)";
 
-            $stmt = $connection->prepare("INSERT INTO userstable (username, email, password) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", $username, $email, $hashedPassword);
-
-            if ($stmt->execute()) {
+            if ($connection->query($sql) === TRUE) {
                 $_SESSION['modalTitle'] = 'Success';
                 $_SESSION['modalMessage'] = 'Account created successfully!';
                 $_SESSION['modalColor'] = '#4CAF50';
                 $_SESSION['redirect'] = true;
+
+                unset($_SESSION['form_data']);
             } else {
                 $_SESSION['modalTitle'] = 'Error';
                 $_SESSION['modalMessage'] = 'Error creating account';
@@ -47,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['modalMessage'] = 'All fields are required!';
         $_SESSION['modalColor'] = '#FFA500';
     }
+
     header("Location: " . $_SERVER['PHP_SELF']);
     exit();
 }
@@ -64,97 +67,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/sweetalert.js"></script>
     <!-- jQuery (required) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="assets/jquery-3.6.0.min.js"></script>
     <!-- iziModal -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.6.1/css/iziModal.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.6.1/js/iziModal.min.js"></script>
+    <link rel="stylesheet" href="izimodal/iziModal.min.css">
+    <script src="izimodal/iziModal.min.js"></script>
+    <!-- styles css, why nasa baba? need muna mag load ang bootstarp at ibang scripts bago ang css custom-->
+    <link href="styles/createAccount.css" rel="stylesheet">
 </head>
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body,
-    html {
-        height: 100%;
-        font-family: 'Arial', sans-serif;
-    }
-
-    .form-section {
-        width: 50%;
-        background-color: #fff;
-        padding: 40px;
-    }
-
-    .form-container {
-        max-width: 400px;
-        width: 100%;
-    }
-
-    .form-title {
-        font-size: 1.8rem;
-        font-weight: bold;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    .image-section {
-        width: 50%;
-        background: url('assets/logo.avif') no-repeat center center;
-        background-size: cover;
-    }
-
-    .btn-custom {
-        background: #000;
-        color: #fff;
-        padding: 12px;
-        font-size: 1rem;
-        border-radius: 8px;
-        transition: 0.3s;
-        width: 100%;
-    }
-
-    .btn-custom:hover {
-        background: white;
-        color: black;
-        border: 1px solid black;
-    }
-
-    .password-container {
-        position: relative;
-    }
-
-    .toggle-password {
-        position: absolute;
-        top: 50%;
-        right: 15px;
-        transform: translateY(-50%);
-        cursor: pointer;
-    }
-
-    .form-check {
-        font-size: 0.9rem;
-        text-align: left;
-    }
-
-    input[type="checkbox"] {
-        transform: scale(1.2);
-        cursor: pointer;
-    }
-
-    /* Mobile View */
-    @media (max-width: 768px) {
-        .image-section {
-            display: block;
-        }
-
-        .form-section {
-            width: 100%;
-        }
-    }
-</style>
 
 <body>
     <!-- izimodal -->
@@ -167,12 +86,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-container">
                 <h2 class="form-title">Create an account</h2>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" maxlength="20" id="username" placeholder="Username" form="create-form" name="username" required>
+                    <input type="text" class="form-control" maxlength="20" id="username" placeholder="Username" form="create-form" name="username" value="<?php echo isset($_SESSION['form_data']['username']) ? htmlspecialchars($_SESSION['form_data']['username']) : ''; ?>" required>
                     <span class="char-counter" style="font-size: .80rem; color: #999;">Max 20 characters</span>
                     <label for="username">Username</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="email" placeholder="Email" form="create-form" name="email" required>
+                    <input type="email" class="form-control" id="email" placeholder="Email" form="create-form" name="email" value="<?php echo isset($_SESSION['form_data']['email']) ? htmlspecialchars($_SESSION['form_data']['email']) : ''; ?>" required>
                     <span class="char-counter" style="font-size: .80rem; color: #999;">ex: juan@gmail.com</span>
                     <label for="email">Email</label>
                 </div>
@@ -191,10 +110,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </span>
                 </div>
                 <button type="submit" class="btn btn-custom w-100" form="create-form">Sign Up</button>
-                <div class="form-check mt-3">
+                <!-- <div class="form-check mt-3">
                     <input class="form-check-input" type="checkbox" value="true" id="agree" form="create-form" required>
                     <label class="form-check-label" for="agree">I agree to the <a href="#">Privacy Policy</a> and <a>Terms & Conditions</a></label>
-                </div>
+                </div> -->
             </div>
         </div>
 

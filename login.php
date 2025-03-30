@@ -30,105 +30,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-
     <!-- Add jQuery before SweetAlert2 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
+    <script src="assets/jquery-3.6.0.min.js"></script>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
-
     <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/sweetalert.js"></script>
+    <!-- custom css -->
+    <link href="styles/login.css" rel="stylesheet">
 </head>
-
-<style>
-    /* Reset styles */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    /* Full height layout */
-    body,
-    html {
-        height: 100%;
-        font-family: 'Arial', sans-serif;
-    }
-
-    /* Form Section */
-    .form-section {
-        width: 50%;
-        background-color: #fff;
-        padding: 40px;
-    }
-
-    .form-container {
-        max-width: 400px;
-        width: 100%;
-    }
-
-    .form-title {
-        font-size: 1.8rem;
-        font-weight: bold;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    /* Image Section */
-    .image-section {
-        width: 50%;
-        background: url('assets/logo.avif') no-repeat center center;
-        background-size: cover;
-    }
-
-    /* Buttons */
-    .btn-custom {
-        background: #000;
-        color: #fff;
-        padding: 12px;
-        font-size: 1rem;
-        border-radius: 8px;
-        transition: 0.3s;
-        width: 100%;
-    }
-
-    .btn-custom:hover {
-        background: white;
-        color: black;
-        border: 1px solid black;
-    }
-
-    /* Password Input */
-    .password-container {
-        position: relative;
-    }
-
-    .toggle-password {
-        position: absolute;
-        top: 50%;
-        right: 15px;
-        transform: translateY(-50%);
-        cursor: pointer;
-    }
-
-    /* Checkbox Agreement */
-    .form-check {
-        font-size: 0.9rem;
-        text-align: left;
-    }
-
-    /* Mobile View */
-    @media (max-width: 768px) {
-        .image-section {
-            display: none;
-        }
-
-        .form-section {
-            width: 100%;
-        }
-    }
-</style>
 
 <body>
 
