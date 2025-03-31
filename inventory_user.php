@@ -42,9 +42,7 @@
                 <div class="col-md-4">
                     <input type="text" class="form-control" placeholder="Search Product">
                 </div>
-                <div class="col-md-2">
-                    <button class="btn btn-warning w-100">🔍</button>
-                </div>
+
                 <div class="col-md-3">
                     <select class="form-select">
                         <option value="">Filter</option>

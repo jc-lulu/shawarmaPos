@@ -80,7 +80,6 @@
             <h1>ORDERED HISTORY</h1>
             <div class="search-bar">
                 <input type="text" placeholder="Search Order">
-                <button>🔍</button>
             </div>
             <div class="data-table">
                 <table>

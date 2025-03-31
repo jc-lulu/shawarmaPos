@@ -57,7 +57,6 @@
                         <h2>Menu</h2>
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search Food">
-                            <button class="btn btn-warning">🔍</button>
                         </div>
                         <div class="btn-group mt-3">
                             <button class="btn btn-warning">All</button>
