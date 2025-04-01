@@ -73,9 +73,9 @@ input[type="checkbox"] {
 }
 
 /* Mobile View */
-@media (max-width: 768px) {
+@media (max-width: 800px) {
   .image-section {
-    display: block;
+    display: none;
   }
 
   .form-section {
