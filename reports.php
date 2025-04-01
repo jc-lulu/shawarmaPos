@@ -17,7 +17,6 @@
 
             <div class="search-bar">
                 <input type="text" placeholder="Search Reports">
-                <button>🔍</button>
             </div>
 
             <div class="filters">
