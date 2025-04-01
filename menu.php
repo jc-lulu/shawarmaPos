@@ -5,45 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POS System</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-        body {
-            background-color: #f9f5d7;
-        }
-
-        .invoice {
-            height: 85vh;
-            background-color: #d9ead3;
-            border-radius: 5px;
-        }
-
-        .menu-item img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-
-        .menu-item button {
-            width: 100%;
-        }
-
-        .quantity {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .quantity button {
-            background-color: #ccc;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 3px;
-        }
-    </style>
+    <?php include('header/header.php') ?>
+    <link href="styles/menu.css" rel="stylesheet">
 </head>
 
 <body>

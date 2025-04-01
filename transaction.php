@@ -4,31 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php include('header/header.php') ?>
     <title>Transactions</title>
-
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-        body {
-            background-color: #f9f5d7;
-        }
-
-        .data-table {
-            max-height: 400px;
-            overflow-y: auto;
-            background-color: #d9d9d9;
-            border-radius: 5px;
-            padding: 10px;
-        }
-
-        thead th {
-            position: sticky;
-            top: 0;
-            background-color: #ff8c00;
-            color: white;
-        }
-    </style>
+    <link href="styles/transaction.css" rel="stylesheet">
 </head>
 
 <body>
@@ -63,17 +41,10 @@
                             <th>Quantity</th>
                             <th>Status</th>
                             <th>Date</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody class="table-light">
-                        <tr>
-                            <td>1</td>
-                            <td>Product A</td>
-                            <td>In</td>
-                            <td>50</td>
-                            <td>Approved</td>
-                            <td>2025-04-01</td>
-                        </tr>
                         <tr>
                             <td>2</td>
                             <td>Product B</td>
@@ -81,6 +52,9 @@
                             <td>20</td>
                             <td>Pending</td>
                             <td>2025-03-30</td>
+                            <td>
+                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#transactionEditModal">✏️ Edit</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -160,9 +134,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

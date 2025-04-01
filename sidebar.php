@@ -55,6 +55,8 @@
     <a href="menu.php">Menu</a>
     <a href="inventory_user.php">Inventory</a>
     <a href="ordered_history.php">Ordered History</a>
+    <a href="transaction.php">Transactions</a>
+    <a href="menuManagement.php">Menu Management</a>
     <a href="reports.php">Reports</a>
     <a href="logout.php" class="signout">Sign Out</a>
 </nav>
