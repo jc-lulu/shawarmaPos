@@ -68,6 +68,7 @@
                             <div id="remove-product-list" class="row g-3">
                                 <!-- Product list will be dynamically loaded here -->
                             </div>
+                            <hr>
                             <button type="submit" class="btn btn-danger w-100 mt-3">🗑 Remove Selected</button>
                         </form>
                     </div>
