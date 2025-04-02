@@ -5,10 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory</title>
-
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <?php include("header/header.php") ?>
     <style>
         body {
             background-color: #f9f5d7;
@@ -81,15 +78,12 @@
                             <td>$250</td>
                             <td>2025-03-28</td>
                         </tr>
-                        <!-- More rows can be dynamically added here -->
+
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

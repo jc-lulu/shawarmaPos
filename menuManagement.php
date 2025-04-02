@@ -66,7 +66,7 @@
                         <!-- Product List -->
                         <form id="removeProductForm">
                             <div id="remove-product-list" class="row g-3">
-                                <!-- Product list will be dynamically loaded here -->
+                                <!-- Product list  -->
                             </div>
                             <hr>
                             <button type="submit" class="btn btn-danger w-100 mt-3">🗑 Remove Selected</button>
@@ -87,7 +87,7 @@
                 success: function(response) {
                     $("#remove-product-list").html(response);
 
-                    // Add click functionality to select product
+                    //click functionality to select product
                     $(".selectable-product").click(function() {
                         var checkbox = $(this).find("input[type='checkbox']");
                         checkbox.prop("checked", !checkbox.prop("checked"));

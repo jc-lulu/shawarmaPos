@@ -2,7 +2,7 @@
 include('cedric_dbConnection.php');
 
 if (isset($_POST['remove_products'])) {
-    $idsToDelete = implode(",", $_POST['remove_products']); // Convert array to comma-separated values
+    $idsToDelete = implode(",", $_POST['remove_products']);
     $sql = "DELETE FROM menu WHERE menuId IN ($idsToDelete)";
 
     if ($connection->query($sql) === TRUE) {
