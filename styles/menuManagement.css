@@ -17,3 +17,36 @@ body {
   flex: 1;
   padding: 20px;
 }
+
+.product-container {
+  height: 200px;
+  width: 200px;
+  background-color: #ffff;
+  padding: 5px;
+}
+
+.image-container {
+  width: 100%;
+  height: 60%;
+}
+
+.product-name {
+  height: 25%;
+  width: 100%;
+}
+
+.product-price {
+  height: 20%;
+  width: 100%;
+}
+
+.selectable-product {
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.selectable-product.selected {
+  border: 2px solid red;
+  background-color: #ffe6e6;
+}

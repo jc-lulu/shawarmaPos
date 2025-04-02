@@ -6,6 +6,8 @@
 <script src="assets/sweetalert.js"></script>
 <!-- jQuery (required) -->
 <script src="assets/jquery-3.6.0.min.js"></script>
+<!--font-awesome-->
+<link rel="stylesheet" href="assets/fontAwesome/css/all.min.css">
 <!-- iziModal -->
 <link rel="stylesheet" href="izimodal/iziModal.min.css">
 <script src="izimodal/iziModal.min.js"></script>

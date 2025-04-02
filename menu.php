@@ -30,29 +30,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="card menu-item p-2">
-                                <img src="cat.jpg" alt="Food">
-                                <div class="card-body text-center">
-                                    <h5 class="card-title">Siopao</h5>
-                                    <p class="card-text">$100</p>
-                                    <button class="btn btn-success" onclick="addToInvoice('Siopao', 100)">Add</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card menu-item p-2">
-                                <img src="cat.jpg" alt="Food">
-                                <div class="card-body text-center">
-                                    <h5 class="card-title">Label of Food</h5>
-                                    <p class="card-text">$Price</p>
-                                    <button class="btn btn-success" onclick="addToInvoice('Label of Food', Price)">Add</button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Add more menu items as needed -->
-                    </div>
+                    <div class="row p-3 gap-2" id="product-list"></div>
                 </div>
 
                 <div class="col-md-4">
@@ -65,12 +43,53 @@
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
-        let invoice = {};
+        function loadProducts() {
+            $.ajax({
+                url: "fetchMenu.php",
+                type: "GET",
+                dataType: "json",
+                success: function(products) {
+                    let productHTML = "";
+
+                    if (products.length > 0) {
+                        products.forEach(function(product) {
+                            productHTML += `
+                            <div class="col-md-3 product-container p-3" style="background-color: white; border-radius: 10px;">
+                                <div class="image-container">
+                                    <img src="${product.productImage}" alt="${product.productName}" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div class="product-name text-center">
+                                    <strong>${product.productName}</strong>
+                                </div>
+                                <div class="product-price text-center">
+                                    <span>₱${parseFloat(product.productPrice).toFixed(2)}</span>
+                                </div>
+                                <div class="button-container text-center">
+                                    <button class="btn btn-primary">Add</button>
+                                </div>
+                            </div>
+                        `;
+                        });
+                    } else {
+                        productHTML = "<p>No products found.</p>";
+                    }
+
+                    $("#product-list").html(productHTML);
+                },
+                error: function() {
+                    console.error("Error loading products.");
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            loadProducts();
+
+        });
+    </script>
+    <!-- <script>
+       let invoice = {};
 
         function addToInvoice(name, price) {
             if (!invoice[name]) {
@@ -109,7 +128,7 @@
                 updateInvoice();
             }
         }
-    </script>
+    </script> -->
 </body>
 
 </html>
