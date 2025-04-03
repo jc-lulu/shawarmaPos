@@ -82,7 +82,7 @@
     <script>
         function loadRemoveProductList() {
             $.ajax({
-                url: "fetchRemove.php",
+                url: "server_side/fetchRemove.php",
                 type: "GET",
                 success: function(response) {
                     $("#remove-product-list").html(response);
@@ -103,7 +103,7 @@
 
         function loadProducts() {
             $.ajax({
-                url: "fetchMenu.php",
+                url: "server_side/fetchMenu.php",
                 type: "GET",
                 dataType: "json",
                 success: function(products) {
@@ -138,14 +138,14 @@
         }
 
         $(document).ready(function() {
-            loadProducts(); // Load products on page load
+            loadProducts(); // Load products
 
             $("#uploadMenu").submit(function(event) {
                 event.preventDefault(); // Prevent page reload
                 var formData = new FormData(this);
 
                 $.ajax({
-                    url: "addMenu.php",
+                    url: "server_side/addMenu.php",
                     type: "POST",
                     data: formData,
                     contentType: false,
@@ -193,7 +193,7 @@
                 var formData = $(this).serialize();
                 console.log('burger ka sakin');
                 $.ajax({
-                    url: "removeMenu.php",
+                    url: "server_side/removeMenu.php",
                     type: "POST",
                     data: formData,
                     success: function(response) {

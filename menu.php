@@ -46,7 +46,7 @@
     <script>
         function loadProducts() {
             $.ajax({
-                url: "fetchMenu.php",
+                url: "server_side/fetchMenu.php",
                 type: "GET",
                 dataType: "json",
                 success: function(products) {

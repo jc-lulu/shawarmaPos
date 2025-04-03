@@ -48,7 +48,6 @@
                     </select>
                 </div>
             </div>
-
             <div class="data-table">
                 <table class="table table-bordered table-hover text-center">
                     <thead class="table-warning">
