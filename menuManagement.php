@@ -13,7 +13,7 @@
     <div class="container-fluid d-flex">
         <?php include 'sidebar.php'; ?>
         <div class="main-content">
-            <div class="col">
+            <div class="col py-3">
                 <h1>Menu Management</h1>
             </div>
             <div class="row p-3">

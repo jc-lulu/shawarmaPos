@@ -13,11 +13,11 @@
     <div class="container-fluid d-flex">
         <?php include 'sidebar.php'; ?>
 
-        <div class="container-fluid p-3">
+        <div class="container-fluid py-3 p-3">
             <div class="row">
                 <div class="col-md-8">
                     <div class="mb-3">
-                        <h2>Menu</h2>
+                        <h1>Menu</h1>
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search Food">
                         </div>

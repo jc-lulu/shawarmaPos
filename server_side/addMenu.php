@@ -1,5 +1,5 @@
 <?php
-include('cedric_dbConnection.php');
+include('../cedric_dbConnection.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $productName = $_POST['product_name'];

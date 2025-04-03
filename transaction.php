@@ -14,8 +14,8 @@
         <?php include 'sidebar.php'; ?>
 
         <div class="container py-3">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="mb-0">TRANSACTIONS</h1>
+            <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+                <h1>TRANSACTIONS</h1>
 
                 <!-- Transaction Button with Dropdown -->
                 <!-- <div class="dropdown">
@@ -82,10 +82,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" class="form-control mb-2" placeholder="Product Name" form="inItemForm">
-                    <input type="number" class="form-control mb-2" placeholder="Quantity" form="inItemForm">
-                    <input type="date" class="form-control mb-2 DateIn" id="dateIn" value="<?php echo "Y-M-D" ?>" disabled>
-                    <select class="form-control mb-2" id="noManpower" name="noManpower" form="inItemForm">
+                    <input type="text" class="form-control mb-2" placeholder="Product Name" form="inItemForm" name="productIn_item">
+                    <input type="number" class="form-control mb-2" placeholder="Quantity" form="inItemForm" name="productIn_quantity">
+                    <input type="date" class="form-control mb-2 DateIn" id="dateIn" value="<?php echo "yyy-mm-dd" ?>" disabled>
+                    <select class="form-control mb-2" form="inItemForm" name="productIn_type">
                         <option value="" selected="true" disabled="disabled" style="font-style: italic;">Select Type</option>
                         <option value="type 1">type 1</option>
                         <option value="type 2">type 2</option>
@@ -151,6 +151,44 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+
+            $('#inItemForm').submit(function(event) {
+                event.preventDefault();
+                var inFormData = new FormData(this);
+
+                $.ajax({
+                    url: "server_side/inItem.php",
+                    type: "POST",
+                    data: inFormData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        if (response.trim() === "success") {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Product In",
+                                text: "The product has been successfully In",
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+
+                            $("#transactionInModal").modal("hide");
+                            $("#inItemForm")[0].reset();
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                text: response
+                            });
+                        }
+
+                    }
+                })
+            })
+        });
+    </script>
 </body>
 
 </html>

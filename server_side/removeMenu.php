@@ -1,5 +1,5 @@
 <?php
-include('cedric_dbConnection.php');
+include('../cedric_dbConnection.php');
 
 if (isset($_POST['remove_products'])) {
     $idsToDelete = implode(",", $_POST['remove_products']);

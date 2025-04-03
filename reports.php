@@ -12,9 +12,8 @@
 <body>
     <div class="container">
         <?php include 'sidebar.php'; ?>
-        <div class="main-content">
+        <div class="main-content py-3">
             <h1>REPORTS</h1>
-
             <div class="search-bar">
                 <input type="text" placeholder="Search Reports">
             </div>

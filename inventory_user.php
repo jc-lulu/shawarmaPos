@@ -32,8 +32,8 @@
     <div class="container-fluid d-flex">
         <?php include 'sidebar.php'; ?>
 
-        <div class="container py-3">
-            <h1 class="mb-4">INVENTORY</h1>
+        <div class="container py-3 mb-3">
+            <h1>INVENTORY</h1>
 
             <div class="row mb-3">
                 <div class="col-md-4">

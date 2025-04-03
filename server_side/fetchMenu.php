@@ -1,5 +1,5 @@
 <?php
-include('cedric_dbConnection.php');
+include('../cedric_dbConnection.php');
 
 $sql = "SELECT * FROM menu ORDER BY menuId DESC";
 $result = $connection->query($sql);
