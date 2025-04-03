@@ -114,7 +114,7 @@
                             productHTML += `
                             <div class="col-md-3 product-container">
                                 <div class="image-container">
-                                    <img src="${product.productImage}" alt="${product.productName}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <img src="server_side/${product.productImage}" alt="${product.productName}" style="width: 100%; height: 100%; object-fit: cover;">
                                 </div>
                                 <div class="product-name text-center">
                                     <strong>${product.productName}</strong>

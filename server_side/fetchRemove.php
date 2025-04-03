@@ -9,7 +9,7 @@ if ($result->num_rows > 0) {
         echo '<div class="col-md-4 product-card">
                 <label class="card shadow-sm selectable-product">
                     <input type="checkbox" name="remove_products[]" value="' . $row['menuId'] . '" class="form-check-input d-none">
-                    <img src="' . $row['productImage'] . '" class="card-img-top" alt="' . $row['productName'] . '" style="height: 150px; object-fit: cover;">
+                    <img src="server_side/' . $row['productImage'] . '" class="card-img-top" alt="' . $row['productName'] . '" style="height: 150px; object-fit: cover;">
                     <div class="card-body text-center">
                         <h6 class="card-title">' . $row['productName'] . '</h6>
                     </div>
