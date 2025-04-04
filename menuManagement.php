@@ -13,25 +13,23 @@
     <div class="container-fluid d-flex">
         <?php include 'sidebar.php'; ?>
         <div class="main-content">
-            <div class="col py-3">
-                <h1>Menu Management</h1>
+            <h1>Menu Management</h1>
+
+            <div class="action-row mb-4">
+                <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#transactionInModal">
+                    <i class="fa-solid fa-plus me-2"></i>Add Product
+                </button>
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#removeProductModal">
+                    <i class="fa-solid fa-xmark me-2"></i>Remove Product
+                </button>
             </div>
-            <div class="row p-3">
-                <div class="col gap-2">
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#transactionInModal"><i class="fa-solid fa-plus m-1"></i>Add Product</button>
-                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#removeProductModal"><i class="fa-solid fa-xmark m-1"></i>Remove Product</button>
-                </div>
-                <div class="row p-3 gap-2" id="product-list">
-                    <!-- <div class="col-md-3 product-container">
-                        <div class="image-container"></div>
-                        <div class="product-name"></div>
-                        <div class="product-price"></div>
-                    </div> -->
-                </div>
+
+            <div id="product-list" class="product-list-container">
+                <!-- Products will be loaded here -->
             </div>
         </div>
 
-        <!-- Modals -->
+        <!-- Add Product Modal -->
         <div class="modal fade" id="transactionInModal" tabindex="-1" aria-labelledby="transactionInLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -41,10 +39,25 @@
                     </div>
                     <div class="modal-body">
                         <form id="uploadMenu" method="POST" enctype="multipart/form-data">
-                            <input type="text" class="form-control mb-2" name="product_name" placeholder="Product Name" required>
-                            <input type="number" class="form-control mb-2" name="price" placeholder="Price" required>
-                            <input type="file" class="form-control mb-2" name="product_image" accept="image/*" required>
-                            <button class="btn btn-primary w-100" type="submit">✔ Add</button>
+                            <div class="mb-3">
+                                <label for="product_name" class="form-label">Product Name</label>
+                                <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Enter product name" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Price (₱)</label>
+                                <input type="number" class="form-control" id="price" name="price" placeholder="Enter price" step="0.01" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="product_image" class="form-label">Product Image</label>
+                                <input type="file" class="form-control" id="product_image" name="product_image" accept="image/*" required>
+                                <div class="form-text">Recommended size: 500x500px</div>
+                            </div>
+
+                            <button class="btn btn-primary w-100" type="submit">
+                                <i class="fas fa-check me-2"></i> Add Product
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -61,22 +74,25 @@
                     </div>
                     <div class="modal-body">
                         <!-- Search Product -->
-                        <input type="text" id="searchProduct" class="form-control mb-3" placeholder="Search product name">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            <input type="text" id="searchProduct" class="form-control" placeholder="Search product name">
+                        </div>
 
                         <!-- Product List -->
                         <form id="removeProductForm">
                             <div id="remove-product-list" class="row g-3">
-                                <!-- Product list  -->
+                                <!-- Product list will be loaded dynamically -->
                             </div>
                             <hr>
-                            <button type="submit" class="btn btn-danger w-100 mt-3">🗑 Remove Selected</button>
+                            <button type="submit" class="btn btn-danger w-100 mt-3">
+                                <i class="fas fa-trash me-2"></i> Remove Selected
+                            </button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </div>
 
     <script>
@@ -100,7 +116,6 @@
             });
         }
 
-
         function loadProducts() {
             $.ajax({
                 url: "server_side/fetchMenu.php",
@@ -112,9 +127,9 @@
                     if (products.length > 0) {
                         products.forEach(function(product) {
                             productHTML += `
-                            <div class="col-md-3 product-container">
+                            <div class="product-container">
                                 <div class="image-container">
-                                    <img src="server_side/${product.productImage}" alt="${product.productName}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    <img src="server_side/${product.productImage}" alt="${product.productName}">
                                 </div>
                                 <div class="product-name text-center">
                                     <strong>${product.productName}</strong>
@@ -123,10 +138,10 @@
                                     <span>₱${parseFloat(product.productPrice).toFixed(2)}</span>
                                 </div>
                             </div>
-                        `;
+                            `;
                         });
                     } else {
-                        productHTML = "<p>No products found.</p>";
+                        productHTML = "<div class='w-100 text-center p-5'><p class='text-muted'>No products found. Add some products to get started!</p></div>";
                     }
 
                     $("#product-list").html(productHTML);
@@ -191,14 +206,12 @@
                 event.preventDefault();
 
                 var formData = $(this).serialize();
-                console.log('burger ka sakin');
                 $.ajax({
                     url: "server_side/removeMenu.php",
                     type: "POST",
                     data: formData,
                     success: function(response) {
                         if (response.trim() === "success") {
-                            console.log('pasok kana');
                             Swal.fire({
                                 icon: "success",
                                 title: "Products Removed!",
@@ -221,8 +234,6 @@
             });
         });
     </script>
-
-
 </body>
 
 </html>
