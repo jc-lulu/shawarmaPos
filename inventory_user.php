@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory</title>
-    <?php include("header/header.php") ?>
+    <?php include("header/header.php"); ?>
     <style>
         body {
             background-color: #f9f5d7;
@@ -73,6 +73,48 @@
         .type-out {
             color: #dc3545;
             font-weight: bold;
+        }
+
+        .dt-buttons button {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .dt-buttons .buttons-copy {
+            background-color: #ff8c00 !important;
+            color: white !important;
+            border: none !important;
+
+        }
+
+        .dt-buttons .buttons-csv,
+        .buttons-excel {
+            background-color: #28a745 !important;
+            color: white !important;
+            border: none !important;
+
+        }
+
+        .dt-buttons .buttons-pdf {
+            background-color: #dc3545 !important;
+            color: white !important;
+            border: none !important;
+
+        }
+
+        .dt-buttons .buttons-print {
+            background-color: #17a2b8 !important;
+            color: white !important;
+            border: none !important;
+
+        }
+
+        div.dt-buttons {
+            float: none !important;
+        }
+
+        label {
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -181,42 +223,53 @@
 
     <script>
         $(document).ready(function() {
-            // Initialize DataTable
+            // Initialize DataTable with custom buttons
             $('#inventoryTable').DataTable({
                 responsive: true,
-                dom: 'Bfrtip',
+                dom: '<"dt-buttons"B><"clear">lfrtip',
                 buttons: [{
                         extend: 'copy',
-                        className: 'btn btn-secondary btn-sm'
+                        className: 'btn btn-outline-secondary btn-sm me-1',
+                        text: '<i class="fas fa-copy me-1"></i> Copy',
+                        titleAttr: 'Copy to clipboard'
                     },
                     {
                         extend: 'csv',
-                        className: 'btn btn-secondary btn-sm'
+                        className: 'btn btn-outline-success btn-sm me-1',
+                        text: '<i class="fas fa-file-csv me-1"></i> CSV',
+                        titleAttr: 'Export as CSV'
                     },
                     {
                         extend: 'excel',
-                        className: 'btn btn-secondary btn-sm'
+                        className: 'btn btn-outline-primary btn-sm me-1',
+                        text: '<i class="fas fa-file-excel me-1"></i> Excel',
+                        titleAttr: 'Export as Excel'
                     },
                     {
                         extend: 'pdf',
-                        className: 'btn btn-secondary btn-sm'
+                        className: 'btn btn-outline-danger btn-sm me-1',
+                        text: '<i class="fas fa-file-pdf me-1"></i> PDF',
+                        titleAttr: 'Export as PDF'
                     },
                     {
                         extend: 'print',
-                        className: 'btn btn-secondary btn-sm'
+                        className: 'btn btn-outline-dark btn-sm',
+                        text: '<i class="fas fa-print me-1"></i> Print',
+                        titleAttr: 'Print table'
                     }
                 ],
+
                 pageLength: 10,
                 lengthMenu: [
                     [10, 25, 50, -1],
                     [10, 25, 50, "All"]
                 ],
                 order: [
-                    [5, 'desc'],
-                    [6, 'desc']
+                    [4, 'desc'],
+                    [5, 'desc']
                 ], // Order by dateOfIn and dateOfOut descending
                 columnDefs: [{
-                    targets: [5, 6], // Date columns
+                    targets: [4, 5], // Date columns
                     render: function(data, type, row) {
                         // For sorting purposes, return the original data
                         if (type === 'sort' && data !== 'N/A') {
@@ -226,6 +279,9 @@
                     }
                 }]
             });
+
+            // Add custom styling for the buttons container
+            $('.dt-buttons').addClass('mb-3');
 
             // Handle edit button click
             $(document).on('click', '.edit-btn', function() {
