@@ -12,18 +12,67 @@
         }
 
         .data-table {
-            max-height: 400px;
-            overflow-y: auto;
-            background-color: #d9d9d9;
-            border-radius: 5px;
-            padding: 10px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        thead th {
-            position: sticky;
-            top: 0;
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+            margin-left: 5px;
+        }
+
+        .dataTables_wrapper .dataTables_length select {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+            margin: 0 5px;
+        }
+
+        table.dataTable thead th {
             background-color: #ff8c00;
             color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        .badge-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .badge-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .badge-warning {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .badge-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .type-in {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .type-out {
+            color: #dc3545;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -36,53 +85,178 @@
             <h1>INVENTORY</h1>
 
             <div class="row mb-3">
-                <div class="col-md-4">
-                    <input type="text" class="form-control" placeholder="Search Product">
-                </div>
-
-                <div class="col-md-3">
-                    <select class="form-select">
-                        <option value="">Filter</option>
-                        <option value="category1">Category 1</option>
-                        <option value="category2">Category 2</option>
-                    </select>
-                </div>
+                <?php
+                $role = 0;
+                if ($role == 0) {
+                    echo '<div class="col-md-12 d-flex justify-content-end gap-2 mb-3">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#transactionInModal"><i class="fa-solid fa-plus m-1"></i>In Item</button>
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#transactionOutModal"><i class="fa-solid fa-minus m-1"></i>Out Item</button>
+                    </div>';
+                }
+                ?>
             </div>
             <div class="data-table">
-                <table class="table table-bordered table-hover text-center">
-                    <thead class="table-warning">
+                <table id="inventoryTable" class="table table-bordered table-hover text-center display responsive nowrap" style="width:100%">
+                    <thead>
                         <tr>
-                            <th style="width: 10%;">ID</th>
-                            <th style="width: 25%;">Name</th>
-                            <th style="width: 15%;">Quantity</th>
-                            <th style="width: 15%;">Gross Income</th>
-                            <th style="width: 15%;">Net Income</th>
-                            <th style="width: 20%;">Date</th>
+                            <th>Transaction ID</th>
+                            <th>Product Name</th>
+                            <th>Type</th>
+                            <th>Quantity</th>
+                            <!-- <th>Transaction Status</th> -->
+                            <th>Date In</th>
+                            <th>Date Out</th>
+                            <?php if ($role == 0) echo '<th>Actions</th>'; ?>
                         </tr>
                     </thead>
-                    <tbody class="table-light">
-                        <tr>
-                            <td>1</td>
-                            <td>Sample Product</td>
-                            <td>50</td>
-                            <td>$500</td>
-                            <td>$400</td>
-                            <td>2025-03-29</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Another Product</td>
-                            <td>30</td>
-                            <td>$300</td>
-                            <td>$250</td>
-                            <td>2025-03-28</td>
-                        </tr>
+                    <tbody>
+                        <?php
+                        include('cedric_dbConnection.php');
 
+                        $query = "SELECT transactionId, productName, type, quantity, transactionStatus, dateOfIn, dateOfOut FROM inventory";
+                        $result = $connection->query($query);
+
+                        if ($result && $result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<tr>";
+                                echo "<td>" . $row['transactionId'] . "</td>";
+                                echo "<td>" . $row['productName'] . "</td>";
+
+                                // Display type
+                                if ($row['type'] == 0) {
+                                    echo "<td><span class='type-in'>IN</span></td>";
+                                } else {
+                                    echo "<td><span class='type-out'>OUT</span></td>";
+                                }
+
+                                echo "<td>" . $row['quantity'] . "</td>";
+
+                                // Format transaction status with badges
+                                $status = $row['transactionStatus'];
+                                $statusClass = '';
+
+                                if ($status == 'Completed') {
+                                    $statusClass = 'badge-success';
+                                } else if ($status == 'Pending') {
+                                    $statusClass = 'badge-warning';
+                                } else if ($status == 'Cancelled') {
+                                    $statusClass = 'badge-danger';
+                                } else {
+                                    $statusClass = 'badge-info';
+                                }
+
+                                // echo "<td><span class='badge {$statusClass}'>{$status}</span></td>";
+
+                                // Format dates or show placeholder if NULL
+                                echo "<td>" . ($row['dateOfIn'] ? date('Y-m-d', strtotime($row['dateOfIn'])) : 'N/A') . "</td>";
+                                echo "<td>" . ($row['dateOfOut'] ? date('Y-m-d', strtotime($row['dateOfOut'])) : 'N/A') . "</td>";
+
+                                // Add action buttons for admin
+                                if ($role == 0) {
+                                    echo "<td>
+                                        <button class='btn btn-sm btn-info edit-btn' data-id='" . $row['transactionId'] . "'><i class='fas fa-edit'></i></button>
+                                        <button class='btn btn-sm btn-danger delete-btn' data-id='" . $row['transactionId'] . "'><i class='fas fa-trash'></i></button>
+                                    </td>";
+                                }
+
+                                echo "</tr>";
+                            }
+                        } else {
+                            $colspan = $role == 0 ? 8 : 7;
+                            echo "<tr><td colspan='{$colspan}'>No inventory data found</td></tr>";
+                        }
+
+                        $connection->close();
+                        ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    <?php
+    //Footer
+    include("header/footer.php");
+    ?>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            $('#inventoryTable').DataTable({
+                responsive: true,
+                dom: 'Bfrtip',
+                buttons: [{
+                        extend: 'copy',
+                        className: 'btn btn-secondary btn-sm'
+                    },
+                    {
+                        extend: 'csv',
+                        className: 'btn btn-secondary btn-sm'
+                    },
+                    {
+                        extend: 'excel',
+                        className: 'btn btn-secondary btn-sm'
+                    },
+                    {
+                        extend: 'pdf',
+                        className: 'btn btn-secondary btn-sm'
+                    },
+                    {
+                        extend: 'print',
+                        className: 'btn btn-secondary btn-sm'
+                    }
+                ],
+                pageLength: 10,
+                lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "All"]
+                ],
+                order: [
+                    [5, 'desc'],
+                    [6, 'desc']
+                ], // Order by dateOfIn and dateOfOut descending
+                columnDefs: [{
+                    targets: [5, 6], // Date columns
+                    render: function(data, type, row) {
+                        // For sorting purposes, return the original data
+                        if (type === 'sort' && data !== 'N/A') {
+                            return data;
+                        }
+                        return data;
+                    }
+                }]
+            });
+
+            // Handle edit button click
+            $(document).on('click', '.edit-btn', function() {
+                const id = $(this).data('id');
+                // Add modal open or redirect logic here
+                alert('Edit transaction ID: ' + id);
+            });
+
+            // Handle delete button click
+            $(document).on('click', '.delete-btn', function() {
+                const id = $(this).data('id');
+                if (confirm('Are you sure you want to delete this inventory transaction?')) {
+                    // Add AJAX delete logic here
+                    $.ajax({
+                        url: 'delete_inventory.php',
+                        type: 'POST',
+                        data: {
+                            id: id
+                        },
+                        success: function(response) {
+                            alert('Transaction deleted successfully');
+                            location.reload();
+                        },
+                        error: function() {
+                            alert('Error deleting transaction');
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

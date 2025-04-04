@@ -84,7 +84,8 @@
                 <div class="modal-body">
                     <input type="text" class="form-control mb-2" placeholder="Product Name" form="inItemForm" name="productIn_item">
                     <input type="number" class="form-control mb-2" placeholder="Quantity" form="inItemForm" name="productIn_quantity">
-                    <input type="date" class="form-control mb-2 DateIn" id="dateIn" value="<?php echo "yyy-mm-dd" ?>" disabled>
+                    <input type="date" class="form-control mb-2 DateIn" id="dateIn" form="inItemForm" name="dateOfIn" value="<?php echo date('Y-m-d'); ?>" style="display: none;" placeholder="<?php echo date('Y-m-d'); ?>">
+                    <input type="date" class="form-control mb-2 DateIn" id="dateIn" value="<?php echo date('Y-m-d'); ?>" placeholder="<?php echo date('Y-m-d'); ?>" disabled>
                     <select class="form-control mb-2" form="inItemForm" name="productIn_type">
                         <option value="" selected="true" disabled="disabled" style="font-style: italic;">Select Type</option>
                         <option value="type 1">type 1</option>

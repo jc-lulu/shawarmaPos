@@ -11,4 +11,8 @@
 <!-- iziModal -->
 <link rel="stylesheet" href="izimodal/iziModal.min.css">
 <script src="izimodal/iziModal.min.js"></script>
+<!--dataTables-->
+<link rel="stylesheet" type="text/css" href="dataTable/datatables.min.css">
+<link rel="stylesheet" type="text/css" href="dataTable/respinsive.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="dataTable/buttons.dataTables.min.css">
 <!-- styles css, why nasa baba? need muna mag load ang bootstarp at ibang scripts bago ang css custom-->
