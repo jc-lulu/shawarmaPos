@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dateOfIn = $_POST['dateOfIn'];
 
 
-    $sql = "INSERT INTO inventory (productName, quantity,type, transactionStatus, dateOfIn) VALUES ('$productName', $productQuantity, '$productType', 0, '$dateOfIn')";
+    $sql = "INSERT INTO inventory (productName, quantity, productType, type, transactionStatus, dateOfIn) VALUES ('$productName', $productQuantity, '$productType', 0, 0, '$dateOfIn')";
     $query = $connection->query($sql);
 
     if ($connection) {

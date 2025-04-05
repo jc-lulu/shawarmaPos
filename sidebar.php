@@ -232,7 +232,7 @@
 
     <div class="user-info">
         <div class="user-name">Admin User</div>
-        <div class="user-role">Administrator</div>
+        <div class="user-role"><?php echo "Hello, " . $_SESSION['user_name']; ?></div>
         <a href="logout.php" class="signout">
             <i class="fas fa-sign-out-alt"></i> <span>Sign Out</span>
         </a>

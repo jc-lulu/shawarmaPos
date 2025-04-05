@@ -1,3 +1,6 @@
+<?php
+include('server_side/check_session.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,7 +21,7 @@
                 <div class="col-md-8">
                     <div class="mb-3">
                         <h1>Menu</h1>
-                        <div class="input-group">
+                        <div class="input-group mt-3">
                             <input type="text" class="form-control" placeholder="Search Food">
                         </div>
                         <div class="btn-group mt-3">
@@ -43,6 +46,7 @@
             </div>
         </div>
     </div>
+
     <script>
         function loadProducts() {
             $.ajax({
@@ -85,50 +89,8 @@
 
         $(document).ready(function() {
             loadProducts();
-
         });
     </script>
-    <!-- <script>
-       let invoice = {};
-
-        function addToInvoice(name, price) {
-            if (!invoice[name]) {
-                invoice[name] = {
-                    price: price,
-                    quantity: 1
-                };
-            } else {
-                invoice[name].quantity++;
-            }
-            updateInvoice();
-        }
-
-        function updateInvoice() {
-            const invoiceList = document.getElementById('invoice-list');
-            invoiceList.innerHTML = '';
-            for (const [name, data] of Object.entries(invoice)) {
-                const item = document.createElement('div');
-                item.classList.add('text-center', 'p-2', 'border-bottom');
-                item.innerHTML = `
-                    <p>${name} - $${data.price} x <span>${data.quantity}</span></p>
-                    <div class='quantity'>
-                        <button onclick="changeQuantity('${name}', -1)">-</button>
-                        <span>${data.quantity}</span>
-                        <button onclick="changeQuantity('${name}', 1)">+</button>
-                    </div>
-                `;
-                invoiceList.appendChild(item);
-            }
-        }
-
-        function changeQuantity(name, amount) {
-            if (invoice[name]) {
-                invoice[name].quantity += amount;
-                if (invoice[name].quantity <= 0) delete invoice[name];
-                updateInvoice();
-            }
-        }
-    </script> -->
 </body>
 
 </html>

@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 include('cedric_dbConnection.php');
 
 $message = '';
@@ -6,14 +8,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $sql = "SELECT email, password FROM userstable WHERE email = '$email'";
+    $sql = "SELECT usersId, username, role, email, password FROM userstable WHERE email = '$email'";
     $result = $connection->query($sql);
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         $hashed_password = $row['password'];
         if (password_verify($password, $hashed_password)) {
-            $message = "Login successful";
+            //session variables
+            $_SESSION['user_id'] = $row['usersId'];
+            $_SESSION['user_name'] = $row['username'];
+            $_SESSION['user_email'] = $row['email'];
+            $_SESSION['user_role'] = $row['role'];
+            $_SESSION['logged_in'] = true;
+            $_SESSION['last_activity'] = time();
+
+            $message = "Login successful"; //set login message
         } else {
             $message = "Wrong email or password";
         }
@@ -37,7 +47,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-
     <form method="Post" id="log-form"></form>
     <div class="container-fluid vh-100 d-flex">
         <!-- Image Section -->
@@ -53,6 +62,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-floating mb-3 password-container">
                     <input type="password" class="form-control" id="password" placeholder="Password" form="log-form" name="password" required>
                     <label for="password">Password</label>
+                    <button type="button" class="btn btn-sm btn-outline-secondary toggle-password" onclick="togglePassword()">
+                        <i class="fas fa-eye"></i>
+                    </button>
                 </div>
                 <button type="submit" class="btn btn-custom w-100" form="log-form">Sign In</button>
             </div>
@@ -67,14 +79,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     title: message === "Login successful" ? 'Success!' : 'Error',
                     text: message,
                     icon: message === "Login successful" ? 'success' : 'error',
-                    timer: 1000,
+                    timer: 1500,
                     timerProgressBar: true,
-                    showConfirmButton: true
+                    showConfirmButton: false
                 }).then(function() {
                     if (message === "Login successful") {
-                        // setTimeout(function() {
+                        console.log("Login successful, redirecting to menu.php");
                         window.location.href = 'menu.php';
-                        // }, 1000); 
                     }
                 });
             }

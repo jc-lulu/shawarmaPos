@@ -1,3 +1,7 @@
+<?php
+include('server_side/check_session.php');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

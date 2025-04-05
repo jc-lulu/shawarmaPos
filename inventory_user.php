@@ -1,3 +1,6 @@
+<?php
+include('server_side/check_session.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,117 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory</title>
     <?php include("header/header.php"); ?>
-    <style>
-        body {
-            background-color: #f9f5d7;
-        }
-
-        .data-table {
-            background-color: #ffffff;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .dataTables_wrapper .dataTables_filter input {
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 5px;
-            margin-left: 5px;
-        }
-
-        .dataTables_wrapper .dataTables_length select {
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 5px;
-            margin: 0 5px;
-        }
-
-        table.dataTable thead th {
-            background-color: #ff8c00;
-            color: white;
-            position: sticky;
-            top: 0;
-        }
-
-        .badge-success {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .badge-danger {
-            background-color: #dc3545;
-            color: white;
-        }
-
-        .badge-warning {
-            background-color: #ffc107;
-            color: black;
-        }
-
-        .badge-info {
-            background-color: #17a2b8;
-            color: white;
-        }
-
-        .badge {
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-weight: 500;
-        }
-
-        .type-in {
-            color: #28a745;
-            font-weight: bold;
-        }
-
-        .type-out {
-            color: #dc3545;
-            font-weight: bold;
-        }
-
-        .dt-buttons button {
-            font-weight: bold;
-            margin-right: 5px;
-        }
-
-        .dt-buttons .buttons-copy {
-            background-color: #ff8c00 !important;
-            color: white !important;
-            border: none !important;
-
-        }
-
-        .dt-buttons .buttons-csv,
-        .buttons-excel {
-            background-color: #28a745 !important;
-            color: white !important;
-            border: none !important;
-
-        }
-
-        .dt-buttons .buttons-pdf {
-            background-color: #dc3545 !important;
-            color: white !important;
-            border: none !important;
-
-        }
-
-        .dt-buttons .buttons-print {
-            background-color: #17a2b8 !important;
-            color: white !important;
-            border: none !important;
-
-        }
-
-        div.dt-buttons {
-            float: none !important;
-        }
-
-        label {
-            margin-bottom: 10px;
-        }
-    </style>
+    <link href="styles/inventory.css" rel="stylesheet">
 </head>
 
 <body>
@@ -128,7 +21,8 @@
 
             <div class="row mb-3">
                 <?php
-                $role = 0;
+                $role = $_SESSION['user_role'];
+
                 if ($role == 0) {
                     echo '<div class="col-md-12 d-flex justify-content-end gap-2 mb-3">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#transactionInModal"><i class="fa-solid fa-plus m-1"></i>In Item</button>
@@ -141,27 +35,26 @@
                 <table id="inventoryTable" class="table table-bordered table-hover text-center display responsive nowrap" style="width:100%">
                     <thead>
                         <tr>
-                            <th>Transaction ID</th>
+                            <th>Product ID</th>
                             <th>Product Name</th>
                             <th>Type</th>
                             <th>Quantity</th>
-                            <!-- <th>Transaction Status</th> -->
-                            <th>Date In</th>
-                            <th>Date Out</th>
-                            <?php if ($role == 0) echo '<th>Actions</th>'; ?>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         include('cedric_dbConnection.php');
 
-                        $query = "SELECT transactionId, productName, type, quantity, transactionStatus, dateOfIn, dateOfOut FROM inventory";
+                        $query = "SELECT productId, productName, type, quantity, transactionStatus, dateOfIn, dateOfOut FROM inventory";
                         $result = $connection->query($query);
 
                         if ($result && $result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
+
+
                                 echo "<tr>";
-                                echo "<td>" . $row['transactionId'] . "</td>";
+                                echo "<td>" . $row['productId'] . "</td>";
                                 echo "<td>" . $row['productName'] . "</td>";
 
                                 // Display type
@@ -173,45 +66,104 @@
 
                                 echo "<td>" . $row['quantity'] . "</td>";
 
-                                // Format transaction status with badges
+                                // Store dates in data attributes for the modal
+                                $dateIn = $row['dateOfIn'] ? date('Y-m-d', strtotime($row['dateOfIn'])) : 'N/A';
+                                $dateOut = ($row['dateOfOut'] && $row['dateOfOut'] != '0000-00-00') ?
+                                    date('Y-m-d', strtotime($row['dateOfOut'])) : 'N/A';
                                 $status = $row['transactionStatus'];
-                                $statusClass = '';
 
-                                if ($status == 'Completed') {
-                                    $statusClass = 'badge-success';
-                                } else if ($status == 'Pending') {
-                                    $statusClass = 'badge-warning';
-                                } else if ($status == 'Cancelled') {
-                                    $statusClass = 'badge-danger';
-                                } else {
-                                    $statusClass = 'badge-info';
-                                }
+                                // Action buttons
+                                echo "<td>
+                                    <button class='btn btn-sm btn-success view-details-btn' 
+                                        data-id='" . $row['productId'] . "'
+                                        data-name='" . $row['productName'] . "'
+                                        data-type='" . ($row['type'] == 0 ? 'IN' : 'OUT') . "'
+                                        data-quantity='" . $row['quantity'] . "'
+                                        data-status='" . $status . "'
+                                        data-date-in='" . $dateIn . "'
+                                        data-date-out='" . $dateOut . "'>
+                                        <i class='fas fa-receipt me-1'></i> View Details
+                                    </button>";
 
-                                // echo "<td><span class='badge {$statusClass}'>{$status}</span></td>";
+                                // Add edit and delete buttons for admins
 
-                                // Format dates or show placeholder if NULL
-                                echo "<td>" . ($row['dateOfIn'] ? date('Y-m-d', strtotime($row['dateOfIn'])) : 'N/A') . "</td>";
-                                echo "<td>" . ($row['dateOfOut'] ? date('Y-m-d', strtotime($row['dateOfOut'])) : 'N/A') . "</td>";
+                                $role = $_SESSION['user_role'];
 
-                                // Add action buttons for admin
                                 if ($role == 0) {
-                                    echo "<td>
-                                        <button class='btn btn-sm btn-info edit-btn' data-id='" . $row['transactionId'] . "'><i class='fas fa-edit'></i></button>
-                                        <button class='btn btn-sm btn-danger delete-btn' data-id='" . $row['transactionId'] . "'><i class='fas fa-trash'></i></button>
-                                    </td>";
+                                    echo " <button class='btn btn-sm btn-info edit-btn' data-id='" . $row['productId'] . "'>
+                                        <i class='fas fa-edit'></i>
+                                    </button>
+                                    <button class='btn btn-sm btn-danger delete-btn' data-id='" . $row['productId'] . "'>
+                                        <i class='fas fa-trash'></i>
+                                    </button>";
                                 }
 
+                                echo "</td>";
                                 echo "</tr>";
                             }
                         } else {
-                            $colspan = $role == 0 ? 8 : 7;
-                            echo "<tr><td colspan='{$colspan}'>No inventory data found</td></tr>";
+                            echo "<tr><td colspan='5'>No inventory data found</td></tr>";
                         }
 
                         $connection->close();
                         ?>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Details Modal -->
+    <div class="modal fade receipt-modal" id="productDetailsModal" tabindex="-1" aria-labelledby="productDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title" id="productDetailsModalLabel">Product Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="receipt-header">
+                        <h4>SHAWARMA POS SYSTEM</h4>
+                        <p>Inventory Item Receipt</p>
+                    </div>
+                    <div class="receipt-body">
+                        <div class="receipt-item">
+                            <span class="receipt-item-label">Product ID:</span>
+                            <span id="modal-product-id"></span>
+                        </div>
+                        <div class="receipt-item">
+                            <span class="receipt-item-label">Product Name:</span>
+                            <span id="modal-product-name"></span>
+                        </div>
+                        <div class="receipt-item">
+                            <span class="receipt-item-label">Type:</span>
+                            <span id="modal-product-type"></span>
+                        </div>
+                        <div class="receipt-item">
+                            <span class="receipt-item-label">Quantity:</span>
+                            <span id="modal-product-quantity"></span>
+                        </div>
+                        <div class="receipt-item">
+                            <span class="receipt-item-label">Status:</span>
+                            <span id="modal-product-status"></span>
+                        </div>
+                        <div class="receipt-item">
+                            <span class="receipt-item-label">Date In:</span>
+                            <span id="modal-date-in"></span>
+                        </div>
+                        <div class="receipt-item">
+                            <span class="receipt-item-label">Date Out:</span>
+                            <span id="modal-date-out"></span>
+                        </div>
+                    </div>
+                    <div class="receipt-footer">
+                        <p>Generated on: <span id="modal-generated-date"></span></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="print-receipt"><i class="fas fa-print me-1"></i> Print</button>
+                </div>
             </div>
         </div>
     </div>
@@ -265,23 +217,84 @@
                     [10, 25, 50, "All"]
                 ],
                 order: [
-                    [4, 'desc'],
-                    [5, 'desc']
-                ], // Order by dateOfIn and dateOfOut descending
-                columnDefs: [{
-                    targets: [4, 5], // Date columns
-                    render: function(data, type, row) {
-                        // For sorting purposes, return the original data
-                        if (type === 'sort' && data !== 'N/A') {
-                            return data;
-                        }
-                        return data;
-                    }
-                }]
+                    [0, 'desc']
+                ],
             });
 
             // Add custom styling for the buttons container
             $('.dt-buttons').addClass('mb-3');
+
+            // Handle View Details button click
+            $(document).on('click', '.view-details-btn', function() {
+                const id = $(this).data('id');
+                const name = $(this).data('name');
+                const type = $(this).data('type');
+                const quantity = $(this).data('quantity');
+                const status = $(this).data('status');
+                const dateIn = $(this).data('date-in');
+                const dateOut = $(this).data('date-out');
+
+                // Format current date for receipt
+                const now = new Date();
+                const formattedDate = now.toLocaleString();
+
+                // Set modal values
+                $('#modal-product-id').text(id);
+                $('#modal-product-name').text(name);
+                $('#modal-product-type').text(type);
+                $('#modal-product-quantity').text(quantity);
+                $('#modal-product-status').text(status);
+                $('#modal-date-in').text(dateIn);
+                $('#modal-date-out').text(dateOut);
+                $('#modal-generated-date').text(formattedDate);
+
+                // Highlight the product type
+                if (type === 'IN') {
+                    $('#modal-product-type').removeClass('type-out').addClass('type-in');
+                } else {
+                    $('#modal-product-type').removeClass('type-in').addClass('type-out');
+                }
+
+                // Open modal
+                $('#productDetailsModal').modal('show');
+            });
+
+            // Handle print button click
+            $('#print-receipt').on('click', function() {
+                const modalContent = document.querySelector('.receipt-modal .modal-content').innerHTML;
+                const printWindow = window.open('', '_blank');
+
+                printWindow.document.write(`
+                    <html>
+                    <head>
+                        <title>Inventory Receipt</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto; padding: 20px; }
+                            .receipt-header { text-align: center; border-bottom: 2px dashed #ddd; padding-bottom: 10px; margin-bottom: 15px; }
+                            .receipt-body { padding: 0 15px; }
+                            .receipt-item { display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; }
+                            .receipt-item-label { font-weight: bold; color: #555; }
+                            .receipt-footer { border-top: 2px dashed #ddd; margin-top: 15px; padding-top: 10px; text-align: center; font-size: 0.9rem; }
+                            .type-in { color: #28a745; font-weight: bold; }
+                            .type-out { color: #dc3545; font-weight: bold; }
+                            .modal-header, .modal-footer, .btn-close { display: none; }
+                        </style>
+                    </head>
+                    <body>
+                        ${modalContent}
+                    </body>
+                    </html>
+                `);
+
+                printWindow.document.close();
+                printWindow.focus();
+
+                // Give time for styles to load
+                setTimeout(() => {
+                    printWindow.print();
+                    printWindow.close();
+                }, 500);
+            });
 
             // Handle edit button click
             $(document).on('click', '.edit-btn', function() {

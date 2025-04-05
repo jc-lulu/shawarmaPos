@@ -1,0 +1,150 @@
+<style>
+        body {
+            background-color: #f9f5d7;
+        }
+
+        .data-table {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dataTables_wrapper .dataTables_filter input {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+            margin-left: 5px;
+        }
+
+        .dataTables_wrapper .dataTables_length select {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+            margin: 0 5px;
+        }
+
+        table.dataTable thead th {
+            background-color: #ff8c00;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        .badge-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .badge-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .badge-warning {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .badge-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .type-in {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .type-out {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .dt-buttons button {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .dt-buttons .buttons-copy {
+            background-color: #ff8c00 !important;
+            color: white !important;
+            border: none !important;
+
+        }
+
+        .dt-buttons .buttons-csv,
+        .buttons-excel {
+            background-color: #28a745 !important;
+            color: white !important;
+            border: none !important;
+
+        }
+
+        .dt-buttons .buttons-pdf {
+            background-color: #dc3545 !important;
+            color: white !important;
+            border: none !important;
+
+        }
+
+        .dt-buttons .buttons-print {
+            background-color: #17a2b8 !important;
+            color: white !important;
+            border: none !important;
+
+        }
+
+        div.dt-buttons {
+            float: none !important;
+        }
+
+        label {
+            margin-bottom: 10px;
+        }
+
+        /* Receipt Modal Styles */
+        .receipt-modal .modal-content {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .receipt-header {
+            text-align: center;
+            border-bottom: 2px dashed #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .receipt-body {
+            padding: 0 15px;
+        }
+
+        .receipt-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 8px;
+        }
+
+        .receipt-item-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .receipt-footer {
+            border-top: 2px dashed #ddd;
+            margin-top: 15px;
+            padding-top: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+    </style>
