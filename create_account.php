@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         } else {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $sql = "INSERT INTO userstable (username, email, password, role) VALUES ('$username', '$email', '$hashedPassword', 1)";
+            $sql = "INSERT INTO userstable (username, email, password, role, accountStatus) VALUES ('$username', '$email', '$hashedPassword', 1, 0)";
 
             if ($connection->query($sql) === TRUE) {
                 $_SESSION['modalTitle'] = 'Success';

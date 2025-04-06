@@ -193,6 +193,9 @@
         .user-info {
             display: none;
         }
+
+        /* a.btn-notification {
+        } */
     }
 </style>
 
@@ -202,10 +205,19 @@
         <div class="app-title">Shawarma POS</div>
     </div>
 
+    <div class="menu-label">Notification</div>
+
+    <div class="nav-links">
+        <a href="#" class="<?php echo basename($_SERVER['PHP_SELF']) == '#' ? 'active' : ''; ?> btn-notification">
+            <i class="fas fa-bell"></i>
+            <span>Notifications</span>
+        </a>
+    </div>
+
     <div class="menu-label">Main Menu</div>
 
     <div class="nav-links">
-        <a href="menu.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'menu.php' ? 'active' : ''; ?>">
+        <a href="menu.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'menu.php' ? 'active' : ''; ?> btn-notification">
             <i class="fas fa-utensils"></i> <span>Menu</span>
         </a>
         <a href="inventory_user.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'inventory_user.php' ? 'active' : ''; ?>">
@@ -228,6 +240,10 @@
             echo '<a href="menuManagement.php" class="' . $activeClass . '">
             <i class="fas fa-list-alt"></i> <span>Menu Management</span>
         </a>';
+            $activeClass = (basename($_SERVER['PHP_SELF']) == 'manageAccounts.php') ? 'active' : '';
+            echo '<a href="manageAccounts.php" class="' . $activeClass . '">
+                <i class="fas fa-users-cog"></i> <span>Manage Accounts</span>
+            </a>';
         }
         ?>
         <a href="reports.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'reports.php' ? 'active' : ''; ?>">
