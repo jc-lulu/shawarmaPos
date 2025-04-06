@@ -20,19 +20,6 @@ include('server_side/check_session.php');
         <div class="container py-3">
             <div class="d-flex justify-content-between align-items-center py-3 mb-4">
                 <h1>TRANSACTIONS</h1>
-
-                <!-- Transaction Button with Dropdown -->
-                <!-- <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        🔄 Transactions
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#transactionInModal">📥 In</button></li>
-                        <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#transactionOutModal">📤 Out</button></li>
-                        <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#transactionEditModal">✏️ Edit</button></li>
-                        <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#transactionApprovalModal">✅ Approval</button></li>
-                    </ul>
-                </div> -->
             </div>
             <div class="row mb-3">
                 <div class="col-md-12">

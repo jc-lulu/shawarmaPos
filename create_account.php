@@ -152,7 +152,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <?php if (isset($_SESSION['redirect']) && $_SESSION['redirect']): ?>
                     setTimeout(function() {
-                        window.location.href = 'login.php';
+                        window.location.href = 'index.php';
                     }, 3000);
                 <?php endif; ?>
 

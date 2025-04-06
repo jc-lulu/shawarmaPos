@@ -222,9 +222,14 @@
     <div class="menu-label">Administration</div>
 
     <div class="nav-links">
-        <a href="menuManagement.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'menuManagement.php' ? 'active' : ''; ?>">
+        <?php
+        if ($_SESSION['user_role'] == 0) {
+            $activeClass = (basename($_SERVER['PHP_SELF']) == 'menuManagement.php') ? 'active' : '';
+            echo '<a href="menuManagement.php" class="' . $activeClass . '">
             <i class="fas fa-list-alt"></i> <span>Menu Management</span>
-        </a>
+        </a>';
+        }
+        ?>
         <a href="reports.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'reports.php' ? 'active' : ''; ?>">
             <i class="fas fa-chart-bar"></i> <span>Reports</span>
         </a>
@@ -233,8 +238,39 @@
     <div class="user-info">
         <div class="user-name">Admin User</div>
         <div class="user-role"><?php echo "Hello, " . $_SESSION['user_name']; ?></div>
-        <a href="logout.php" class="signout">
+        <a onclick="confirmLogout()" class="signout">
             <i class="fas fa-sign-out-alt"></i> <span>Sign Out</span>
         </a>
     </div>
 </nav>
+
+<script>
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Ready to Leave?',
+            text: "Are you sure you want to log out?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#ff8c00',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, log me out!',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Show a brief "logging out" message
+                Swal.fire({
+                    title: 'Logging Out...',
+                    text: 'You will be redirected to the login page.',
+                    icon: 'info',
+                    timer: 1200,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    willClose: () => {
+                        window.location.href = 'server_side/logout.php';
+                    }
+                });
+            }
+        });
+    }
+</script>
