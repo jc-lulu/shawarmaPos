@@ -2,7 +2,6 @@
 session_start();
 include('../cedric_dbConnection.php');
 
-// Check if user is logged in and if role is admin
 if (!isset($_SESSION['logged_in']) || $_SESSION['user_role'] != 0) {
     echo json_encode(['success' => false, 'message' => 'Unauthorized access']);
     exit;

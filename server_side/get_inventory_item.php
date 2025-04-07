@@ -1,9 +1,7 @@
 <?php
-// filepath: c:\xampp\htdocs\shawarmaPos\server_side\get_inventory_item.php
 session_start();
 include('../cedric_dbConnection.php');
 
-// Check if user is logged in
 if (!isset($_SESSION['logged_in'])) {
     echo json_encode(['success' => false, 'message' => 'User not logged in']);
     exit;

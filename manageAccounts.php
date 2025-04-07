@@ -10,139 +10,7 @@ include('server_side/check_session.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Accounts</title>
     <?php include("header/header.php"); ?>
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .page-container {
-            padding: 1.5rem;
-            transition: all 0.3s;
-        }
-
-        .page-title {
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 3px solid #ff8c00;
-            display: inline-block;
-        }
-
-        .data-table {
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            margin-bottom: 2rem;
-        }
-
-        .btn-action {
-            margin: 0 3px;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-
-        .btn-view {
-            background-color: #28a745;
-            color: white;
-            border: none;
-        }
-
-        .btn-view:hover {
-            background-color: #218838;
-            transform: scale(1.1);
-        }
-
-        .btn-edit {
-            background-color: #17a2b8;
-            color: white;
-            border: none;
-        }
-
-        .btn-edit:hover {
-            background-color: #138496;
-            transform: scale(1.1);
-        }
-
-        .btn-delete {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-        }
-
-        .btn-delete:hover {
-            background-color: #c82333;
-            transform: scale(1.1);
-        }
-
-        .btn-add {
-            background: linear-gradient(to right, #4e73df, #224abe);
-            color: white;
-            border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 6px;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .btn-add:hover {
-            background: linear-gradient(to right, #3a5bc7, #1a3a9c);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(78, 115, 223, 0.3);
-        }
-
-        .role-admin {
-            background-color: rgba(220, 53, 69, 0.15);
-            color: #dc3545;
-            font-weight: 600;
-            padding: 5px 12px;
-            border-radius: 20px;
-            display: inline-block;
-        }
-
-        .role-staff {
-            background-color: rgba(40, 167, 69, 0.15);
-            color: #28a745;
-            font-weight: 600;
-            padding: 5px 12px;
-            border-radius: 20px;
-            display: inline-block;
-        }
-
-        #accountsTable thead th {
-            background: linear-gradient(to right, #ff8c00, #e67e00);
-            color: white;
-            font-weight: 500;
-            padding: 12px;
-            border: none;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 0.5px;
-        }
-
-        #accountsTable tbody tr {
-            transition: all 0.2s;
-        }
-
-        #accountsTable tbody tr:hover {
-            background-color: #f8f9fa;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        #accountsTable td {
-            padding: 12px;
-            vertical-align: middle;
-            border-bottom: 1px solid #e9ecef;
-        }
-    </style>
+    <link href="styles/manageAccounts.css" rel="stylesheet">
 </head>
 
 <body>
@@ -343,38 +211,38 @@ include('server_side/check_session.php');
             // Initialize DataTable
             $('#accountsTable').DataTable({
                 responsive: true,
-                dom: '<"dt-buttons"B><"clear">lfrtip',
-                buttons: [{
-                        extend: 'copy',
-                        className: 'btn btn-outline-secondary btn-sm me-1',
-                        text: '<i class="fas fa-copy me-1"></i> Copy',
-                        titleAttr: 'Copy to clipboard'
-                    },
-                    {
-                        extend: 'csv',
-                        className: 'btn btn-outline-success btn-sm me-1',
-                        text: '<i class="fas fa-file-csv me-1"></i> CSV',
-                        titleAttr: 'Export as CSV'
-                    },
-                    {
-                        extend: 'excel',
-                        className: 'btn btn-outline-primary btn-sm me-1',
-                        text: '<i class="fas fa-file-excel me-1"></i> Excel',
-                        titleAttr: 'Export as Excel'
-                    },
-                    {
-                        extend: 'pdf',
-                        className: 'btn btn-outline-danger btn-sm me-1',
-                        text: '<i class="fas fa-file-pdf me-1"></i> PDF',
-                        titleAttr: 'Export as PDF'
-                    },
-                    {
-                        extend: 'print',
-                        className: 'btn btn-outline-dark btn-sm',
-                        text: '<i class="fas fa-print me-1"></i> Print',
-                        titleAttr: 'Print table'
-                    }
-                ],
+                // dom: '<"dt-buttons"B><"clear">lfrtip',
+                // buttons: [{
+                //         extend: 'copy',
+                //         className: 'btn btn-outline-secondary btn-sm me-1',
+                //         text: '<i class="fas fa-copy me-1"></i> Copy',
+                //         titleAttr: 'Copy to clipboard'
+                //     },
+                //     {
+                //         extend: 'csv',
+                //         className: 'btn btn-outline-success btn-sm me-1',
+                //         text: '<i class="fas fa-file-csv me-1"></i> CSV',
+                //         titleAttr: 'Export as CSV'
+                //     },
+                //     {
+                //         extend: 'excel',
+                //         className: 'btn btn-outline-primary btn-sm me-1',
+                //         text: '<i class="fas fa-file-excel me-1"></i> Excel',
+                //         titleAttr: 'Export as Excel'
+                //     },
+                //     {
+                //         extend: 'pdf',
+                //         className: 'btn btn-outline-danger btn-sm me-1',
+                //         text: '<i class="fas fa-file-pdf me-1"></i> PDF',
+                //         titleAttr: 'Export as PDF'
+                //     },
+                //     {
+                //         extend: 'print',
+                //         className: 'btn btn-outline-dark btn-sm',
+                //         text: '<i class="fas fa-print me-1"></i> Print',
+                //         titleAttr: 'Print table'
+                //     }
+                // ],
                 pageLength: 10,
                 lengthMenu: [
                     [10, 25, 50, -1],
@@ -385,7 +253,7 @@ include('server_side/check_session.php');
                 ],
             });
 
-            // Add custom styling for the buttons container
+            //custom styling for the buttons container
             $('.dt-buttons').addClass('mb-3');
 
             // Create new account
@@ -453,7 +321,7 @@ include('server_side/check_session.php');
 
             // Edit account - populate modal
             $(document).on('click', '.edit-btn', function() {
-                // Hide any active tooltips
+
                 $('.tooltip').hide();
 
                 const id = $(this).data('id');
@@ -461,7 +329,6 @@ include('server_side/check_session.php');
                 const email = $(this).data('email');
                 const role = $(this).data('role');
 
-                // Populate form fields
                 $('#edit_user_id').val(id);
                 $('#edit_username').val(username);
                 $('#edit_email').val(email);

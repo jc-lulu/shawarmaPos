@@ -15,24 +15,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = $result->fetch_assoc();
         $hashed_password = $row['password'];
         $accountStatus = $row['accountStatus'];
-        //check if account status
-        if ($accountStatus == 0) {
-            $message = "Account is not verified. Waiting for approval.";
-        } else {
-            if (password_verify($password, $hashed_password)) {
-                //session variables
-                $_SESSION['user_id'] = $row['usersId'];
-                $_SESSION['user_name'] = $row['username'];
-                $_SESSION['user_email'] = $row['email'];
-                $_SESSION['user_role'] = $row['role'];
-                $_SESSION['logged_in'] = true;
-                $_SESSION['last_activity'] = time();
 
-                $message = "Login successful"; //set login message
-            } else {
-                $message = "Wrong email or password";
-            }
+        if (password_verify($password, $hashed_password)) {
+            //session variables
+            $_SESSION['user_id'] = $row['usersId'];
+            $_SESSION['user_name'] = $row['username'];
+            $_SESSION['user_email'] = $row['email'];
+            $_SESSION['user_role'] = $row['role'];
+            $_SESSION['logged_in'] = true;
+            $_SESSION['last_activity'] = time();
+
+            $message = "Login successful"; //set login message
+        } else {
+            $message = "Wrong email or password";
         }
+        //check if account status
+        // if ($accountStatus == 0) {
+        //     $message = "Account is not verified. Waiting for approval.";
+        // } else {
+        //     if (password_verify($password, $hashed_password)) {
+        //         //session variables
+        //         $_SESSION['user_id'] = $row['usersId'];
+        //         $_SESSION['user_name'] = $row['username'];
+        //         $_SESSION['user_email'] = $row['email'];
+        //         $_SESSION['user_role'] = $row['role'];
+        //         $_SESSION['logged_in'] = true;
+        //         $_SESSION['last_activity'] = time();
+
+        //         $message = "Login successful"; //set login message
+        //     } else {
+        //         $message = "Wrong email or password";
+        //     }
+        // }
     } else {
         $message = "Wrong email or password";
     }

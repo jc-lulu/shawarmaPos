@@ -593,7 +593,7 @@ include('server_side/check_session.php');
                 ],
             });
 
-            // Add custom styling for the buttons container
+            //custom styling for the buttons container
             $('.dt-buttons').addClass('mb-3');
 
             // Handle View Details button click
@@ -620,7 +620,6 @@ include('server_side/check_session.php');
                 $('#modal-date-out').text(dateOut);
                 $('#modal-generated-date').text(formattedDate);
 
-                // Highlight the product type
                 if (type === 'IN') {
                     $('#modal-product-type').removeClass('type-out').addClass('type-in');
                 } else {
@@ -661,21 +660,21 @@ include('server_side/check_session.php');
                 printWindow.document.close();
                 printWindow.focus();
 
-                // Give time for styles to load
+        
                 setTimeout(() => {
                     printWindow.print();
                     printWindow.close();
                 }, 500);
             });
 
-            // Handle edit button click
+            //edit button click
             $(document).on('click', '.edit-btn', function() {
                 const id = $(this).data('id');
 
                 // Hide any active tooltips
                 $('.tooltip').hide();
 
-                // Fetch item details for editing
+                //Fetch item details for editing
                 $.ajax({
                     url: 'server_side/get_inventory_item.php',
                     type: 'GET',
@@ -694,7 +693,7 @@ include('server_side/check_session.php');
                             $('#edit-product-quantity').val(item.quantity);
                             $('#edit-product-status').val(item.transactionStatus);
 
-                            // Format dates for form inputs
+                
                             if (item.dateOfIn) {
                                 $('#edit-date-in').val(item.dateOfIn.substring(0, 10)); // YYYY-MM-DD format
                             }
@@ -705,7 +704,7 @@ include('server_side/check_session.php');
                                 $('#edit-date-out').val('');
                             }
 
-                            // Show/hide date out field based on type
+                        
                             if (item.type == 0) { // IN
                                 $('#edit-date-out-container').hide();
                             } else { // OUT
@@ -731,8 +730,6 @@ include('server_side/check_session.php');
                     }
                 });
             });
-
-            // Toggle date out field visibility when type changes
             $('#edit-product-type').change(function() {
                 if ($(this).val() == 0) { // IN
                     $('#edit-date-out-container').hide();
@@ -741,7 +738,7 @@ include('server_side/check_session.php');
                 }
             });
 
-            // Handle save button click
+            //save button click
             $('#saveEditBtn').click(function() {
                 // Validate form
                 if (!$('#editItemForm')[0].checkValidity()) {
@@ -749,7 +746,6 @@ include('server_side/check_session.php');
                     return;
                 }
 
-                // Get form data
                 const formData = {
                     productId: $('#edit-product-id').val(),
                     productName: $('#edit-product-name').val(),
@@ -797,7 +793,7 @@ include('server_side/check_session.php');
                 });
             });
 
-            // Handle delete button click
+            //delete button click
             $(document).on('click', '.delete-btn', function() {
                 const id = $(this).data('id');
 
