@@ -13,7 +13,7 @@ include('server_side/check_session.php');
 </head>
 
 <body>
-    <div class="container-fluid d-flex">
+    <div class="container-fluid d-flex" style="padding-left: 0;">
         <?php include 'sidebar.php'; ?>
         <div class="main-content">
             <h1>Menu Management</h1>
