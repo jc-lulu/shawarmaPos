@@ -1,18 +1,168 @@
 body {
-  background-color: #f9f5d7;
+  background-color: #f8f9fa;
+  font-family: "Poppins", sans-serif;
+}
+
+.page-container {
+  padding: 1.5rem;
+  transition: all 0.3s;
+}
+
+.page-title {
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 3px solid #ff8c00;
+  display: inline-block;
 }
 
 .data-table {
-  max-height: 400px;
-  overflow-y: auto;
-  background-color: #d9d9d9;
-  border-radius: 5px;
-  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+  max-height: initial;
+  overflow-y: visible;
 }
 
-thead th {
+.btn-action {
+  margin: 0 3px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.btn-edit {
+  background-color: #17a2b8;
+  color: white;
+  border: none;
+}
+
+.btn-edit:hover {
+  background-color: #138496;
+  transform: scale(1.1);
+}
+
+.btn-add {
+  background: linear-gradient(to right, #4e73df, #224abe);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-add:hover {
+  background: linear-gradient(to right, #3a5bc7, #1a3a9c);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(78, 115, 223, 0.3);
+}
+
+.btn-out {
+  background: linear-gradient(to right, #fd7e14, #e67e00);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-out:hover {
+  background: linear-gradient(to right, #e67300, #cc6700);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(253, 126, 20, 0.3);
+}
+
+.type-in {
+  background-color: rgba(40, 167, 69, 0.15);
+  color: #28a745;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.type-out {
+  background-color: rgba(253, 126, 20, 0.15);
+  color: #fd7e14;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.status-pending {
+  background-color: rgba(255, 193, 7, 0.15);
+  color: #ffc107;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.status-approved {
+  background-color: rgba(40, 167, 69, 0.15);
+  color: #28a745;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.status-rejected {
+  background-color: rgba(220, 53, 69, 0.15);
+  color: #dc3545;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+#transactionsTable thead th {
+  background: linear-gradient(to right, #ff8c00, #e67e00);
+  color: white;
+  font-weight: 500;
+  padding: 12px;
+  border: none;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
   position: sticky;
   top: 0;
-  background-color: #ff8c00;
-  color: black;
+}
+
+#transactionsTable tbody tr {
+  transition: all 0.2s;
+}
+
+#transactionsTable tbody tr:hover {
+  background-color: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+}
+
+#transactionsTable td {
+  padding: 12px;
+  vertical-align: middle;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.filters-section {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.action-buttons-container {
+  white-space: nowrap;
 }

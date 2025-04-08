@@ -1,5 +1,4 @@
 <?php
-// filepath: c:\xampp\htdocs\shawarmaPos\delete_inventory.php
 session_start();
 include('../cedric_dbConnection.php');
 
