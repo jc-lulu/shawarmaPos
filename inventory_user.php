@@ -321,6 +321,7 @@ include('server_side/check_session.php');
 
         <div class="container py-4 page-container">
             <h1 class="page-title">INVENTORY MANAGEMENT</h1>
+            <title>Login Page</title>
 
             <div class="row mb-4">
                 <?php
