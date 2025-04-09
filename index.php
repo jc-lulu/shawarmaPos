@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             if (password_verify($password, $hashed_password)) {
                 //session variables
-                $_SESSION['user_id'] = $row['usersId'];
+                $_SESSION['user_id'] = $row['user_id'];
                 $_SESSION['user_name'] = $row['username'];
                 $_SESSION['user_email'] = $row['email'];
                 $_SESSION['user_role'] = $row['role'];
