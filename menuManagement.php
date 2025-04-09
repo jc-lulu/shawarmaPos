@@ -99,25 +99,30 @@ include('server_side/check_session.php');
     </div>
 
     <script>
-        function loadRemoveProductList() {
-            $.ajax({
-                url: "server_side/fetchRemove.php",
-                type: "GET",
-                success: function(response) {
-                    $("#remove-product-list").html(response);
+function loadRemoveProductList() {
+    $.ajax({
+        url: "server_side/fetchRemove.php",
+        type: "GET",
+        success: function(response) {
+            $("#remove-product-list").html(response);
 
-                    //click functionality to select product
-                    $(".selectable-product").click(function() {
-                        var checkbox = $(this).find("input[type='checkbox']");
-                        checkbox.prop("checked", !checkbox.prop("checked"));
-                        $(this).toggleClass("selected", checkbox.prop("checked"));
-                    });
-                },
-                error: function() {
-                    console.error("Error loading products.");
-                }
+            // Fix selectable product functionality
+            $(".selectable-product").on("click", function(e) {
+                var checkbox = $(this).find("input[type='checkbox']");
+                checkbox.prop("checked", !checkbox.prop("checked"));
+                $(this).toggleClass("selected", checkbox.prop("checked"));
             });
+            
+            // Prevent checkbox click from triggering parent click
+            $(".selectable-product input[type='checkbox']").on("click", function(e) {
+                e.stopPropagation();
+            });
+        },
+        error: function() {
+            console.error("Error loading products.");
         }
+    });
+}
 
         function loadProducts() {
             $.ajax({
@@ -192,7 +197,6 @@ include('server_side/check_session.php');
                 });
             });
 
-            //search function sa Remove Modal
             $("#searchProduct").on("keyup", function() {
                 var searchText = $(this).val().toLowerCase();
                 $(".product-card").each(function() {
@@ -235,6 +239,20 @@ include('server_side/check_session.php');
                     }
                 });
             });
+
+            $("#product_image").change(function() {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                if (!$("#image-preview").length) {
+                    $("<div id='image-preview' class='mt-3 text-center'><img src='" + e.target.result + "' class='img-thumbnail' style='max-height: 200px;'></div>").insertAfter("#product_image");
+                } else {
+                    $("#image-preview img").attr("src", e.target.result);
+                }
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
         });
     </script>
 </body>
