@@ -303,7 +303,7 @@ include('server_side/check_session.php');
                 </div>
             `;
 
-            // Update the invoice container
+            // update the invoice list
             $("#invoice-list").html(invoiceHTML);
 
             // Update the place order button text
@@ -311,7 +311,6 @@ include('server_side/check_session.php');
                 <i class="fas fa-check-circle me-2"></i>Place Order (₱${subtotal.toFixed(2)})
             `);
 
-            // Attach event listeners for quantity buttons
             $(".qty-btn.minus").on("click", function () {
                 const id = $(this).data("id");
                 removeFromCart(id);
@@ -325,7 +324,7 @@ include('server_side/check_session.php');
                 }
             });
 
-            // Attach event listener for clear cart button
+            // clear cart button
             $("#clear-cart").on("click", function () {
                 Swal.fire({
                     title: 'Clear cart?',
@@ -408,7 +407,7 @@ include('server_side/check_session.php');
                 });
             });
 
-            // Place order functionality
+            // Place order function
             $(".invoice .btn-warning").on("click", function () {
                 if (cart.length === 0) {
                     Swal.fire({
@@ -429,16 +428,173 @@ include('server_side/check_session.php');
                     confirmButtonText: 'Yes, place order!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Here you would normally send the order to the server
-                        // For now we'll just show a success message and clear the cart
-
+                        // Show loading state
                         Swal.fire({
-                            icon: 'success',
-                            title: 'Order Placed!',
-                            text: 'Your order has been placed successfully.',
-                        }).then(() => {
-                            // Clear cart after order is placed
-                            clearCart();
+                            title: 'Processing Order...',
+                            text: 'Please wait while we process your order.',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        // send to server via ajax
+                        $.ajax({
+                            url: "server_side/place_order.php",
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify({
+                                items: cart,
+                                subtotal: subtotal
+                            }),
+                            dataType: "json",
+                            success: function (response) {
+                                if (response.success) {
+                                    // Show receipt with order ID and print button
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Order Placed!',
+                                        html: `
+                <div class="text-center">
+                    <p>Your order has been placed successfully.</p>
+                    <div class="alert alert-success mt-3">
+                        <strong>Order ID:</strong> ${response.orderId}<br>
+                        <strong>Date:</strong> ${response.dateOfOrder}<br>
+                        <strong>Time:</strong> ${response.timeOfOrder}
+                    </div>
+                    <button id="print-receipt" class="btn btn-sm btn-outline-primary mt-3">
+                        <i class="fas fa-print me-2"></i>Print Receipt
+                    </button>
+                </div>
+            `,
+                                        didOpen: () => {
+                                            document.getElementById('print-receipt').addEventListener('click', function () {
+                                                // Generate printable receipt
+                                                const receiptWindow = window.open('', '_blank');
+
+                                                receiptWindow.document.write(`
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <title>Receipt #${response.orderId}</title>
+                            <style>
+                                body {
+                                    font-family: 'Courier New', monospace;
+                                    width: 300px;
+                                    margin: 0 auto;
+                                    padding: 10px;
+                                }
+                                .receipt-header, .receipt-footer {
+                                    text-align: center;
+                                    margin-bottom: 10px;
+                                }
+                                .divider {
+                                    border-top: 1px dashed #000;
+                                    margin: 10px 0;
+                                }
+                                table {
+                                    width: 100%;
+                                    border-collapse: collapse;
+                                }
+                                th, td {
+                                    text-align: left;
+                                    padding: 3px 0;
+                                }
+                                .amount {
+                                    text-align: right;
+                                }
+                                .total {
+                                    font-weight: bold;
+                                    border-top: 1px solid #000;
+                                    padding-top: 5px;
+                                }
+                                @media print {
+                                    .no-print {
+                                        display: none;
+                                    }
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="receipt-header">
+                                <h2>SHAWARMA POS</h2>
+                                <p>Receipt #${response.orderId}</p>
+                                <p>${response.dateOfOrder} - ${response.timeOfOrder}</p>
+                            </div>
+                            
+                            <div class="divider"></div>
+                            
+                            <table>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Qty</th>
+                                    <th class="amount">Price</th>
+                                    <th class="amount">Total</th>
+                                </tr>
+                    `);
+
+                                                // Add items to receipt
+                                                cart.forEach(item => {
+                                                    receiptWindow.document.write(`
+                            <tr>
+                                <td>${item.name}</td>
+                                <td>${item.quantity}</td>
+                                <td class="amount">₱${item.price.toFixed(2)}</td>
+                                <td class="amount">₱${item.totalPrice.toFixed(2)}</td>
+                            </tr>
+                        `);
+                                                });
+
+                                                // Add totals and footer
+                                                receiptWindow.document.write(`
+                                <tr class="total">
+                                    <td colspan="2">Total:</td>
+                                    <td colspan="2" class="amount">₱${subtotal.toFixed(2)}</td>
+                                </tr>
+                            </table>
+                            
+                            <div class="divider"></div>
+                            
+                            <div class="receipt-footer">
+                                <p>Thank you for your order!</p>
+                                <p>Please come again</p>
+                            </div>
+                            
+                            <div class="no-print" style="text-align: center; margin-top: 20px;">
+                                <button onclick="window.print();" style="padding: 8px 16px; cursor: pointer;">
+                                    Print Receipt
+                                </button>
+                            </div>
+                        </body>
+                        </html>
+                    `);
+
+                                                // Trigger the print dialog
+                                                receiptWindow.document.close();
+                                                receiptWindow.focus();
+                                            });
+                                        }
+                                    }).then(() => {
+                                        // Clear cart after order is placed
+                                        clearCart();
+                                    });
+                                } else {
+                                    // Show error message
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Order Failed',
+                                        text: response.message || 'There was an error processing your order. Please try again.',
+                                    });
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("Error placing order:", error);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Server Error',
+                                    text: 'There was a problem connecting to the server. Please try again later.',
+                                });
+                            }
                         });
                     }
                 });
