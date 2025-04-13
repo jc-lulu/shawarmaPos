@@ -8,13 +8,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $sql = "SELECT usersId, username, role, email, password, accountStatus FROM userstable WHERE email = '$email'";
+    $sql = "SELECT usersId, username, role, email, password FROM userstable WHERE email = '$email'";
     $result = $connection->query($sql);
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         $hashed_password = $row['password'];
-        $accountStatus = $row['accountStatus'];
 
         if (password_verify($password, $hashed_password)) {
             //session variables
@@ -87,9 +86,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </button>
                 </div>
                 <button type="submit" class="btn btn-custom w-100" form="log-form">Sign In</button>
-                <div class="create-account-container text-center p-2">
+                <!-- <div class="create-account-container text-center p-2">
                     <p>Don't have an account? <a href="create_account.php" class="create-account-link">Sign Up</a></p>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

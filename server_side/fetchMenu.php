@@ -1,10 +1,10 @@
 <?php
 include('../cedric_dbConnection.php');
 
-$sql = "SELECT * FROM menu ORDER BY menuId DESC";
-$result = $connection->query($sql);
+$query = "SELECT menuId, productName, productPrice, productImage, productType FROM menu ORDER BY productType ASC, productName ASC";
+$result = $connection->query($query);
 
-$products = [];
+$products = array();
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
@@ -12,4 +12,6 @@ if ($result->num_rows > 0) {
     }
 }
 
+header('Content-Type: application/json');
 echo json_encode($products);
+$connection->close();

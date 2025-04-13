@@ -22,18 +22,21 @@ include('server_side/check_session.php');
                     <div class="mb-3">
                         <h1>Menu</h1>
                         <div class="input-group mt-3">
-                            <input type="text" class="form-control" placeholder="Search Food">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            <input type="text" id="searchFood" class="form-control"
+                                placeholder="Search by product name...">
                         </div>
-                        <div class="btn-group mt-3">
-                            <button class="btn btn-warning">All</button>
-                            <button class="btn btn-warning">Shawarma</button>
-                            <button class="btn btn-warning">Burgers</button>
-                            <button class="btn btn-warning">Fries</button>
-                            <button class="btn btn-warning">Drinks</button>
+                        <div class="btn-group mt-3 filter-buttons">
+                            <button id="filter-all" class="btn btn-warning filter-btn active">All</button>
+                            <button id="filter-0" class="btn btn-warning filter-btn">Shawarma</button>
+                            <button id="filter-1" class="btn btn-warning filter-btn">Burgers</button>
+                            <button id="filter-2" class="btn btn-warning filter-btn">Fries</button>
+                            <button id="filter-3" class="btn btn-warning filter-btn">Rice</button>
+                            <button id="filter-4" class="btn btn-warning filter-btn">Drinks</button>
                         </div>
                     </div>
 
-                    <div class="row p-3 gap-2" id="product-list"></div>
+                    <div class="row p-3 gap-3" id="product-list"></div>
                 </div>
 
                 <div class="col-md-4">
@@ -48,47 +51,398 @@ include('server_side/check_session.php');
     </div>
 
     <script>
+        // Global variables
+        let allProducts = [];
+        let currentFilter = 'all';
+
+        let cart = [];
+        let subtotal = 0;
+
+        // Load all products from the server
         function loadProducts() {
             $.ajax({
                 url: "server_side/fetchMenu.php",
                 type: "GET",
                 dataType: "json",
-                success: function(products) {
-                    let productHTML = "";
+                success: function (products) {
+                    // Store all products for filtering
+                    allProducts = products;
 
-                    if (products.length > 0) {
-                        products.forEach(function(product) {
-                            productHTML += `
-                            <div class="col-md-3 product-container p-3" style="background-color: white; border-radius: 10px;">
-                                <div class="image-container">
-                                    <img src="server_side/${product.productImage}" alt="${product.productName}" style="width: 100%; height: 100%; object-fit: cover;">
-                                </div>
-                                <div class="product-name text-center">
-                                    <strong>${product.productName}</strong>
-                                </div>
-                                <div class="product-price text-center">
-                                    <span>₱${parseFloat(product.productPrice).toFixed(2)}</span>
-                                </div>
-                                <div class="button-container text-center">
-                                    <button class="btn btn-primary">Add</button>
-                                </div>
-                            </div>
-                        `;
-                        });
-                    } else {
-                        productHTML = "<p>No products found.</p>";
-                    }
-
-                    $("#product-list").html(productHTML);
+                    // Apply initial filter (show all)
+                    filterProducts(currentFilter);
                 },
-                error: function() {
-                    console.error("Error loading products.");
+                error: function (xhr, status, error) {
+                    console.error("Error loading products:", error);
+                    $("#product-list").html(`
+                    <div class="col-12 text-center py-5">
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Failed to load menu items. Please try again later.
+                        </div>
+                    </div>
+                `);
                 }
             });
         }
 
-        $(document).ready(function() {
+        // Filter products by type and search term
+        function filterProducts(filterType) {
+            // Update active filter
+            currentFilter = filterType;
+
+            // Highlight active filter button
+            $('.filter-btn').removeClass('active');
+            $(`#filter-${filterType}`).addClass('active');
+
+            // Get current search term
+            const searchTerm = $('#searchFood').val().toLowerCase().trim();
+
+            // Apply filters
+            let filteredProducts = allProducts;
+
+            // Filter by product type if not "all"
+            if (filterType !== 'all') {
+                const typeValue = parseInt(filterType);
+                filteredProducts = filteredProducts.filter(product =>
+                    parseInt(product.productType) === typeValue
+                );
+            }
+
+            // Apply search filter if there's text
+            if (searchTerm) {
+                filteredProducts = filteredProducts.filter(product =>
+                    product.productName.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // Display filtered products
+            renderProducts(filteredProducts);
+        }
+
+        // Render products to the page
+        function renderProducts(products) {
+            let productHTML = "";
+
+            if (products.length > 0) {
+                products.forEach(function (product) {
+                    productHTML += `
+                <div class="col-md-3 product-container p-3">
+                    <div class="image-container">
+                        <img src="${product.productImage}" alt="${product.productName}" 
+                             onerror="this.src='images/no-image.png'">
+                    </div>
+                    <div class="product-name">
+                        <strong>${product.productName}</strong>
+                    </div>
+                    <div class="product-price">
+                        <span>₱${parseFloat(product.productPrice).toFixed(2)}</span>
+                    </div>
+                    <div class="button-container">
+                        <button class="btn btn-warning add-to-cart" 
+                                data-id="${product.menuId}" 
+                                data-name="${product.productName}" 
+                                data-price="${product.productPrice}">
+                            <i class="fas fa-cart-plus me-2"></i>Add
+                        </button>
+                    </div>
+                </div>`;
+                });
+            } else {
+                productHTML = `
+            <div class="col-12 text-center py-5">
+                <div class="alert alert-warning">
+                    <i class="fas fa-search me-2"></i>
+                    No products found matching your criteria.
+                </div>
+            </div>`;
+            }
+
+            $("#product-list").html(productHTML);
+        }
+
+        // Function to add items to cart
+        function addToCart(id, name, price) {
+            // Check if item is already in cart
+            const existingItemIndex = cart.findIndex(item => item.id === id);
+
+            if (existingItemIndex !== -1) {
+                // Increment quantity if already in cart
+                cart[existingItemIndex].quantity++;
+                cart[existingItemIndex].totalPrice = cart[existingItemIndex].quantity * cart[existingItemIndex].price;
+            } else {
+                // Add new item to cart
+                cart.push({
+                    id: id,
+                    name: name,
+                    price: parseFloat(price),
+                    quantity: 1,
+                    totalPrice: parseFloat(price)
+                });
+            }
+
+            // Update the invoice display
+            updateInvoice();
+
+            // Return the updated cart for potential further use
+            return cart;
+        }
+
+        // Function to remove items from cart
+        function removeFromCart(id) {
+            const itemIndex = cart.findIndex(item => item.id === id);
+
+            if (itemIndex !== -1) {
+                if (cart[itemIndex].quantity > 1) {
+                    // Decrease quantity if more than 1
+                    cart[itemIndex].quantity--;
+                    cart[itemIndex].totalPrice = cart[itemIndex].quantity * cart[itemIndex].price;
+                } else {
+                    // Remove item if quantity is 1
+                    cart.splice(itemIndex, 1);
+                }
+
+                // Update the invoice display
+                updateInvoice();
+            }
+        }
+
+        // Function to clear the entire cart
+        function clearCart() {
+            cart = [];
+            updateInvoice();
+        }
+
+        // Function to update the invoice display
+        function updateInvoice() {
+            // Calculate subtotal
+            subtotal = cart.reduce((sum, item) => sum + item.totalPrice, 0);
+
+            // If cart is empty, show empty message
+            if (cart.length === 0) {
+                $("#invoice-list").html(`
+                    <div class="text-center py-5 text-muted">
+                        <i class="fas fa-shopping-cart fa-3x mb-3"></i>
+                        <p>Your cart is empty</p>
+                    </div>
+                `);
+
+                // Update place order button
+                $(".invoice .btn-warning").html(`
+                    <i class="fas fa-check-circle me-2"></i>Place Order
+                `);
+                return;
+            }
+
+            // Build receipt HTML
+            let invoiceHTML = `
+                <div class="receipt">
+                    <div class="receipt-header mb-3">
+                        <p class="text-center mb-1">${new Date().toLocaleDateString('en-PH', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            })}</p>
+                        <p class="text-center mb-0">${new Date().toLocaleTimeString('en-PH')}</p>
+                    </div>
+                    
+                    <table class="receipt-items w-100">
+                        <thead>
+                            <tr>
+                                <th class="text-start">Item</th>
+                                <th>Qty</th>
+                                <th class="text-end">Price</th>
+                                <th class="text-end">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            // Add cart items
+            cart.forEach(item => {
+                invoiceHTML += `
+                    <tr>
+                        <td class="text-start item-name">${item.name}</td>
+                        <td class="text-center">
+                            <div class="qty-control">
+                                <button class="qty-btn minus" data-id="${item.id}">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="qty-btn plus" data-id="${item.id}">+</button>
+                            </div>
+                        </td>
+                        <td class="text-end">₱${item.price.toFixed(2)}</td>
+                        <td class="text-end">₱${item.totalPrice.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+
+            // Add receipt footer with totals
+            invoiceHTML += `
+                        </tbody>
+                    </table>
+                    
+                    <div class="receipt-divider my-3"></div>
+                    
+                    <div class="receipt-summary">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span>₱${subtotal.toFixed(2)}</span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between total-row mb-3">
+                            <span><strong>TOTAL</strong></span>
+                            <span><strong>₱${subtotal.toFixed(2)}</strong></span>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <button id="clear-cart" class="btn btn-outline-danger btn-sm">
+                            <i class="fas fa-trash me-1"></i> Clear All
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Update the invoice container
+            $("#invoice-list").html(invoiceHTML);
+
+            // Update the place order button text
+            $(".invoice .btn-warning").html(`
+                <i class="fas fa-check-circle me-2"></i>Place Order (₱${subtotal.toFixed(2)})
+            `);
+
+            // Attach event listeners for quantity buttons
+            $(".qty-btn.minus").on("click", function () {
+                const id = $(this).data("id");
+                removeFromCart(id);
+            });
+
+            $(".qty-btn.plus").on("click", function () {
+                const id = $(this).data("id");
+                const item = cart.find(item => item.id === id);
+                if (item) {
+                    addToCart(id, item.name, item.price);
+                }
+            });
+
+            // Attach event listener for clear cart button
+            $("#clear-cart").on("click", function () {
+                Swal.fire({
+                    title: 'Clear cart?',
+                    text: "All items will be removed from your order.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, clear it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        clearCart();
+                        Swal.fire(
+                            'Cleared!',
+                            'Your cart has been cleared.',
+                            'success'
+                        );
+                    }
+                });
+            });
+        }
+
+        // Document ready
+        $(document).ready(function () {
+            // Initial load
             loadProducts();
+
+            // Initialize empty invoice
+            updateInvoice();
+
+            // Filter button click events
+            $('#filter-all').on('click', function () {
+                filterProducts('all');
+            });
+
+            $('#filter-0').on('click', function () {
+                filterProducts('0');
+            });
+
+            $('#filter-1').on('click', function () {
+                filterProducts('1');
+            });
+
+            $('#filter-2').on('click', function () {
+                filterProducts('2');
+            });
+
+            $('#filter-3').on('click', function () {
+                filterProducts('3');
+            });
+
+            $('#filter-4').on('click', function () {
+                filterProducts('4');
+            });
+
+            // Search input event
+            $('#searchFood').on('input', function () {
+                filterProducts(currentFilter);
+            });
+
+            // Add to cart click handler
+            $(document).on('click', '.add-to-cart', function () {
+                const productId = $(this).data('id');
+                const productName = $(this).data('name');
+                const productPrice = $(this).data('price');
+
+                // Add the item to cart
+                addToCart(productId, productName, productPrice);
+
+                // Show notification
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Added to Cart',
+                    text: `${productName} has been added to your order.`,
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true
+                });
+            });
+
+            // Place order functionality
+            $(".invoice .btn-warning").on("click", function () {
+                if (cart.length === 0) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Empty Cart',
+                        text: 'Please add some items to your cart first.',
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Confirm Order',
+                    text: `Place order for ₱${subtotal.toFixed(2)}?`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ff8c00',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, place order!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Here you would normally send the order to the server
+                        // For now we'll just show a success message and clear the cart
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Order Placed!',
+                            text: 'Your order has been placed successfully.',
+                        }).then(() => {
+                            // Clear cart after order is placed
+                            clearCart();
+                        });
+                    }
+                });
+            });
         });
     </script>
 </body>

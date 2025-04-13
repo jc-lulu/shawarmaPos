@@ -33,7 +33,8 @@ include('server_side/check_session.php');
         </div>
 
         <!-- Add Product Modal -->
-        <div class="modal fade" id="transactionInModal" tabindex="-1" aria-labelledby="transactionInLabel" aria-hidden="true">
+        <div class="modal fade" id="transactionInModal" tabindex="-1" aria-labelledby="transactionInLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -44,17 +45,32 @@ include('server_side/check_session.php');
                         <form id="uploadMenu" method="POST" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label for="product_name" class="form-label">Product Name</label>
-                                <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Enter product name" required>
+                                <input type="text" class="form-control" id="product_name" name="product_name"
+                                    placeholder="Enter product name" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="price" class="form-label">Price (₱)</label>
-                                <input type="number" class="form-control" id="price" name="price" placeholder="Enter price" step="0.01" required>
+                                <input type="number" class="form-control" id="price" name="price"
+                                    placeholder="Enter price" step="0.01" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Product Type</label>
+                                <select class="form-select" id="category" name="category" required>
+                                    <option value="" disabled selected>Select Category</option>
+                                    <option value="0">Shawarma</option>
+                                    <option value="1">Burgers</option>
+                                    <option value="2">Fries</option>
+                                    <option value="3">Rice</option>
+                                    <option value="4">Drinks</option>
+                                </select>
                             </div>
 
                             <div class="mb-3">
                                 <label for="product_image" class="form-label">Product Image</label>
-                                <input type="file" class="form-control" id="product_image" name="product_image" accept="image/*" required>
+                                <input type="file" class="form-control" id="product_image" name="product_image"
+                                    accept="image/*" required>
                                 <div class="form-text">Recommended size: 500x500px</div>
                             </div>
 
@@ -68,7 +84,8 @@ include('server_side/check_session.php');
         </div>
 
         <!-- Remove Product Modal -->
-        <div class="modal fade" id="removeProductModal" tabindex="-1" aria-labelledby="removeProductLabel" aria-hidden="true">
+        <div class="modal fade" id="removeProductModal" tabindex="-1" aria-labelledby="removeProductLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -79,7 +96,8 @@ include('server_side/check_session.php');
                         <!-- Search Product -->
                         <div class="input-group mb-3">
                             <span class="input-group-text"><i class="fas fa-search"></i></span>
-                            <input type="text" id="searchProduct" class="form-control" placeholder="Search product name">
+                            <input type="text" id="searchProduct" class="form-control"
+                                placeholder="Search product name">
                         </div>
 
                         <!-- Product List -->
@@ -99,54 +117,50 @@ include('server_side/check_session.php');
     </div>
 
     <script>
-function loadRemoveProductList() {
-    $.ajax({
-        url: "server_side/fetchRemove.php",
-        type: "GET",
-        success: function(response) {
-            $("#remove-product-list").html(response);
+        function loadRemoveProductList() {
+            $.ajax({
+                url: "server_side/fetchRemove.php",
+                type: "GET",
+                success: function (response) {
+                    $("#remove-product-list").html(response);
 
-            // Fix selectable product functionality
-            $(".selectable-product").on("click", function(e) {
-                var checkbox = $(this).find("input[type='checkbox']");
-                checkbox.prop("checked", !checkbox.prop("checked"));
-                $(this).toggleClass("selected", checkbox.prop("checked"));
+                    //click functionality to select product
+                    $(".selectable-product").click(function () {
+                        var checkbox = $(this).find("input[type='checkbox']");
+                        checkbox.prop("checked", !checkbox.prop("checked"));
+                        $(this).toggleClass("selected", checkbox.prop("checked"));
+                    });
+                },
+                error: function () {
+                    console.error("Error loading products.");
+                }
             });
-            
-            // Prevent checkbox click from triggering parent click
-            $(".selectable-product input[type='checkbox']").on("click", function(e) {
-                e.stopPropagation();
-            });
-        },
-        error: function() {
-            console.error("Error loading products.");
         }
-    });
-}
 
         function loadProducts() {
             $.ajax({
                 url: "server_side/fetchMenu.php",
                 type: "GET",
                 dataType: "json",
-                success: function(products) {
+                success: function (products) {
                     let productHTML = "";
 
                     if (products.length > 0) {
-                        products.forEach(function(product) {
+                        products.forEach(function (product) {
+                            // Fix image path to correctly point to uploads folder
                             productHTML += `
-                            <div class="product-container">
-                                <div class="image-container">
-                                    <img src="server_side/${product.productImage}" alt="${product.productName}">
-                                </div>
-                                <div class="product-name text-center">
-                                    <strong>${product.productName}</strong>
-                                </div>
-                                <div class="product-price text-center">
-                                    <span>₱${parseFloat(product.productPrice).toFixed(2)}</span>
-                                </div>
-                            </div>
-                            `;
+                    <div class="product-container">
+                        <div class="image-container">
+                            <img src="${product.productImage}" alt="${product.productName}">
+                        </div>
+                        <div class="product-name text-center">
+                            <strong>${product.productName}</strong>
+                        </div>
+                        <div class="product-price text-center">
+                            <span>₱${parseFloat(product.productPrice).toFixed(2)}</span>
+                        </div>
+                    </div>
+                    `;
                         });
                     } else {
                         productHTML = "<div class='w-100 text-center p-5'><p class='text-muted'>No products found. Add some products to get started!</p></div>";
@@ -154,16 +168,17 @@ function loadRemoveProductList() {
 
                     $("#product-list").html(productHTML);
                 },
-                error: function() {
-                    console.error("Error loading products.");
+                error: function (xhr, status, error) {
+                    console.error("Error loading products:", error);
+                    $("#product-list").html("<div class='w-100 text-center p-5'><p class='text-danger'>Error loading products. Please try again later.</p></div>");
                 }
             });
         }
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             loadProducts(); // Load products
 
-            $("#uploadMenu").submit(function(event) {
+            $("#uploadMenu").submit(function (event) {
                 event.preventDefault(); // Prevent page reload
                 var formData = new FormData(this);
 
@@ -173,7 +188,7 @@ function loadRemoveProductList() {
                     data: formData,
                     contentType: false,
                     processData: false,
-                    success: function(response) {
+                    success: function (response) {
                         if (response.trim() === "success") {
                             Swal.fire({
                                 icon: "success",
@@ -197,19 +212,21 @@ function loadRemoveProductList() {
                 });
             });
 
-            $("#searchProduct").on("keyup", function() {
+            // Search products in remove modal
+            //search function sa Remove Modal
+            $("#searchProduct").on("keyup", function () {
                 var searchText = $(this).val().toLowerCase();
-                $(".product-card").each(function() {
+                $(".product-card").each(function () {
                     var productName = $(this).find(".card-title").text().toLowerCase();
                     $(this).toggle(productName.includes(searchText));
                 });
             });
 
-            $("#removeProductModal").on("show.bs.modal", function() {
+            $("#removeProductModal").on("show.bs.modal", function () {
                 loadRemoveProductList();
             });
 
-            $("#removeProductForm").submit(function(event) {
+            $("#removeProductForm").submit(function (event) {
                 event.preventDefault();
 
                 var formData = $(this).serialize();
@@ -217,7 +234,7 @@ function loadRemoveProductList() {
                     url: "server_side/removeMenu.php",
                     type: "POST",
                     data: formData,
-                    success: function(response) {
+                    success: function (response) {
                         if (response.trim() === "success") {
                             Swal.fire({
                                 icon: "success",
@@ -240,19 +257,19 @@ function loadRemoveProductList() {
                 });
             });
 
-            $("#product_image").change(function() {
-        if (this.files && this.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                if (!$("#image-preview").length) {
-                    $("<div id='image-preview' class='mt-3 text-center'><img src='" + e.target.result + "' class='img-thumbnail' style='max-height: 200px;'></div>").insertAfter("#product_image");
-                } else {
-                    $("#image-preview img").attr("src", e.target.result);
+            $("#product_image").change(function () {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        if (!$("#image-preview").length) {
+                            $("<div id='image-preview' class='mt-3 text-center'><img src='" + e.target.result + "' class='img-thumbnail' style='max-height: 200px;'></div>").insertAfter("#product_image");
+                        } else {
+                            $("#image-preview img").attr("src", e.target.result);
+                        }
+                    }
+                    reader.readAsDataURL(this.files[0]);
                 }
-            }
-            reader.readAsDataURL(this.files[0]);
-        }
-    });
+            });
         });
     </script>
 </body>
