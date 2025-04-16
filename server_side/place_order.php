@@ -19,7 +19,7 @@ $connection->begin_transaction();
 
 try {
     // Step 1: Generate the new order ID
-    $query = "SELECT MAX(CAST(itemKey AS UNSIGNED)) as maxId FROM ordereditemhistory";
+    $query = "SELECT MAX(CAST(itemKey AS UNSIGNED)) as maxId FROM ordered   itemhistory";
     $result = $connection->query($query);
     $row = $result->fetch_assoc();
 
