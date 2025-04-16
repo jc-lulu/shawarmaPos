@@ -1,7 +1,6 @@
 <?php
 include('../cedric_dbConnection.php');
 
-// Get the order data from AJAX request
 $postData = json_decode(file_get_contents('php://input'), true);
 
 if (!$postData || empty($postData['items'])) {
@@ -19,7 +18,7 @@ $connection->begin_transaction();
 
 try {
     // Step 1: Generate the new order ID
-    $query = "SELECT MAX(CAST(itemKey AS UNSIGNED)) as maxId FROM ordered   itemhistory";
+    $query = "SELECT MAX(CAST(itemKey AS UNSIGNED)) as maxId FROM ordereditemhistory";
     $result = $connection->query($query);
     $row = $result->fetch_assoc();
 
@@ -70,7 +69,6 @@ try {
         'dateOfOrder' => $dateOfOrder,
         'timeOfOrder' => $timeOfOrder
     ]);
-
 } catch (Exception $e) {
     // Roll back the transaction in case of error
     $connection->rollback();
@@ -82,4 +80,3 @@ try {
 }
 
 $connection->close();
-?>

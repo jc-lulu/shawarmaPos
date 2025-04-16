@@ -64,14 +64,14 @@ include('server_side/check_session.php');
                 url: "server_side/fetchMenu.php",
                 type: "GET",
                 dataType: "json",
-                success: function (products) {
+                success: function(products) {
                     // Store all products for filtering
                     allProducts = products;
 
                     // Apply initial filter (show all)
                     filterProducts(currentFilter);
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     console.error("Error loading products:", error);
                     $("#product-list").html(`
                     <div class="col-12 text-center py-5">
@@ -124,7 +124,7 @@ include('server_side/check_session.php');
             let productHTML = "";
 
             if (products.length > 0) {
-                products.forEach(function (product) {
+                products.forEach(function(product) {
                     productHTML += `
                 <div class="col-md-3 product-container p-3">
                     <div class="image-container">
@@ -311,12 +311,12 @@ include('server_side/check_session.php');
                 <i class="fas fa-check-circle me-2"></i>Place Order (₱${subtotal.toFixed(2)})
             `);
 
-            $(".qty-btn.minus").on("click", function () {
+            $(".qty-btn.minus").on("click", function() {
                 const id = $(this).data("id");
                 removeFromCart(id);
             });
 
-            $(".qty-btn.plus").on("click", function () {
+            $(".qty-btn.plus").on("click", function() {
                 const id = $(this).data("id");
                 const item = cart.find(item => item.id === id);
                 if (item) {
@@ -325,7 +325,7 @@ include('server_side/check_session.php');
             });
 
             // clear cart button
-            $("#clear-cart").on("click", function () {
+            $("#clear-cart").on("click", function() {
                 Swal.fire({
                     title: 'Clear cart?',
                     text: "All items will be removed from your order.",
@@ -348,7 +348,7 @@ include('server_side/check_session.php');
         }
 
         // Document ready
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Initial load
             loadProducts();
 
@@ -356,37 +356,37 @@ include('server_side/check_session.php');
             updateInvoice();
 
             // Filter button click events
-            $('#filter-all').on('click', function () {
+            $('#filter-all').on('click', function() {
                 filterProducts('all');
             });
 
-            $('#filter-0').on('click', function () {
+            $('#filter-0').on('click', function() {
                 filterProducts('0');
             });
 
-            $('#filter-1').on('click', function () {
+            $('#filter-1').on('click', function() {
                 filterProducts('1');
             });
 
-            $('#filter-2').on('click', function () {
+            $('#filter-2').on('click', function() {
                 filterProducts('2');
             });
 
-            $('#filter-3').on('click', function () {
+            $('#filter-3').on('click', function() {
                 filterProducts('3');
             });
 
-            $('#filter-4').on('click', function () {
+            $('#filter-4').on('click', function() {
                 filterProducts('4');
             });
 
             // Search input event
-            $('#searchFood').on('input', function () {
+            $('#searchFood').on('input', function() {
                 filterProducts(currentFilter);
             });
 
             // Add to cart click handler
-            $(document).on('click', '.add-to-cart', function () {
+            $(document).on('click', '.add-to-cart', function() {
                 const productId = $(this).data('id');
                 const productName = $(this).data('name');
                 const productPrice = $(this).data('price');
@@ -408,7 +408,7 @@ include('server_side/check_session.php');
             });
 
             // Place order function
-            $(".invoice .btn-warning").on("click", function () {
+            $(".invoice .btn-warning").on("click", function() {
                 if (cart.length === 0) {
                     Swal.fire({
                         icon: 'info',
@@ -448,7 +448,7 @@ include('server_side/check_session.php');
                                 subtotal: subtotal
                             }),
                             dataType: "json",
-                            success: function (response) {
+                            success: function(response) {
                                 if (response.success) {
                                     // Show receipt with order ID and print button
                                     Swal.fire({
@@ -468,7 +468,7 @@ include('server_side/check_session.php');
                 </div>
             `,
                                         didOpen: () => {
-                                            document.getElementById('print-receipt').addEventListener('click', function () {
+                                            document.getElementById('print-receipt').addEventListener('click', function() {
                                                 // Generate printable receipt
                                                 const receiptWindow = window.open('', '_blank');
 
@@ -587,7 +587,7 @@ include('server_side/check_session.php');
                                     });
                                 }
                             },
-                            error: function (xhr, status, error) {
+                            error: function(xhr, status, error) {
                                 console.error("Error placing order:", error);
                                 Swal.fire({
                                     icon: 'error',
