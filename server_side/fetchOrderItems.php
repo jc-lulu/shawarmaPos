@@ -1,33 +1,48 @@
 <?php
+include('check_session.php');
 include('../cedric_dbConnection.php');
 
-if (!isset($_GET['orderId']) || empty($_GET['orderId'])) {
-    echo json_encode(['error' => 'No order ID provided']);
-    exit;
-}
+// Get the order ID from the request
+$orderId = isset($_GET['orderId']) ? $_GET['orderId'] : null;
 
-$orderId = $_GET['orderId'];
+// Initialize response array
+$response = array();
 
-// Sanitize input to prevent SQL injection
-$orderId = $connection->real_escape_string($orderId);
-
-$query = "SELECT id, productName, productPrice, Quantity as Quantity, totalPrice
-          FROM ordereditemhistory
-          WHERE itemKey = '$orderId'
-          ORDER BY id";
-
-$result = $connection->query($query);
-
-$items = array();
-
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $items[] = $row;
+if ($orderId) {
+    // Query to get order items where itemKey matches the orderId
+    $query = "SELECT * FROM orderedItemHistory WHERE itemKey = ?";
+    
+    $stmt = $connection->prepare($query);
+    $stmt->bind_param("s", $orderId);
+    $stmt->execute();
+    
+    $result = $stmt->get_result();
+    
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            // Add each item to the response array
+            $response[] = array(
+                'itemKey' => $row['itemKey'],
+                'productName' => $row['productName'],
+                'Quantity' => $row['quantity'],
+                'productPrice' => $row['productPrice'],
+                // Include any other fields you need
+            );
+        }
     }
+    
+    $stmt->close();
+} else {
+    // If no orderId was provided
+    $response = array(
+        'error' => true,
+        'message' => 'No order ID provided'
+    );
 }
 
-// Return as JSON
+// Return data as JSON
 header('Content-Type: application/json');
-echo json_encode($items);
+echo json_encode($response);
+
 $connection->close();
 ?>

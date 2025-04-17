@@ -1,4 +1,5 @@
 <?php
+include('check_session.php');
 include('../cedric_dbConnection.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -7,9 +8,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $productType = $_POST['productIn_type'];
     $dateOfIn = $_POST['dateOfIn'];
 
-
-    $sql = "INSERT INTO inventory (productName, quantity, productType, type, transactionStatus, dateOfIn) VALUES ('$productName', $productQuantity, '$productType', 0, 0, '$dateOfIn')";
+    $sql = "INSERT INTO inventory (productName, quantity, productType, type, requestedBy,transactionStatus, dateOfIn) VALUES ('$productName', $productQuantity, '$productType', 0, 0, 1, '$dateOfIn')";
     $query = $connection->query($sql);
+
 
     if ($connection) {
         echo "success";

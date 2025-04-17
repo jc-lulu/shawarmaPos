@@ -1,32 +1,43 @@
 <?php
-include('../cedric_dbConnection.php');
+include('check_session.php');
+include('../cedric_dbConnection.php');  // Fixed path and typo in filename
 
-// Get order history from database
-$query = "SELECT oh.historyId, oh.orderId, oh.totalCost, oh.dateOfOrder, oh.timeOfOrder, 
-          COUNT(oi.id) as itemCount
-          FROM orderedhistory oh
-          LEFT JOIN ordereditemhistory oi ON oh.orderId = oi.itemKey
-          GROUP BY oh.historyId, oh.orderId, oh.totalCost, oh.dateOfOrder, oh.timeOfOrder
-          ORDER BY oh.dateOfOrder DESC, oh.timeOfOrder DESC";
+// Query to get order history data
+$query = "SELECT * FROM orderedhistory ORDER BY dateOfOrder DESC, timeOfOrder DESC";
+$result = mysqli_query($conn, $query);
 
-$result = $connection->query($query);
+$orderHistory = array();
 
-$orders = array();
-
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $orders[] = array(
-            'orderId' => $row['orderId'],
-            'totalCost' => $row['totalCost'],
-            'dateOfOrder' => $row['dateOfOrder'],
-            'timeOfOrder' => $row['timeOfOrder'],
-            'itemCount' => $row['itemCount']
+if ($result && mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        // Query to get item count for this order
+        $itemQuery = "SELECT COUNT(*) as item_count FROM ordereditems WHERE orderId = '{$row['orderId']}'";
+        $itemResult = mysqli_query($conn, $itemQuery);
+        $itemCount = 0;
+        
+        if ($itemResult && mysqli_num_rows($itemResult) > 0) {
+            $itemRow = mysqli_fetch_assoc($itemResult);
+            $itemCount = $itemRow['item_count'];
+        }
+        
+        $orderHistory[] = array(
+            'order_id' => $row['orderId'],
+            'total_cost' => $row['totalCost'],
+            'order_date' => $row['dateOfOrder'],
+            'order_time' => $row['timeOfOrder'],
+            'items' => $itemCount
         );
     }
 }
 
-// Return as JSON
+// Add error logging for debugging
+    if (empty($orderHistory)) {
+    error_log("No order history found in database");
+}
+
+// Return data as JSON
 header('Content-Type: application/json');
-echo json_encode($orders);
-$connection->close();
+echo json_encode($orderHistory);
+
+mysqli_close($conn);
 ?>

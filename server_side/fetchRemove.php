@@ -5,6 +5,7 @@ $sql = "SELECT * FROM menu ORDER BY menuId DESC";
 $result = $connection->query($sql);
 
 if ($result->num_rows > 0) {
+    
     while ($row = $result->fetch_assoc()) {
         echo '<div class="col-md-4 product-card">
                 <label class="card shadow-sm selectable-product">

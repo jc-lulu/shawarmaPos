@@ -596,7 +596,7 @@ include('server_side/check_session.php');
                                         
                                         // Now add the script to the receipt window
                                         const qrScript = receiptWindow.document.createElement('script');
-                                        qrScript.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
+                                        qrScript.src = "assets/qrCode.min.js";
                                         qrScript.onload = function() {
                                             // Generate QR code after the script has loaded
                                             const qr = receiptWindow.qrcode(0, 'M');
