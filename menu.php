@@ -469,110 +469,145 @@ include('server_side/check_session.php');
             `,
                                         didOpen: () => {
                                             document.getElementById('print-receipt').addEventListener('click', function() {
-                                                // Generate printable receipt
-                                                const receiptWindow = window.open('', '_blank');
+                                        // Generate printable receipt
+                                        const receiptWindow = window.open('', '_blank');
+                                        
+                                        // Create order data for QR code
+                                        const orderData = JSON.stringify({
+                                            orderId: response.orderId,
+                                            date: response.dateOfOrder,
+                                            time: response.timeOfOrder,
+                                            total: subtotal.toFixed(2),
+                                            items: cart.map(item => ({name: item.name, qty: item.quantity, price: item.price}))
+                                        });
+                                        
+                                        // Properly escape the data for JavaScript
+                                        const escapedOrderData = orderData.replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, '\\"');
+                                        
+                                        receiptWindow.document.write(`
+                                            <!DOCTYPE html>
+                                            <html>
+                                            <head>
+                                                <title>Receipt #${response.orderId}</title>
+                                                <style>
+                                                    body {
+                                                        font-family: 'Courier New', monospace;
+                                                        width: 300px;
+                                                        margin: 0 auto;
+                                                        padding: 10px;
+                                                    }
+                                                    .receipt-header, .receipt-footer {
+                                                        text-align: center;
+                                                        margin-bottom: 10px;
+                                                    }
+                                                    .divider {
+                                                        border-top: 1px dashed #000;
+                                                        margin: 10px 0;
+                                                    }
+                                                    table {
+                                                        width: 100%;
+                                                        border-collapse: collapse;
+                                                    }
+                                                    th, td {
+                                                        text-align: left;
+                                                        padding: 3px 0;
+                                                    }
+                                                    .amount {
+                                                        text-align: right;
+                                                    }
+                                                    .total {
+                                                        font-weight: bold;
+                                                        border-top: 1px solid #000;
+                                                        padding-top: 5px;
+                                                    }
+                                                    .qr-container {
+                                                        text-align: center;
+                                                        margin: 15px 0;
+                                                    }
+                                                    @media print {
+                                                        .no-print {
+                                                            display: none;
+                                                        }
+                                                    }
+                                                </style>
+                                            </head>
+                                            <body>
+                                                <div class="receipt-header">
+                                                    <h2>SHAWARMA POS</h2>
+                                                    <p>Receipt #${response.orderId}</p>
+                                                    <p>${response.dateOfOrder} - ${response.timeOfOrder}</p>
+                                                </div>
+                                                
+                                                <div class="divider"></div>
+                                                
+                                                <table>
+                                                    <tr>
+                                                        <th>Item</th>
+                                                        <th>Qty</th>
+                                                        <th class="amount">Price</th>
+                                                        <th class="amount">Total</th>
+                                                    </tr>
+                                        `);
 
-                                                receiptWindow.document.write(`
-                        <!DOCTYPE html>
-                        <html>
-                        <head>
-                            <title>Receipt #${response.orderId}</title>
-                            <style>
-                                body {
-                                    font-family: 'Courier New', monospace;
-                                    width: 300px;
-                                    margin: 0 auto;
-                                    padding: 10px;
-                                }
-                                .receipt-header, .receipt-footer {
-                                    text-align: center;
-                                    margin-bottom: 10px;
-                                }
-                                .divider {
-                                    border-top: 1px dashed #000;
-                                    margin: 10px 0;
-                                }
-                                table {
-                                    width: 100%;
-                                    border-collapse: collapse;
-                                }
-                                th, td {
-                                    text-align: left;
-                                    padding: 3px 0;
-                                }
-                                .amount {
-                                    text-align: right;
-                                }
-                                .total {
-                                    font-weight: bold;
-                                    border-top: 1px solid #000;
-                                    padding-top: 5px;
-                                }
-                                @media print {
-                                    .no-print {
-                                        display: none;
-                                    }
-                                }
-                            </style>
-                        </head>
-                        <body>
-                            <div class="receipt-header">
-                                <h2>SHAWARMA POS</h2>
-                                <p>Receipt #${response.orderId}</p>
-                                <p>${response.dateOfOrder} - ${response.timeOfOrder}</p>
-                            </div>
-                            
-                            <div class="divider"></div>
-                            
-                            <table>
-                                <tr>
-                                    <th>Item</th>
-                                    <th>Qty</th>
-                                    <th class="amount">Price</th>
-                                    <th class="amount">Total</th>
-                                </tr>
-                    `);
+                                        // Add items to receipt
+                                        cart.forEach(item => {
+                                            receiptWindow.document.write(`
+                                                <tr>
+                                                    <td>${item.name}</td>
+                                                    <td>${item.quantity}</td>
+                                                    <td class="amount">₱${item.price.toFixed(2)}</td>
+                                                    <td class="amount">₱${item.totalPrice.toFixed(2)}</td>
+                                                </tr>
+                                            `);
+                                        });
 
-                                                // Add items to receipt
-                                                cart.forEach(item => {
-                                                    receiptWindow.document.write(`
-                            <tr>
-                                <td>${item.name}</td>
-                                <td>${item.quantity}</td>
-                                <td class="amount">₱${item.price.toFixed(2)}</td>
-                                <td class="amount">₱${item.totalPrice.toFixed(2)}</td>
-                            </tr>
-                        `);
-                                                });
+                                        // Add totals and footer
+                                        receiptWindow.document.write(`
+                                                    <tr class="total">
+                                                        <td colspan="2">Total:</td>
+                                                        <td colspan="2" class="amount">₱${subtotal.toFixed(2)}</td>
+                                                    </tr>
+                                                </table>
+                                                
+                                                <div class="divider"></div>
+                                                
+                                                <!-- QR Code Container -->
+                                                <div class="qr-container">
+                                                    <div id="qrcode"></div>
+                                                    <p style="font-size: 12px; margin-top: 5px;">Scan to verify order</p>
+                                                </div>
 
-                                                // Add totals and footer
-                                                receiptWindow.document.write(`
-                                <tr class="total">
-                                    <td colspan="2">Total:</td>
-                                    <td colspan="2" class="amount">₱${subtotal.toFixed(2)}</td>
-                                </tr>
-                            </table>
-                            
-                            <div class="divider"></div>
-                            
-                            <div class="receipt-footer">
-                                <p>Thank you for your order!</p>
-                                <p>Please come again</p>
-                            </div>
-                            
-                            <div class="no-print" style="text-align: center; margin-top: 20px;">
-                                <button onclick="window.print();" style="padding: 8px 16px; cursor: pointer;">
-                                    Print Receipt
-                                </button>
-                            </div>
-                        </body>
-                        </html>
-                    `);
-
-                                                // Trigger the print dialog
-                                                receiptWindow.document.close();
-                                                receiptWindow.focus();
-                                            });
+                                                <div class="receipt-footer">
+                                                    <p>Thank you for your order!</p>
+                                                    <p>Please come again</p>
+                                                </div>
+                                                
+                                                <div class="no-print" style="text-align: center; margin-top: 20px;">
+                                                    <button onclick="window.print();" style="padding: 8px 16px; cursor: pointer;">
+                                                        Print Receipt
+                                                    </button>
+                                                </div>
+                                            </body>
+                                            </html>
+                                        `);
+                                        
+                                        // Add the QR code library and generate the QR code AFTER writing the document
+                                        receiptWindow.document.close();
+                                        
+                                        // Now add the script to the receipt window
+                                        const qrScript = receiptWindow.document.createElement('script');
+                                        qrScript.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
+                                        qrScript.onload = function() {
+                                            // Generate QR code after the script has loaded
+                                            const qr = receiptWindow.qrcode(0, 'M');
+                                            qr.addData(escapedOrderData);
+                                            qr.make();
+                                            receiptWindow.document.getElementById('qrcode').innerHTML = qr.createImgTag(4);
+                                        };
+                                        
+                                        receiptWindow.document.head.appendChild(qrScript);
+                                        receiptWindow.focus();
+                                    });
                                         }
                                     }).then(() => {
                                         // Clear cart after order is placed

@@ -130,11 +130,11 @@ include('server_side/check_session.php');
     </div>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             // Initialize tooltips
             const initTooltips = () => {
                 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
                     return new bootstrap.Tooltip(tooltipTriggerEl);
                 });
             };
@@ -148,7 +148,7 @@ include('server_side/check_session.php');
                     url: 'server_side/fetchOrderHistory.php',
                     type: 'GET',
                     dataType: 'json',
-                    success: function (data) {
+                    success: function(data) {
                         // First destroy any existing table
                         if ($.fn.dataTable.isDataTable('#orderHistoryTable')) {
                             $('#orderHistoryTable').DataTable().destroy();
@@ -157,25 +157,30 @@ include('server_side/check_session.php');
                         // Initialize DataTable
                         const table = $('#orderHistoryTable').DataTable({
                             data: data,
-                            columns: [
-                                { data: 'orderId' },
+                            columns: [{
+                                    data: 'orderId'
+                                },
                                 {
                                     data: 'totalCost',
-                                    render: function (data) {
+                                    render: function(data) {
                                         return '₱' + parseFloat(data).toFixed(2);
                                     }
                                 },
-                                { data: 'dateOfOrder' },
-                                { data: 'timeOfOrder' },
+                                {
+                                    data: 'dateOfOrder'
+                                },
+                                {
+                                    data: 'timeOfOrder'
+                                },
                                 {
                                     data: 'itemCount',
-                                    render: function (data) {
+                                    render: function(data) {
                                         return data + ' item' + (data != 1 ? 's' : '');
                                     }
                                 },
                                 {
                                     data: 'orderId',
-                                    render: function (data) {
+                                    render: function(data) {
                                         return `
                                     <button class="action-btn btn-view view-details" data-order="${data}" data-bs-toggle="tooltip" title="View Order Details">
                                         <i class="fas fa-eye"></i>
@@ -198,13 +203,19 @@ include('server_side/check_session.php');
                                 [10, 25, 50, "All"]
                             ],
                             order: [
-                                [2, 'desc'], [3, 'desc'] // Order by date then time
+                                [2, 'desc'],
+                                [3, 'desc'] // Order by date then time
                             ],
-                            columnDefs: [
-                                { targets: [5], orderable: false },
-                                { targets: '_all', orderable: true }
+                            columnDefs: [{
+                                    targets: [5],
+                                    orderable: false
+                                },
+                                {
+                                    targets: '_all',
+                                    orderable: true
+                                }
                             ],
-                            drawCallback: function () {
+                            drawCallback: function() {
                                 initTooltips();
 
                                 // Calculate stats
@@ -224,18 +235,18 @@ include('server_side/check_session.php');
                         $('.dt-buttons').addClass('mb-3');
 
                         // View order details
-                        $('#orderHistoryTable tbody').on('click', '.view-details', function () {
+                        $('#orderHistoryTable tbody').on('click', '.view-details', function() {
                             const orderId = $(this).data('order');
                             viewOrderDetails(orderId);
                         });
 
                         // Print receipt
-                        $('#orderHistoryTable tbody').on('click', '.print-receipt', function () {
+                        $('#orderHistoryTable tbody').on('click', '.print-receipt', function() {
                             const orderId = $(this).data('order');
                             showReceiptModal(orderId);
                         });
                     },
-                    error: function (xhr, status, error) {
+                    error: function(xhr, status, error) {
                         console.error("Error loading order history:", error);
                         console.log(xhr.responseText); // Log the actual error response
                         Swal.fire({
@@ -247,12 +258,12 @@ include('server_side/check_session.php');
                 });
             }
 
-            $("#applyFilters").click(function () {
+            $("#applyFilters").click(function() {
                 loadOrderHistory();
             });
 
             // Reset filters button click
-            $("#resetFilters").click(function () {
+            $("#resetFilters").click(function() {
                 setDefaultDates();
                 $("#minAmount").val("");
                 $("#maxAmount").val("");
@@ -282,9 +293,11 @@ include('server_side/check_session.php');
                 $.ajax({
                     url: 'server_side/fetchOrderItems.php',
                     type: 'GET',
-                    data: { orderId: orderId },
+                    data: {
+                        orderId: orderId
+                    },
                     dataType: 'json',
-                    success: function (items) {
+                    success: function(items) {
                         if (items.length === 0) {
                             Swal.fire({
                                 icon: 'info',
@@ -333,7 +346,7 @@ include('server_side/check_session.php');
                         btn.html('<i class="fas fa-eye-slash"></i>');
                         btn.attr('title', 'Hide Order Details').tooltip('dispose').tooltip();
                     },
-                    error: function (xhr, status, error) {
+                    error: function(xhr, status, error) {
                         console.error("Error loading order details:", error);
                         Swal.fire({
                             icon: 'error',
@@ -350,9 +363,11 @@ include('server_side/check_session.php');
                 $.ajax({
                     url: 'server_side/fetchOrderItems.php',
                     type: 'GET',
-                    data: { orderId: orderId },
+                    data: {
+                        orderId: orderId
+                    },
                     dataType: 'json',
-                    success: function (items) {
+                    success: function(items) {
                         if (items.length === 0) {
                             Swal.fire({
                                 icon: 'info',
@@ -432,7 +447,7 @@ include('server_side/check_session.php');
                         $('#receiptContent').html(receiptHTML);
                         $('#receiptModal').modal('show');
                     },
-                    error: function (xhr, status, error) {
+                    error: function(xhr, status, error) {
                         console.error("Error loading receipt:", error);
                         Swal.fire({
                             icon: 'error',
@@ -444,7 +459,7 @@ include('server_side/check_session.php');
             }
 
             // Print receipt
-            $('#printReceipt').on('click', function () {
+            $('#printReceipt').on('click', function() {
                 const printContent = document.getElementById('receiptContent').innerHTML;
                 const originalContent = document.body.innerHTML;
 
@@ -491,7 +506,7 @@ include('server_side/check_session.php');
                 document.body.innerHTML = originalContent;
 
                 // Reattach event handlers after restoring content
-                $(document).ready(function () {
+                $(document).ready(function() {
                     initTooltips();
                     loadOrderHistory();
                 });
