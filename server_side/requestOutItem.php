@@ -60,8 +60,28 @@ try {
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Failed to submit request: ' . $stmt->error]);
         }
+
+        //step 2 : insert into notifications table
+        $transactionId = $stmt->insert_id; // Get the last inserted transaction ID
+        $notificationType = 1;
+        $notificationStatus = 0; 
+        $notificationMessage = "You have a request for Out item that need your approval";
+        $notes = ($notes) ? $notes : 'No notes provided';
+
+        $notifyStmt = $connection->prepare("INSERT INTO notifications (transactionKey, notificationType, notificationStatus, notificationMessage, notes) VALUES (?, ?, ?, ?, ?)");
+        if (!$notifyStmt) {
+            throw new Exception("Prepare failed: " . $connection->error);
+        }
+
+        $notifyStmt->bind_param("iiiss", $transactionId, $notificationType, $notificationStatus, $notificationMessage, $notes);
         
+        if (!$notifyStmt->execute()) {
+            throw new Exception("Execute failed: " . $notifyStmt->error);
+        }
+
+        $notifyStmt->close();
         $stmt->close();
+
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
     }

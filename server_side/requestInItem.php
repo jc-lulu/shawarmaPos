@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!$stmt->execute()) {
             throw new Exception("Execute failed: " . $stmt->error);
         }
-
+        //step 2: insert into notifications table
         $transactionId = $stmt->insert_id; // Get the last inserted transaction ID
         $notificationType = 0;
         $notificationStatus = 0;
