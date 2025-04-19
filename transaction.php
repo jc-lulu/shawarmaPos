@@ -172,10 +172,10 @@ include('server_side/check_session.php');
         </div>
     </div>
 
-    <!-- OUT Transaction Modal - Enhanced -->
+    <!-- OUT Transaction Modal - Enhanced with Product Selection -->
     <div class="modal fade" id="transactionOutModal" tabindex="-1" aria-labelledby="transactionOutModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-gradient-danger text-white">
                     <h5 class="modal-title" id="transactionOutModalLabel">
@@ -184,18 +184,67 @@ include('server_side/check_session.php');
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
+
                 <div class="modal-body p-4">
-                    <form id="outItemForm">
+                    <!-- Step 1: Select Product Section -->
+                    <div id="selectProductSection">
+                        <h5 class="mb-3 text-danger"><i class="fas fa-search me-2"></i>Select a Product</h5>
+
                         <div class="mb-4">
-                            <label for="productOut_item" class="form-label fw-bold">
-                                <i class="fas fa-tag me-2 text-danger"></i>Product Name
-                            </label>
-                            <input type="text" class="form-control form-control-lg border-0 bg-light"
-                                id="productOut_item" name="productOut_item" placeholder="Enter product name" required>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-0"><i class="fas fa-search"></i></span>
+                                <input type="text" class="form-control form-control-lg" id="productSearchInput"
+                                    placeholder="Search products by name..." aria-label="Search products">
+                            </div>
                         </div>
 
-                        <div class="row mb-4">
-                            <div class="col-md-6">
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                            <table class="table table-hover" id="productSelectionTable">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Product Name</th>
+                                        <th>Available Quantity</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productListBody">
+                                    <tr>
+                                        <td colspan="3" class="text-center">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="noProductsMessage" class="alert alert-info d-none">
+                            <i class="fas fa-info-circle me-2"></i>No products found. Try a different search term.
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Request Form Section -->
+                    <div id="requestFormSection" class="d-none">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="backToProductsBtn">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Products
+                            </button>
+                            <h5 class="mb-0 text-danger">Request Form</h5>
+                        </div>
+
+                        <form id="outItemForm">
+                            <input type="hidden" id="productOut_id" name="productOut_id">
+
+                            <div class="mb-4">
+                                <label for="productOut_item" class="form-label fw-bold">
+                                    <i class="fas fa-tag me-2 text-danger"></i>Product Name
+                                </label>
+                                <input type="text" class="form-control form-control-lg border-0 bg-light"
+                                    id="productOut_item" name="productOut_item" readonly required>
+                            </div>
+
+                            <div class="mb-4" id="quantityContainer">
                                 <label for="productOut_quantity" class="form-label fw-bold">
                                     <i class="fas fa-hashtag me-2 text-danger"></i>Quantity
                                 </label>
@@ -205,37 +254,40 @@ include('server_side/check_session.php');
                                         required>
                                     <span class="input-group-text bg-light border-0">units</span>
                                 </div>
+                                <small class="form-text text-muted">Available: <span id="availableQuantity">0</span>
+                                    units</small>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="mb-4">
                                 <label for="dateOfOut" class="form-label fw-bold">
                                     <i class="fas fa-calendar-alt me-2 text-danger"></i>Request Date
                                 </label>
                                 <input type="date" class="form-control form-control-lg border-0 bg-light" id="dateOfOut"
                                     name="dateOfOut" required>
                             </div>
-                        </div>
 
-                        <div class="mb-4">
-                            <label for="requestOutNotes" class="form-label fw-bold">
-                                <i class="fas fa-sticky-note me-2 text-danger"></i>Notes (Optional)
-                            </label>
-                            <textarea class="form-control form-control-lg border-0 bg-light" id="requestOutNotes"
-                                name="requestOutNotes" rows="3"
-                                placeholder="Add any additional information about this request..."></textarea>
-                        </div>
+                            <div class="mb-4">
+                                <label for="requestOutNotes" class="form-label fw-bold">
+                                    <i class="fas fa-sticky-note me-2 text-danger"></i>Notes (Optional)
+                                </label>
+                                <textarea class="form-control form-control-lg border-0 bg-light" id="requestOutNotes"
+                                    name="requestOutNotes" rows="3"
+                                    placeholder="Add any additional information about this request..."></textarea>
+                            </div>
 
-                        <div class="alert alert-warning" role="alert">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            Your request to remove items will be reviewed by an administrator.
-                        </div>
-                    </form>
+                            <div class="alert alert-warning" role="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Your request to remove items will be reviewed by an administrator.
+                            </div>
+                        </form>
+                    </div>
                 </div>
+
                 <div class="modal-footer bg-light">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times me-2"></i>Cancel
                     </button>
-                    <button type="button" class="btn btn-danger btn-lg px-4" id="submitRequestOutBtn">
+                    <button type="button" class="btn btn-danger btn-lg px-4 d-none" id="submitRequestOutBtn">
                         <i class="fas fa-paper-plane me-2"></i>Submit Request
                     </button>
                 </div>
@@ -381,8 +433,6 @@ include('server_side/check_session.php');
                 processing: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>'
             }
         });
-
-        // Search and filter functionality
         // Search and filter functionality
         $("#searchProduct, #filterType, #filterStatus").on("keyup change", function() {
             let table = $('#transactionsTable').DataTable();
@@ -536,41 +586,144 @@ include('server_side/check_session.php');
             });
         });
 
-        $('#outItemForm').submit(function(event) {
-            event.preventDefault();
-            var outFormData = new FormData(this);
+        $('#dateOfOut').val(today);
 
+        // Product selection for Request Out
+        $('#transactionOutModal').on('show.bs.modal', function() {
+            // Reset the modal to show product selection first
+            showProductSelectionView();
+
+            // Load products
+            loadProducts();
+        });
+
+        // Back button functionality
+        $('#backToProductsBtn').click(function() {
+            showProductSelectionView();
+        });
+
+        // Product search functionality
+        $('#productSearchInput').on('keyup', function() {
+            const searchTerm = $(this).val().toLowerCase();
+            filterProductTable(searchTerm);
+        });
+
+        // Quantity validation
+        $('#productOut_quantity').on('input', function() {
+            const availableQty = parseInt($('#availableQuantity').text());
+            const requestedQty = parseInt($(this).val());
+
+            if (requestedQty > availableQty) {
+                $(this).addClass('is-invalid');
+                $('#quantityContainer .invalid-feedback').remove();
+                $('#quantityContainer').append(
+                    '<div class="invalid-feedback">Quantity cannot exceed available amount</div>'
+                );
+            } else {
+                $(this).removeClass('is-invalid');
+                $('#quantityContainer .invalid-feedback').remove();
+            }
+        });
+
+        $('#submitRequestOutBtn').click(function() {
+            // Enhanced validation with visual feedback
+            let isValid = true;
+            $('#outItemForm input:required').each(function() {
+                if (!this.checkValidity()) {
+                    $(this).addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $(this).addClass('is-valid').removeClass('is-invalid');
+                }
+            });
+
+            // Check quantity specifically
+            const availableQty = parseInt($('#availableQuantity').text());
+            const requestedQty = parseInt($('#productOut_quantity').val());
+
+            if (requestedQty > availableQty) {
+                $('#productOut_quantity').addClass('is-invalid');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                return;
+            }
+
+            // Show loading state
+            const saveBtn = $(this);
+            const originalText = saveBtn.html();
+            saveBtn.html(
+                '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Submitting...'
+            );
+            saveBtn.addClass('disabled').prop('disabled', true);
+
+            // Get form data
+            // Change this code in the submitRequestOutBtn click handler
+
+            const formData = {
+                productId: $('#productOut_id').val(), // Changed from product_id
+                productName: $('#productOut_item').val(), // Changed from product_name
+                quantity: $('#productOut_quantity').val(), // This one is fine
+                date: $('#dateOfOut').val(), // This one is fine
+                notes: $('#requestOutNotes').val() // This one is fine
+            };
+
+            // Send AJAX request
             $.ajax({
-                url: "server_side/requestOutItem.php",
-                type: "POST",
-                data: outFormData,
-                contentType: false,
-                processData: false,
+                url: 'server_side/requestOutItem.php',
+                type: 'POST',
+                data: formData,
+                dataType: 'json',
                 success: function(response) {
-                    if (response.trim() === "success") {
+                    saveBtn.html(originalText);
+                    saveBtn.removeClass('disabled').prop('disabled', false);
+
+                    if (response.status === 'success') {
+                        // Show success message
+                        $('#transactionOutModal').modal('hide');
+
                         Swal.fire({
-                            icon: "success",
-                            title: "Product Out",
-                            text: "The product has been successfully removed",
+                            title: 'Request Submitted!',
+                            text: 'Your inventory request has been submitted for approval.',
+                            icon: 'success',
                             showConfirmButton: false,
-                            timer: 2000
+                            timer: 2000,
+                            timerProgressBar: true
+                        }).then(function() {
+                            // Reload with fade effect
+                            $('body').fadeOut(500, function() {
+                                location.reload();
+                            });
                         });
 
-                        $("#transactionOutModal").modal("hide");
-                        $("#outItemForm")[0].reset();
-                        // Reload the page after success
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
+                        // Reset form
+                        $('#outItemForm')[0].reset();
+                        $('#outItemForm input').removeClass('is-valid is-invalid');
                     } else {
+                        // Show error message
                         Swal.fire({
-                            icon: "error",
-                            title: "Error",
-                            text: response
+                            title: 'Error',
+                            text: response.message ||
+                                'Failed to submit your request. Please try again.',
+                            icon: 'error'
                         });
                     }
+                },
+                error: function(xhr, status, error) {
+                    saveBtn.html(originalText);
+                    saveBtn.removeClass('disabled').prop('disabled', false);
+
+                    console.error('AJAX Error:', status, error);
+                    console.log('Response:', xhr.responseText);
+
+                    Swal.fire({
+                        title: 'Server Error',
+                        text: 'Unable to connect to the server. Please check your connection and try again.',
+                        icon: 'error'
+                    });
                 }
-            })
+            });
         });
 
         // Edit transaction - populate modal
@@ -648,6 +801,125 @@ include('server_side/check_session.php');
             });
         });
     });
+
+    // Add these functions outside the document.ready() block, at the end of your script tags
+    function loadProducts() {
+        console.log("Loading products...");
+        $.ajax({
+            url: 'server_side/fetchRequestOutItem.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                console.log("API response:", response);
+                if (response.status === 'success') {
+                    renderProductList(response.products);
+                } else {
+                    $('#productListBody').html(`
+                    <tr>
+                        <td colspan="3" class="text-center text-danger">
+                            <i class="fas fa-exclamation-circle me-2"></i>${response.message || 'Error loading products'}
+                        </td>
+                    </tr>
+                `);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX error:", status, error);
+                console.log("Response text:", xhr.responseText);
+                $('#productListBody').html(`
+                <tr>
+                    <td colspan="3" class="text-center text-danger">
+                        <i class="fas fa-exclamation-circle me-2"></i>Server error. Unable to load products.
+                    </td>
+                </tr>
+            `);
+            }
+        });
+    }
+
+    function renderProductList(products) {
+        console.log("Rendering products:", products);
+        if (!products || products.length === 0) {
+            $('#productListBody').html(`
+            <tr>
+                <td colspan="3" class="text-center">
+                    <i class="fas fa-info-circle me-2"></i>No products available
+                </td>
+            </tr>
+        `);
+            return;
+        }
+
+        let html = '';
+        products.forEach(product => {
+            html += `
+            <tr>
+                <td>${product.name}</td>
+                <td>${product.quantity}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary select-product" 
+                            data-id="${product.id}" 
+                            data-name="${product.name}" 
+                            data-quantity="${product.quantity}">
+                        <i class="fas fa-check me-1"></i>Select
+                    </button>
+                </td>
+            </tr>
+        `;
+        });
+
+        $('#productListBody').html(html);
+
+        // Add click event for product selection
+        $('.select-product').click(function() {
+            const productId = $(this).data('id');
+            const productName = $(this).data('name');
+            const availableQty = $(this).data('quantity');
+
+            // Fill the form with selected product data
+            $('#productOut_id').val(productId);
+            $('#productOut_item').val(productName);
+            $('#availableQuantity').text(availableQty);
+
+            // Show the request form section
+            showRequestFormView();
+        });
+    }
+
+    function filterProductTable(searchTerm) {
+        const rows = $('#productListBody tr');
+        let matchFound = false;
+
+        rows.each(function() {
+            const productName = $(this).find('td:first').text().toLowerCase();
+
+            if (productName.includes(searchTerm)) {
+                $(this).show();
+                matchFound = true;
+            } else {
+                $(this).hide();
+            }
+        });
+
+        // Show/hide no products message
+        if (matchFound) {
+            $('#noProductsMessage').addClass('d-none');
+        } else {
+            $('#noProductsMessage').removeClass('d-none');
+        }
+    }
+
+    function showProductSelectionView() {
+        $('#selectProductSection').removeClass('d-none');
+        $('#requestFormSection').addClass('d-none');
+        $('#submitRequestOutBtn').addClass('d-none');
+    }
+
+    function showRequestFormView() {
+        $('#selectProductSection').addClass('d-none');
+        $('#requestFormSection').removeClass('d-none');
+        $('#submitRequestOutBtn').removeClass('d-none');
+    }
     </script>
 </body>
 

@@ -1,66 +1,73 @@
 <?php
-// File: server_side/outItem.php
-include('check_session.php');
+session_start();
 include('../cedric_dbConnection.php');
 
-// Set header to handle AJAX response
+// Set response content type to JSON
 header('Content-Type: application/json');
 
-// Initialize response array
-$response = array('status' => 'error', 'message' => 'An unknown error occurred');
+try {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // Capture data from request
+        $productId = $_POST['productId'] ?? '';        
+        $productName = $_POST['productName'] ?? '';    
+        $quantity = $_POST['quantity'] ?? '';          
+        $date = $_POST['date'] ?? '';                  
+        $notes = $_POST['notes'] ?? '';                 
+        $userId = $_SESSION['user_id'] ?? 0;
+        
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    try {
-        // Sanitize and validate inputs
-        $productName = mysqli_real_escape_string($connection, $_POST['productOut_item']);
-        $productQuantity = intval($_POST['productOut_quantity']);
-        $dateOfOut = mysqli_real_escape_string($connection, $_POST['dateOfOut']);
-        $notes = isset($_POST['requestOutNotes']) ? mysqli_real_escape_string($connection, $_POST['requestOutNotes']) : '';
-        
-        // Get user ID from session
-        $requestedBy = $_SESSION['user_id'];
-        
-        // Validation checks
-        if (empty($productName)) {
-            throw new Exception("Product name is required");
+        if (empty($productId) || empty($productName) || empty($quantity) || empty($date)) {
+            echo json_encode(['status' => 'error', 'message' =>  'All required fields must be filled']);
+            exit;
         }
         
-        if ($productQuantity <= 0) {
-            throw new Exception("Quantity must be greater than zero");
+        // Check if quantity is valid
+        if (!is_numeric($quantity) || $quantity <= 0) {
+            echo json_encode(['status' => 'error', 'message' => 'Please enter a valid quantity']);
+            exit;
         }
         
-        if (empty($dateOfOut)) {
-            throw new Exception("Request date is required");
+        // Check if product exists and has enough quantity
+        $checkQuery = "SELECT quantity FROM inventory WHERE productId = ?";
+        $checkStmt = $connection->prepare($checkQuery);
+        $checkStmt->bind_param("i", $productId);
+        $checkStmt->execute();
+        $result = $checkStmt->get_result();
+        
+        if ($result->num_rows === 0) {
+            echo json_encode(['status' => 'error', 'message' => 'Product not found']);
+            exit;
         }
         
-        // Default product type for OUT transactions if needed (adjust as necessary)
-        $productType = "1"; // Default value
+        $row = $result->fetch_assoc();
+        $availableQuantity = $row['quantity'];
         
-        // Insert the request with Pending status (0)
-        // Transaction type: OUT (1)
-        $stmt = $connection->prepare("INSERT INTO transaction (requestorId, productName, quantity, productType, transactionType, transactionStatus, dateOfRequest, notes) VALUES (?, ?, ?, ?, 1, 0, ?, ?)");
-        
-        if (!$stmt) {
-            throw new Exception("Prepare failed: " . $connection->error);
+        if ($quantity > $availableQuantity) {
+            echo json_encode(['status' => 'error', 'message' => 'Requested quantity exceeds available amount']);
+            exit;
         }
         
-        $stmt->bind_param("isisss", $requestedBy, $productName, $productQuantity, $productType, $dateOfOut, $notes);
+        // Insert transaction record
+        $query = "INSERT INTO transaction (productId, productName, transactionType, quantity, dateOfRequest, notes, transactionStatus, requestorId) 
+                  VALUES (?, ?, 1, ?, ?, ?,  0, ?)";
+        $stmt = $connection->prepare($query);
+        $type = 1;
+        $status = 0;
+        $stmt->bind_param("isissi", $productId, $productName, $quantity, $date, $notes, $userId);
         
-        if (!$stmt->execute()) {
-            throw new Exception("Execute failed: " . $stmt->error);
+        if ($stmt->execute()) {
+            echo json_encode(['status' => 'success', 'message' => 'Request submitted successfully']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to submit request: ' . $stmt->error]);
         }
-        
-        // Success response
-        $response = array('status' => 'success', 'message' => 'Request submitted successfully');
         
         $stmt->close();
-    } catch (Exception $e) {
-        $response = array('status' => 'error', 'message' => $e->getMessage());
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid request method']);
     }
+} catch (Exception $e) {
+    echo json_encode(['status' => 'error', 'message' => 'Server error: ' . $e->getMessage()]);
 }
-
-// Return response
-echo json_encode($response);
 
 $connection->close();
 ?>
