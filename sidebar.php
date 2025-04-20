@@ -257,7 +257,7 @@ body {
     </div>
 
     <div class="user-info">
-        <div class="user-name">Admin User</div>
+        <div class="user-name"><?php echo $role = ($_SESSION["user_role"] == 0) ? "ADMIN" : "STAFF" ; ?></div>
         <div class="user-role"><?php echo "Hello, " . $_SESSION['user_name']; ?></div>
         <a onclick="confirmLogout()" class="signout">
             <i class="fas fa-sign-out-alt"></i> <span>Sign Out</span>

@@ -1,9 +1,8 @@
 <?php
-// File: server_side/fetch_transactions.php
+
 // Prevent any output before JSON response
 ob_start();
 
-// Include required files
 include('check_session.php');
 include('../cedric_dbConnection.php');
 
@@ -11,21 +10,58 @@ include('../cedric_dbConnection.php');
 $response = array('data' => array());
 
 try {
-    // Query to get all transactions with proper ordering
-    $query = "SELECT 
-                transactionId,
-                requestorId, 
-                productName, 
-                quantity,
-                productType,
-                transactionType, 
-                transactionStatus, 
-                dateOfRequest,
-                notes
-              FROM transaction 
-              ORDER BY transactionId DESC";
+    // Get current user ID and role from session
+    $currentUserId = $_SESSION['user_id'];
+    $userRole = $_SESSION['user_role'];
 
-    $result = $connection->query($query);
+    // Determine which query to run based on user role
+    if ($userRole == 0) { // Admin role
+        // Admin sees all transactions
+        $query = "SELECT 
+                    transactionId,
+                    requestorId, 
+                    productName, 
+                    quantity,
+                    productType,
+                    transactionType, 
+                    transactionStatus, 
+                    dateOfRequest,
+                    notes
+                  FROM transaction 
+                  ORDER BY transactionId DESC";
+                  
+        $stmt = $connection->prepare($query);
+        if ($stmt === false) {
+            throw new Exception("Prepare statement error: " . $connection->error);
+        }
+        
+        $stmt->execute();
+    } else {
+        // staff
+        $query = "SELECT 
+                    transactionId,
+                    requestorId, 
+                    productName, 
+                    quantity,
+                    productType,
+                    transactionType, 
+                    transactionStatus, 
+                    dateOfRequest,
+                    notes
+                  FROM transaction 
+                  WHERE requestorId = ?
+                  ORDER BY transactionId DESC";
+                  
+        $stmt = $connection->prepare($query);
+        if ($stmt === false) {
+            throw new Exception("Prepare statement error: " . $connection->error);
+        }
+        
+        $stmt->bind_param("i", $currentUserId);
+        $stmt->execute();
+    }
+    
+    $result = $stmt->get_result();
     
     if ($result === false) {
         throw new Exception("Database query error: " . $connection->error);
@@ -91,5 +127,8 @@ try {
 }
 
 // Close connection
+if (isset($stmt)) {
+    $stmt->close();
+}
 $connection->close();
 ?>

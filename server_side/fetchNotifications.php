@@ -1,30 +1,35 @@
 <?php
-// filepath: server_side/fetchNotifications.php
 include('check_session.php');
 include('../cedric_dbConnection.php');
 
-// Set headers for JSON response
 header('Content-Type: application/json');
+
+// Get user role from session
+$userRole = $_SESSION['user_role'];
 
 // Get filter parameters
 $search = isset($_GET['search']) ? mysqli_real_escape_string($connection, $_GET['search']) : '';
 $type = isset($_GET['type']) && $_GET['type'] !== '' ? intval($_GET['type']) : null;
 $status = isset($_GET['status']) && $_GET['status'] !== '' ? intval($_GET['status']) : null;
 
-// Build the query
 $query = "SELECT * FROM notifications WHERE 1=1";
 
-// Add search filter if provided
+// If not admin (role != 1), exclude request notifications (type 0)
+if ($userRole != 0) {
+    $query .= " AND (notificationType != 0)";
+}
+
+// search filter if provided
 if (!empty($search)) {
     $query .= " AND (notificationMessage LIKE '%$search%' OR notes LIKE '%$search%')";
 }
 
-// Add type filter if provided
+// type filter if provided
 if ($type !== null) {
     $query .= " AND notificationType = $type";
 }
 
-// Add status filter if provided
+// status filter if provided
 if ($status !== null) {
     $query .= " AND notificationStatus = $status";
 }

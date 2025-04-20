@@ -63,7 +63,7 @@ try {
 
         //step 2 : insert into notifications table
         $transactionId = $stmt->insert_id; // Get the last inserted transaction ID
-        $notificationType = 1;
+        $notificationType = 0;
         $notificationStatus = 0; 
         $notificationMessage = "You have a request for Out item that need your approval";
         $notes = ($notes) ? $notes : 'No notes provided';

@@ -22,9 +22,6 @@ include('server_side/check_session.php');
                 <button class="btn btn-primary me-2" id="refreshNotifications">
                     <i class="fa-solid fa-rotate me-2"></i>Refresh
                 </button>
-                <button class="btn btn-warning" id="markAllRead">
-                    <i class="fa-solid fa-check-double me-2"></i>Mark All as Read
-                </button>
             </div>
 
             <div class="filters-section mb-4">
@@ -34,16 +31,8 @@ include('server_side/check_session.php');
                             placeholder="Search notifications...">
                     </div>
                     <div class="col-md-4 mb-2">
-                        <select class="form-select" id="filterType">
-                            <option value="">All Types</option>
-                            <option value="0">In Requests</option>
-                            <option value="1">Out Requests</option>
-                            <option value="2">System</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4 mb-2">
                         <select class="form-select" id="filterStatus">
-                            <option value="">All Status</option>
+                            <option value="">All Notifications</option>
                             <option value="0">Unread</option>
                             <option value="1">Read</option>
                         </select>
@@ -80,7 +69,7 @@ include('server_side/check_session.php');
                     <button type="button" class="btn btn-success d-none" id="approveBtn">Approve</button>
                     <button type="button" class="btn btn-danger d-none" id="declineBtn">Decline</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="viewTransactionBtn">View Transaction</button>
+                    <!-- <button type="button" class="btn btn-primary" id="viewTransactionBtn">View Transaction</button> -->
                 </div>
             </div>
         </div>
@@ -120,17 +109,17 @@ include('server_side/check_session.php');
 
                         let typeIcon, typeBadge;
                         if (notification.notificationType == 0) {
-                            typeIcon = "fa-arrow-right-to-bracket";
+                            typeIcon = "fa-regular fa-bell";
                             typeBadge = "badge bg-success";
-                            typeText = "In Request";
+                            typeText = "Request";
                         } else if (notification.notificationType == 1) {
-                            typeIcon = "fa-arrow-right-from-bracket";
+                            typeIcon = "fa-solid fa-circle-exclamation";
                             typeBadge = "badge bg-warning";
-                            typeText = "Out Request";
+                            typeText = "Alert";
                         } else {
-                            typeIcon = "fa-gear";
+                            typeIcon = "fa-regular fa-bell";
                             typeBadge = "badge bg-info";
-                            typeText = "System";
+                            typeText = "Response";
                         }
 
                         notificationsHTML += `
@@ -222,11 +211,6 @@ include('server_side/check_session.php');
                     const dateFormatted = new Date(notification.createdAt).toLocaleString();
 
                     let detailsHTML = `
-                    <div class="notification-detail-header">
-                        <h6>Type: <span class="fw-normal">${typeText}</span></h6>
-                        <h6>Date: <span class="fw-normal">${dateFormatted}</span></h6>
-                    </div>
-                    <hr>
                     <div class="notification-detail-body">
                         <h6>Message:</h6>
                         <p>${notification.notificationMessage}</p>

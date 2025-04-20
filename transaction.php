@@ -659,7 +659,7 @@ include('server_side/check_session.php');
             saveBtn.addClass('disabled').prop('disabled', true);
 
             // Get form data
-            // Change this code in the submitRequestOutBtn click handler
+
 
             const formData = {
                 productId: $('#productOut_id').val(), // Changed from product_id
@@ -802,7 +802,6 @@ include('server_side/check_session.php');
         });
     });
 
-    // Add these functions outside the document.ready() block, at the end of your script tags
     function loadProducts() {
         console.log("Loading products...");
         $.ajax({
