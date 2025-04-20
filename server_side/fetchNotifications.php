@@ -53,6 +53,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     
     // Use notificationId as id for frontend
     $row['id'] = $row['notificationId'];
+    $row['transactionId'] = $row['transactionKey'];
     
     $notifications[] = $row;
 }

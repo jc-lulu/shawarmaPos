@@ -187,6 +187,74 @@ include('server_side/check_session.php');
         });
     }
 
+    function approveTransaction(notificationId, transactionId) {
+        Swal.fire({
+            title: 'Confirm Approval',
+            text: 'Are you sure you want to approve this transaction?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, approve it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Show loading state
+                Swal.fire({
+                    title: 'Processing...',
+                    text: 'Approving transaction',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: 'server_side/approve_transaction.php',
+                    type: 'POST',
+                    data: {
+                        notificationId: notificationId,
+                        transactionId: transactionId
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: 'Approved!',
+                                text: response.message,
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                // Close modal
+                                $("#notificationDetailModal").modal("hide");
+                                // Reload notifications
+                                loadNotifications();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: response.message || 'Failed to approve transaction',
+                                icon: 'error'
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("AJAX Error:", status, error);
+                        console.log("Response:", xhr.responseText);
+
+                        Swal.fire({
+                            title: 'Server Error!',
+                            text: 'There was a problem connecting to the server',
+                            icon: 'error'
+                        });
+                    }
+                });
+            }
+        });
+    }
+
     function viewNotificationDetails(notificationId) {
         $.ajax({
             url: "server_side/getNotificationDetails.php",
@@ -199,6 +267,16 @@ include('server_side/check_session.php');
                 if (data.success) {
                     const notification = data.notification;
                     let typeText;
+
+                    $("#approveBtn").removeAttr("data-notification-id").removeAttr("data-transaction-id");
+                    $("#declineBtn").removeAttr("data-notification-id").removeAttr("data-transaction-id");
+
+                    // Set notification ID using HTML attributes instead of jQuery data
+                    $("#approveBtn").attr("data-notification-id", notification.notificationId);
+                    $("#declineBtn").attr("data-notification-id", notification.notificationId);
+
+                    // Log for debugging
+                    console.log("Set notification ID:", notification.notificationId);
 
                     if (notification.notificationType == 0) {
                         typeText = "In Request";
@@ -226,6 +304,22 @@ include('server_side/check_session.php');
                         const transTypeText = trans.transactionType == 0 ? "In" : "Out";
                         const statusBadge = getStatusBadge(trans.transactionStatus);
                         const transDate = new Date(trans.dateOfRequest).toLocaleDateString();
+
+                        // Store transaction ID for buttons
+                        $("#approveBtn").data("transaction-id", trans.transactionId);
+                        $("#declineBtn").data("transaction-id", trans.transactionId);
+
+                        console.log("Set transaction ID:", trans.transactionId);
+
+                        if (trans.transactionStatus == 0) { // Pending
+                            if (<?php echo ($_SESSION['user_role'] == 1) ? 'true' : 'false'; ?>) {
+                                $("#approveBtn, #declineBtn").removeClass("d-none");
+                            } else {
+                                $("#approveBtn, #declineBtn").addClass("d-none");
+                            }
+                        } else {
+                            $("#approveBtn, #declineBtn").addClass("d-none");
+                        }
 
                         detailsHTML += `
                         <hr>
@@ -321,9 +415,9 @@ include('server_side/check_session.php');
         return <?php echo ($_SESSION['user_role'] == 0) ? 'true' : 'false'; ?>;
     }
 
-    function approveTransaction(transactionId) {
-        updateTransactionStatus(transactionId, 1);
-    }
+    // function approveTransaction(transactionId) {
+    //     updateTransactionStatus(transactionId, 1);
+    // }
 
     function declineTransaction(transactionId) {
         updateTransactionStatus(transactionId, 2);
@@ -453,7 +547,34 @@ include('server_side/check_session.php');
     $(document).ready(function() {
         // Load notifications when page loads
         loadNotifications();
+        //approve
+        $("#approveBtn").click(function() {
+            // Use attr() instead of data()
+            const notificationId = $(this).attr("data-notification-id");
+            const transactionId = $(this).attr("data-transaction-id");
 
+            // Debug log
+            console.log("Click handler - notification ID:", notificationId, "transaction ID:",
+                transactionId);
+
+            if (!notificationId || !transactionId) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Missing notification or transaction ID',
+                    icon: 'error'
+                });
+                return;
+            }
+
+            approveTransaction(notificationId, transactionId);
+        });
+
+        //decline
+        $("#declineBtn").click(function() {
+            const notificationId = $(this).data("notification-id");
+            const transactionId = $(this).data("transaction-id");
+            declineTransaction(notificationId, transactionId);
+        });
         // Refresh button click
         $("#refreshNotifications").click(function() {
             loadNotifications();
