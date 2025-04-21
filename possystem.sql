@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 20, 2025 at 04:25 PM
+-- Generation Time: Apr 21, 2025 at 04:40 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -109,7 +109,8 @@ INSERT INTO `notifications` (`notificationId`, `notificationTarget`, `notificati
 (4, 0, 0, 25, 0, 1, 0, 'You have a request for In item that need your approval', 'pamukpok sa ulo'),
 (5, 0, 0, 26, 0, 1, 0, 'You have a request for Out item that need your approval', 'No notes provided'),
 (6, 0, 0, 27, 0, 1, 0, 'You have a request for Out item that need your approval', 'Pang bato sa ulo'),
-(7, 0, 0, 28, 0, 1, 0, 'You have a request for In item that need your approval', 'Pamalo sa Ulo');
+(7, 0, 0, 28, 0, 1, 0, 'You have a request for In item that need your approval', 'Pamalo sa Ulo'),
+(8, 0, 0, 29, 0, 1, 0, 'You have a request for In item that need your approval', 'No notes provided');
 
 -- --------------------------------------------------------
 
@@ -154,7 +155,8 @@ INSERT INTO `orderedhistory` (`historyId`, `orderId`, `totalCost`, `dateOfOrder`
 (22, 22, 240, '2025-04-17', '11:46:54'),
 (23, 23, 180, '2025-04-17', '11:50:13'),
 (24, 24, 425, '2025-04-17', '12:16:25'),
-(25, 25, 200, '2025-04-17', '14:22:41');
+(25, 25, 200, '2025-04-17', '14:22:41'),
+(26, 26, 350, '2025-04-21', '15:57:54');
 
 -- --------------------------------------------------------
 
@@ -226,7 +228,10 @@ INSERT INTO `ordereditemhistory` (`historyId`, `itemKey`, `productName`, `produc
 (55, 24, 'Fries', 45, 2, 90, '2025-04-17'),
 (56, 24, 'Shawarma Rice', 130, 2, 260, '2025-04-17'),
 (57, 24, 'Coke', 30, 1, 30, '2025-04-17'),
-(58, 25, 'Shawarma Large', 100, 2, 200, '2025-04-17');
+(58, 25, 'Shawarma Large', 100, 2, 200, '2025-04-17'),
+(59, 26, 'Shawarma Solo', 80, 1, 80, '2025-04-21'),
+(60, 26, 'Chicken Shawarma Burger', 120, 2, 240, '2025-04-21'),
+(61, 26, 'Coke', 30, 1, 30, '2025-04-21');
 
 -- --------------------------------------------------------
 
@@ -279,7 +284,8 @@ INSERT INTO `transaction` (`transactionId`, `requestorId`, `productId`, `product
 (25, 7, 0, 'Banana', 50, '1', 0, 0, '2025-04-19', 'pamukpok sa ulo'),
 (26, 7, 8, 'Bans', 10, '', 1, 0, '2025-04-20', ''),
 (27, 7, 8, 'Bans', 20, '', 1, 0, '2025-04-20', 'Pang bato sa ulo'),
-(28, 7, 0, 'Hotdog', 100, '2', 0, 0, '2025-04-20', 'Pamalo sa Ulo');
+(28, 7, 0, 'Hotdog', 100, '2', 0, 0, '2025-04-20', 'Pamalo sa Ulo'),
+(29, 7, 0, 'Bans', 20, '1', 0, 0, '2025-04-21', '');
 
 -- --------------------------------------------------------
 
@@ -300,7 +306,6 @@ CREATE TABLE `userstable` (
 --
 
 INSERT INTO `userstable` (`usersId`, `username`, `email`, `password`, `role`) VALUES
-(1, 'cedric', 'jcmaldia172002@gmail.com', '$2y$10$hL6fXyphh7z/gb6aRZaGR.ya1W2oZ2HTtwaSKRbG0oYCbGZ31CykC', 0),
 (7, 'staff', 'staff@gmail.com', '$2y$10$N9g3lchYZdEvXYjT0eEI1.UXTcwVAnCuxUEOGfoERoNR0BwOqZvmm', 1),
 (8, 'admin', 'admin@gmail.com', '$2y$10$feIxMZi97grNE8WmkuxfFusz5wXqUVJcWj4m6Fw4Jh3Uzqu3yRTu6', 0);
 
@@ -370,25 +375,25 @@ ALTER TABLE `menu`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notificationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `notificationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `orderedhistory`
 --
 ALTER TABLE `orderedhistory`
-  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `ordereditemhistory`
 --
 ALTER TABLE `ordereditemhistory`
-  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `userstable`
