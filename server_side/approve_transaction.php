@@ -1,4 +1,8 @@
 <?php
+// Turn off PHP notices and warnings to prevent HTML in output
+error_reporting(E_ERROR);
+ini_set('display_errors', 0);
+
 // Include required files
 include('check_session.php');
 include('../cedric_dbConnection.php');
@@ -25,12 +29,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Get transaction and notification IDs
-$transactionId = isset($_POST['transactionId']) ? intval($_POST['transactionId']) : 0;
+$transactionId = isset($_POST['transactionId']) ? $_POST['transactionId'] : 0;
 $notificationId = isset($_POST['notificationId']) ? intval($_POST['notificationId']) : 0;
 
 error_log("Received transactionId: $transactionId, notificationId: $notificationId");
 
-if ($transactionId <= 0 || $notificationId <= 0) {
+if (empty($transactionId) || $notificationId <= 0) {
     echo json_encode([
         'success' => false,
         'message' => 'Invalid transaction or notification ID'
@@ -42,87 +46,125 @@ if ($transactionId <= 0 || $notificationId <= 0) {
 $connection->begin_transaction();
 
 try {
-    // Step 1: Get transaction details
+    // Step 1: Get trans    action details
     $query = "SELECT * FROM transaction WHERE transactionId = ?";
     $stmt = $connection->prepare($query);
-    $stmt->bind_param('i', $transactionId);
+
+    if (!$stmt) {
+        throw new Exception("Prepare failed: " . $connection->error);
+    }
+
+    $stmt->bind_param('s', $transactionId);
     $stmt->execute();
     $result = $stmt->get_result();
-    
+
     if ($result->num_rows === 0) {
         throw new Exception("Transaction not found");
     }
-    
+
     $transaction = $result->fetch_assoc(); // Fetch transaction details
-    
+
     // Check if transaction is already approved or rejected
     if ($transaction['transactionStatus'] != 0) {
         throw new Exception("This transaction is already processed");
     }
-    
+
     // Step 2: Update transaction status to Approved (1)
     $updateTransactionQuery = "UPDATE transaction SET transactionStatus = 1 WHERE transactionId = ?";
     $stmt = $connection->prepare($updateTransactionQuery);
-    $stmt->bind_param('i', $transactionId);
-    
+
+    if (!$stmt) {
+        throw new Exception("Prepare failed: " . $connection->error);
+    }
+
+    $stmt->bind_param('s', $transactionId);
+
     if (!$stmt->execute()) {
         throw new Exception("Failed to update transaction status: " . $stmt->error);
     }
-    
+
     // Step 3: Update notification status to Finished (1)
-    $updateNotificationQuery = "UPDATE notifications SET notificationStatus = 1 WHERE notificationId = ?";
+    $updateNotificationQuery = "UPDATE notifications SET requestStatus = 1 WHERE notificationId = ?";
     $stmt = $connection->prepare($updateNotificationQuery);
-    $stmt->bind_param('i', $notificationId);
-    
-    if (!$stmt->execute()) {
-        throw new Exception("Failed to update notification status: " . $stmt->error);
+
+    if (!$stmt) {
+        throw new Exception("Prepare failed for notification update: " . $connection->error);
     }
-    
+
+    //debug logging
+    error_log("Updating notification ID: $notificationId to status 1");
+
+    $stmt->bind_param('i', $notificationId);
+
+    if (!$stmt->execute()) {
+        throw new Exception("Failed to update notification status: " . $stmt->error . " - Query: $updateNotificationQuery");
+    }
+
+    $affectedRows = $stmt->affected_rows;
+    if ($affectedRows == 0) {
+        error_log("Warning: No rows affected when updating notification status for ID: $notificationId");
+    }
+
     // Step 4: Process inventory update based on transaction type
     $productName = $transaction['productName'];
     $quantity = $transaction['quantity'];
     $productType = $transaction['productType'];
     $transactionType = $transaction['transactionType'];
-    
+
     // Check if product exists in inventory
     $checkInventoryQuery = "SELECT * FROM inventory WHERE productName = ?";
     $stmt = $connection->prepare($checkInventoryQuery);
+
+    if (!$stmt) {
+        throw new Exception("Prepare failed: " . $connection->error);
+    }
+
     $stmt->bind_param('s', $productName);
     $stmt->execute();
     $inventoryResult = $stmt->get_result();
-    
+
     if ($inventoryResult->num_rows > 0) {
         // Update existing inventory item
         $inventoryItem = $inventoryResult->fetch_assoc();
-        $inventoryId = $inventoryItem['inventoryId'];
+        $productId = $inventoryItem['productId'];
         $currentQuantity = $inventoryItem['quantity'];
-        
+
         // Calculate new quantity based on transaction type
         // 0 = In (add), 1 = Out (subtract)
-        $newQuantity = ($transactionType == 0) 
-            ? $currentQuantity + $quantity 
+        $newQuantity = ($transactionType == 0)
+            ? $currentQuantity + $quantity
             : $currentQuantity - $quantity;
-        
+
         // Ensure quantity doesn't go negative
         if ($newQuantity < 0) {
             throw new Exception("Cannot approve: Transaction would result in negative inventory");
         }
-        
+
         // Update inventory quantity
-        $updateInventoryQuery = "UPDATE inventory SET quantity = ? WHERE inventoryId = ?";
+        $updateInventoryQuery = "UPDATE inventory SET quantity = ? WHERE productId = ?";
         $stmt = $connection->prepare($updateInventoryQuery);
-        $stmt->bind_param('ii', $newQuantity, $inventoryId);
-        
+
+        if (!$stmt) {
+            throw new Exception("Prepare failed: " . $connection->error);
+        }
+
+        $stmt->bind_param('ii', $newQuantity, $productId);
+
         if (!$stmt->execute()) {
             throw new Exception("Failed to update inventory: " . $stmt->error);
         }
     } else if ($transactionType == 0) {
-        // Only create new inventory item if it's an "In" transaction
+
         $type = 0; // In type
         $insertInventoryQuery = "INSERT INTO inventory (productName, quantity, productType, type) VALUES (?, ?, ?, ?)";
         $stmt = $connection->prepare($insertInventoryQuery);
-        $stmt->bind_param('sii', $productName, $quantity, $productType, $type);
-        
+
+        if (!$stmt) {
+            throw new Exception("Prepare failed: " . $connection->error);
+        }
+
+        $stmt->bind_param('siii', $productName, $quantity, $productType, $type);
+
         if (!$stmt->execute()) {
             throw new Exception("Failed to add new inventory item: " . $stmt->error);
         }
@@ -130,31 +172,37 @@ try {
         // Cannot approve "Out" transaction for non-existent inventory
         throw new Exception("Cannot approve: Product does not exist in inventory");
     }
+
     //Final Step: Create a new notification for the requestor
     $requestorId = $transaction['requestorId'];
     $message = "Your request for " . $productName . " has been approved";
     $notificationType = 2; // Response notification
-    
-    $createNotificationQuery = "INSERT INTO notifications (notificationTarget notificationMessage, notificationType, notificationStatus) VALUES (?, ?, ?, 0)";
+
+    // Fix the query syntax - missing comma between columns
+    $createNotificationQuery = "INSERT INTO notifications (notificationTarget, notificationMessage, notificationType, notificationStatus) VALUES (?, ?, ?, 0)";
     $stmt = $connection->prepare($createNotificationQuery);
+
+    if (!$stmt) {
+        throw new Exception("Prepare failed for notification creation: " . $connection->error);
+    }
+
     $stmt->bind_param('isi', $requestorId, $message, $notificationType);
-    
+
     if (!$stmt->execute()) {
         throw new Exception("Failed to create notification for requestor: " . $stmt->error);
     }
-    
+
     // All operations successful, commit transaction
     $connection->commit();
-    
+
     echo json_encode([
         'success' => true,
         'message' => 'Transaction approved successfully'
     ]);
-    
 } catch (Exception $e) {
     // Roll back on any error
     $connection->rollback();
-    
+
     echo json_encode([
         'success' => false,
         'message' => $e->getMessage()
@@ -162,4 +210,3 @@ try {
 } finally {
     $connection->close();
 }
-?>

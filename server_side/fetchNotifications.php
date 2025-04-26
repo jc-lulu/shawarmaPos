@@ -50,11 +50,11 @@ $notifications = [];
 while ($row = mysqli_fetch_assoc($result)) {
     // Format createdAt if it exists, otherwise use current time
     $row['createdAt'] = isset($row['createdAt']) ? $row['createdAt'] : date('Y-m-d H:i:s');
-    
+
     // Use notificationId as id for frontend
     $row['id'] = $row['notificationId'];
     $row['transactionId'] = $row['transactionKey'];
-    
+
     $notifications[] = $row;
 }
 
@@ -63,4 +63,3 @@ echo json_encode($notifications);
 
 // Close connection
 mysqli_close($connection);
-?>
