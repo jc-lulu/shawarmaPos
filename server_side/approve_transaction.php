@@ -189,17 +189,16 @@ try {
         $type = 0; // In type
         //check if int, making sure to prevent errrors in the database
         $quantity = intval($quantity);
-        $productType = intval($productType);
         $date = date('Y-m-d'); // Current date and time   
 
-        $insertInventoryQuery = "INSERT INTO inventory (productName, quantity, productType, type, transactionStatus, dateOfIn, requestedBy) VALUES (?, ?, ?, ?, 1, ?, 1)";
+        $insertInventoryQuery = "INSERT INTO inventory (productName, quantity, type, transactionStatus, dateOfIn, requestedBy) VALUES (?, ?, ?, 1, ?, 1)";
         $stmt = $connection->prepare($insertInventoryQuery);
 
         if (!$stmt) {
             throw new Exception("Prepare failed: " . $connection->error);
         }
 
-        $stmt->bind_param('siiis', $productName, $quantity, $productType, $type, $date);
+        $stmt->bind_param('siiis', $productName, $quantity, $type, $date);
 
         if (!$stmt->execute()) {
             throw new Exception("Failed to add new inventory item: " . $stmt->error);

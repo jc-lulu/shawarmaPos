@@ -351,8 +351,8 @@ $currentWeekIndexJSON = json_encode($currentWeekIndex);
 <div id="chartdiv"></div>
 
 <!-- Add a title with current week indicator -->
-<div class="mt-3 text-center">
+<!-- <div class="mt-3 text-center">
     <h4>Last 5 Weeks Revenue and Expenses</h4>
     <p class="text-muted small">Current week: <?php echo $currentWeekLabel; ?>
         <?php echo ($currentWeekIndex >= 0) ? '(highlighted in green)' : '(not in view)'; ?></p>
-</div>
+</div> -->

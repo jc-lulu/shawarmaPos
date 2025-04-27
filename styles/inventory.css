@@ -580,3 +580,52 @@ body {
     padding: 1rem;
   }
 }
+
+/* Summary Cards Styling */
+.card {
+  transition: transform 0.3s, box-shadow 0.3s;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-text {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.card-title {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6c757d;
+}
+
+#lowStockCount {
+  color: #dc3545;
+}
+
+#totalStockCount,
+#inItemCount {
+  color: #198754;
+}
+
+/* Add animate.css for smooth animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate__fadeIn {
+  animation: fadeIn 1s;
+}

@@ -22,8 +22,8 @@ include('server_side/check_session.php');
 
             <div class="row mb-4">
                 <div class="col-md-12 d-flex justify-content-end gap-3">
-                    <?php 
-                    if ($_SESSION['user_role'] == 1){
+                    <?php
+                    if ($_SESSION['user_role'] == 1) {
                         echo '<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#transactionInModal">
                                 <i class="fa-solid fa-plus me-2"></i>Request In Item
                               </button>';
@@ -110,7 +110,7 @@ include('server_side/check_session.php');
                                 id="productIn_item" name="productIn_item" placeholder="Enter product name" required>
                         </div>
 
-                        <div class="mb-4">
+                        <!-- <div class="mb-4">
                             <label for="productIn_type" class="form-label fw-bold">
                                 <i class="fas fa-layer-group me-2 text-primary"></i>Product Type
                             </label>
@@ -121,7 +121,7 @@ include('server_side/check_session.php');
                                 <option value="2">Product type 2</option>
                                 <option value="3">Product type 3</option>
                             </select>
-                        </div>
+                        </div> -->
 
                         <div class="row mb-4">
                             <div class="col-md-6">
@@ -347,511 +347,511 @@ include('server_side/check_session.php');
     ?>
 
     <script>
-    $(document).ready(function() {
-        // Initialize tooltips
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-
-        // Initialize DataTable with Ajax source
-        // Initialize DataTable with Ajax source
-        $('#transactionsTable').DataTable({
-            processing: true,
-            responsive: true,
-            serverSide: false, // Set to true only if implementing server-side processing
-            ajax: {
-                url: 'server_side/fetch_transactions.php',
-                dataSrc: 'data',
-                error: function(xhr, error, thrown) {
-                    console.error('DataTables Ajax Error:', error, thrown);
-                    console.log('Response Text:', xhr.responseText);
-                    $('#transactionsTable_processing').html(
-                        'Error loading data. Please refresh the page to try again.');
-                }
-            },
-            columns: [{
-                    data: 'transactionId'
-                },
-                {
-                    data: 'productName'
-                },
-                {
-                    data: 'type',
-                    render: function(data, type, row) {
-                        if (data === 'In') {
-                            return '<span class="type-in">' + data + '</span>';
-                        } else {
-                            return '<span class="type-out">' + data + '</span>';
-                        }
-                    }
-                },
-                {
-                    data: 'quantity'
-                },
-                {
-                    data: 'status',
-                    render: function(data, type, row) {
-                        if (data === 'Approved') {
-                            return '<span class="status-approved">' + data + '</span>';
-                        } else if (data === 'Pending') {
-                            return '<span class="status-pending">' + data + '</span>';
-                        } else {
-                            return '<span class="status-rejected">' + data + '</span>';
-                        }
-                    }
-                },
-                {
-                    data: 'displayDate'
-                },
-                {
-                    data: 'transactionId',
-                    orderable: false,
-                    render: function(data, type, row) {
-                        return '<div class="action-buttons-container">' +
-                            '<button class="btn btn-edit btn-action edit-btn" data-id="' +
-                            data + '" data-bs-toggle="tooltip" title="Edit Transaction">' +
-                            '<i class="fas fa-edit"></i>' +
-                            '</button>' +
-                            '</div>';
-                    }
-                }
-            ],
-            order: [
-                [0, 'desc']
-            ],
-            pageLength: 10,
-            lengthMenu: [
-                [10, 25, 50, -1],
-                [10, 25, 50, "All"]
-            ],
-            language: {
-                emptyTable: "No transactions found",
-                zeroRecords: "No matching transactions found",
-                info: "Showing _START_ to _END_ of _TOTAL_ transactions",
-                infoEmpty: "Showing 0 to 0 of 0 transactions",
-                processing: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>'
-            }
-        });
-        // Search and filter functionality
-        $("#searchProduct, #filterType, #filterStatus").on("keyup change", function() {
-            let table = $('#transactionsTable').DataTable();
-            table.draw();
-        });
-
-        // Custom search function for DataTable
-        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-            let search = $("#searchProduct").val().toLowerCase();
-            let type = $("#filterType").val();
-            let status = $("#filterStatus").val();
-
-            let productName = data[1].toLowerCase();
-            let rowType = data[2];
-            let rowStatus = data[4];
-
-            let matchSearch = search === "" || productName.includes(search);
-            let matchType = type === "" || rowType.includes(type);
-            let matchStatus = status === "" || rowStatus.includes(status);
-
-            return matchSearch && matchType && matchStatus;
-        });
-
-        // Reset filters
-        $("#resetFilters").click(function() {
-            $("#searchProduct").val("");
-            $("#filterType").val("");
-            $("#filterStatus").val("");
-            $('#transactionsTable').DataTable().search("").draw();
-        });
-
-        // Set default date to today for request in form
-        const today = new Date().toISOString().split('T')[0];
-        $('#dateOfIn').val(today);
-
-        // Add animation when opening the modal
-        $('#transactionInModal').on('show.bs.modal', function() {
-            setTimeout(function() {
-                $('#productIn_item').focus();
-            }, 500);
-        });
-
-        // Handle form inputs validation with visual feedback
-        $('#requestInItemForm input, #requestInItemForm select, #requestInItemForm textarea').on('input change',
-            function() {
-                if (this.checkValidity()) {
-                    $(this).addClass('is-valid').removeClass('is-invalid');
-                } else if ($(this).val()) {
-                    $(this).removeClass('is-valid').addClass('is-invalid');
-                } else {
-                    $(this).removeClass('is-valid is-invalid');
-                }
+        $(document).ready(function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
             });
 
-        // Handle Request In Item submission
-        $('#submitRequestInBtn').click(function() {
-            // Enhanced validation with visual feedback
-            let isValid = true;
-            $('#requestInItemForm input:required, #requestInItemForm select:required').each(function() {
-                if (!this.checkValidity()) {
-                    $(this).addClass('is-invalid');
-                    isValid = false;
-                } else {
-                    $(this).addClass('is-valid').removeClass('is-invalid');
+            // Initialize DataTable with Ajax source
+            // Initialize DataTable with Ajax source
+            $('#transactionsTable').DataTable({
+                processing: true,
+                responsive: true,
+                serverSide: false, // Set to true only if implementing server-side processing
+                ajax: {
+                    url: 'server_side/fetch_transactions.php',
+                    dataSrc: 'data',
+                    error: function(xhr, error, thrown) {
+                        console.error('DataTables Ajax Error:', error, thrown);
+                        console.log('Response Text:', xhr.responseText);
+                        $('#transactionsTable_processing').html(
+                            'Error loading data. Please refresh the page to try again.');
+                    }
+                },
+                columns: [{
+                        data: 'transactionId'
+                    },
+                    {
+                        data: 'productName'
+                    },
+                    {
+                        data: 'type',
+                        render: function(data, type, row) {
+                            if (data === 'In') {
+                                return '<span class="type-in">' + data + '</span>';
+                            } else {
+                                return '<span class="type-out">' + data + '</span>';
+                            }
+                        }
+                    },
+                    {
+                        data: 'quantity'
+                    },
+                    {
+                        data: 'status',
+                        render: function(data, type, row) {
+                            if (data === 'Approved') {
+                                return '<span class="status-approved">' + data + '</span>';
+                            } else if (data === 'Pending') {
+                                return '<span class="status-pending">' + data + '</span>';
+                            } else {
+                                return '<span class="status-rejected">' + data + '</span>';
+                            }
+                        }
+                    },
+                    {
+                        data: 'displayDate'
+                    },
+                    {
+                        data: 'transactionId',
+                        orderable: false,
+                        render: function(data, type, row) {
+                            return '<div class="action-buttons-container">' +
+                                '<button class="btn btn-edit btn-action edit-btn" data-id="' +
+                                data + '" data-bs-toggle="tooltip" title="Edit Transaction">' +
+                                '<i class="fas fa-edit"></i>' +
+                                '</button>' +
+                                '</div>';
+                        }
+                    }
+                ],
+                order: [
+                    [0, 'desc']
+                ],
+                pageLength: 10,
+                lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "All"]
+                ],
+                language: {
+                    emptyTable: "No transactions found",
+                    zeroRecords: "No matching transactions found",
+                    info: "Showing _START_ to _END_ of _TOTAL_ transactions",
+                    infoEmpty: "Showing 0 to 0 of 0 transactions",
+                    processing: '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>'
                 }
             });
+            // Search and filter functionality
+            $("#searchProduct, #filterType, #filterStatus").on("keyup change", function() {
+                let table = $('#transactionsTable').DataTable();
+                table.draw();
+            });
 
-            if (!isValid) {
-                // Shake effect for validation errors
-                $('.modal-content').addClass('animate__animated animate__shakeX');
+            // Custom search function for DataTable
+            $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                let search = $("#searchProduct").val().toLowerCase();
+                let type = $("#filterType").val();
+                let status = $("#filterStatus").val();
+
+                let productName = data[1].toLowerCase();
+                let rowType = data[2];
+                let rowStatus = data[4];
+
+                let matchSearch = search === "" || productName.includes(search);
+                let matchType = type === "" || rowType.includes(type);
+                let matchStatus = status === "" || rowStatus.includes(status);
+
+                return matchSearch && matchType && matchStatus;
+            });
+
+            // Reset filters
+            $("#resetFilters").click(function() {
+                $("#searchProduct").val("");
+                $("#filterType").val("");
+                $("#filterStatus").val("");
+                $('#transactionsTable').DataTable().search("").draw();
+            });
+
+            // Set default date to today for request in form
+            const today = new Date().toISOString().split('T')[0];
+            $('#dateOfIn').val(today);
+
+            // Add animation when opening the modal
+            $('#transactionInModal').on('show.bs.modal', function() {
                 setTimeout(function() {
-                    $('.modal-content').removeClass('animate__animated animate__shakeX');
+                    $('#productIn_item').focus();
                 }, 500);
-                return;
-            }
-
-            // Get form data
-            const formData = {
-                productIn_item: $('#productIn_item').val(),
-                productIn_quantity: $('#productIn_quantity').val(),
-                productIn_type: $('#productIn_type').val(),
-                dateOfIn: $('#dateOfIn').val(),
-                requestInNotes: $('#requestInNotes').val()
-            };
-
-            // Show loading state
-            const saveBtn = $(this);
-            const originalText = saveBtn.html();
-            saveBtn.html(
-                '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Submitting...'
-            );
-            saveBtn.addClass('disabled').prop('disabled', true);
-
-            // Send AJAX request
-            $.ajax({
-                url: 'server_side/requestInItem.php',
-                type: 'POST',
-                data: formData,
-                dataType: 'json', // Specify that we expect JSON
-                success: function(response) {
-                    saveBtn.html(originalText);
-                    saveBtn.removeClass('disabled').prop('disabled', false);
-
-                    // Check JSON response status property instead of trimming
-                    if (response.status === 'success') {
-                        // Show success message
-                        $('#transactionInModal').modal('hide');
-
-                        Swal.fire({
-                            title: 'Request Submitted!',
-                            text: 'Your inventory request has been submitted for approval.',
-                            icon: 'success',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            timerProgressBar: true
-                        }).then(function() {
-                            // Reload with fade effect
-                            $('body').fadeOut(500, function() {
-                                location.reload();
-                            });
-                        });
-
-                        // Reset form
-                        $('#requestInItemForm')[0].reset();
-                        $('#requestInItemForm input, #requestInItemForm select, #requestInItemForm textarea')
-                            .removeClass('is-valid is-invalid');
-                        $('#dateOfIn').val(today);
-                    } else {
-                        // Show error message
-                        Swal.fire({
-                            title: 'Error',
-                            text: response.message ||
-                                'Failed to submit your request. Please try again.',
-                            icon: 'error'
-                        });
-                    }
-                },
-                error: function(xhr, status, error) {
-                    saveBtn.html(originalText);
-                    saveBtn.removeClass('disabled').prop('disabled', false);
-
-                    console.error('AJAX Error:', status, error);
-                    console.log('Response:', xhr.responseText);
-
-                    Swal.fire({
-                        title: 'Server Error',
-                        text: 'Unable to connect to the server. Please check your connection and try again.',
-                        icon: 'error'
-                    });
-                }
             });
-        });
 
-        $('#dateOfOut').val(today);
+            // Handle form inputs validation with visual feedback
+            $('#requestInItemForm input, #requestInItemForm select, #requestInItemForm textarea').on('input change',
+                function() {
+                    if (this.checkValidity()) {
+                        $(this).addClass('is-valid').removeClass('is-invalid');
+                    } else if ($(this).val()) {
+                        $(this).removeClass('is-valid').addClass('is-invalid');
+                    } else {
+                        $(this).removeClass('is-valid is-invalid');
+                    }
+                });
 
-        // Product selection for Request Out
-        $('#transactionOutModal').on('show.bs.modal', function() {
-            // Reset the modal to show product selection first
-            showProductSelectionView();
+            // Handle Request In Item submission
+            $('#submitRequestInBtn').click(function() {
+                // Enhanced validation with visual feedback
+                let isValid = true;
+                $('#requestInItemForm input:required, #requestInItemForm select:required').each(function() {
+                    if (!this.checkValidity()) {
+                        $(this).addClass('is-invalid');
+                        isValid = false;
+                    } else {
+                        $(this).addClass('is-valid').removeClass('is-invalid');
+                    }
+                });
 
-            // Load products
-            loadProducts();
-        });
+                if (!isValid) {
+                    // Shake effect for validation errors
+                    $('.modal-content').addClass('animate__animated animate__shakeX');
+                    setTimeout(function() {
+                        $('.modal-content').removeClass('animate__animated animate__shakeX');
+                    }, 500);
+                    return;
+                }
 
-        // Back button functionality
-        $('#backToProductsBtn').click(function() {
-            showProductSelectionView();
-        });
+                // Get form data
+                const formData = {
+                    productIn_item: $('#productIn_item').val(),
+                    productIn_quantity: $('#productIn_quantity').val(),
+                    productIn_type: $('#productIn_type').val(),
+                    dateOfIn: $('#dateOfIn').val(),
+                    requestInNotes: $('#requestInNotes').val()
+                };
 
-        // Product search functionality
-        $('#productSearchInput').on('keyup', function() {
-            const searchTerm = $(this).val().toLowerCase();
-            filterProductTable(searchTerm);
-        });
-
-        // Quantity validation
-        $('#productOut_quantity').on('input', function() {
-            const availableQty = parseInt($('#availableQuantity').text());
-            const requestedQty = parseInt($(this).val());
-
-            if (requestedQty > availableQty) {
-                $(this).addClass('is-invalid');
-                $('#quantityContainer .invalid-feedback').remove();
-                $('#quantityContainer').append(
-                    '<div class="invalid-feedback">Quantity cannot exceed available amount</div>'
+                // Show loading state
+                const saveBtn = $(this);
+                const originalText = saveBtn.html();
+                saveBtn.html(
+                    '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Submitting...'
                 );
-            } else {
-                $(this).removeClass('is-invalid');
-                $('#quantityContainer .invalid-feedback').remove();
-            }
-        });
+                saveBtn.addClass('disabled').prop('disabled', true);
 
-        $('#submitRequestOutBtn').click(function() {
-            // Enhanced validation with visual feedback
-            let isValid = true;
-            $('#outItemForm input:required').each(function() {
-                if (!this.checkValidity()) {
-                    $(this).addClass('is-invalid');
-                    isValid = false;
-                } else {
-                    $(this).addClass('is-valid').removeClass('is-invalid');
-                }
-            });
+                // Send AJAX request
+                $.ajax({
+                    url: 'server_side/requestInItem.php',
+                    type: 'POST',
+                    data: formData,
+                    dataType: 'json', // Specify that we expect JSON
+                    success: function(response) {
+                        saveBtn.html(originalText);
+                        saveBtn.removeClass('disabled').prop('disabled', false);
 
-            // Check quantity specifically
-            const availableQty = parseInt($('#availableQuantity').text());
-            const requestedQty = parseInt($('#productOut_quantity').val());
+                        // Check JSON response status property instead of trimming
+                        if (response.status === 'success') {
+                            // Show success message
+                            $('#transactionInModal').modal('hide');
 
-            if (requestedQty > availableQty) {
-                $('#productOut_quantity').addClass('is-invalid');
-                isValid = false;
-            }
-
-            if (!isValid) {
-                return;
-            }
-
-            // Show loading state
-            const saveBtn = $(this);
-            const originalText = saveBtn.html();
-            saveBtn.html(
-                '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Submitting...'
-            );
-            saveBtn.addClass('disabled').prop('disabled', true);
-
-            // Get form data
-
-
-            const formData = {
-                productId: $('#productOut_id').val(), // Changed from product_id
-                productName: $('#productOut_item').val(), // Changed from product_name
-                quantity: $('#productOut_quantity').val(), // This one is fine
-                date: $('#dateOfOut').val(), // This one is fine
-                notes: $('#requestOutNotes').val() // This one is fine
-            };
-
-            // Send AJAX request
-            $.ajax({
-                url: 'server_side/requestOutItem.php',
-                type: 'POST',
-                data: formData,
-                dataType: 'json',
-                success: function(response) {
-                    saveBtn.html(originalText);
-                    saveBtn.removeClass('disabled').prop('disabled', false);
-
-                    if (response.status === 'success') {
-                        // Show success message
-                        $('#transactionOutModal').modal('hide');
-
-                        Swal.fire({
-                            title: 'Request Submitted!',
-                            text: 'Your inventory request has been submitted for approval.',
-                            icon: 'success',
-                            showConfirmButton: false,
-                            timer: 2000,
-                            timerProgressBar: true
-                        }).then(function() {
-                            // Reload with fade effect
-                            $('body').fadeOut(500, function() {
-                                location.reload();
+                            Swal.fire({
+                                title: 'Request Submitted!',
+                                text: 'Your inventory request has been submitted for approval.',
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                timerProgressBar: true
+                            }).then(function() {
+                                // Reload with fade effect
+                                $('body').fadeOut(500, function() {
+                                    location.reload();
+                                });
                             });
-                        });
 
-                        // Reset form
-                        $('#outItemForm')[0].reset();
-                        $('#outItemForm input').removeClass('is-valid is-invalid');
-                    } else {
-                        // Show error message
+                            // Reset form
+                            $('#requestInItemForm')[0].reset();
+                            $('#requestInItemForm input, #requestInItemForm select, #requestInItemForm textarea')
+                                .removeClass('is-valid is-invalid');
+                            $('#dateOfIn').val(today);
+                        } else {
+                            // Show error message
+                            Swal.fire({
+                                title: 'Error',
+                                text: response.message ||
+                                    'Failed to submit your request. Please try again.',
+                                icon: 'error'
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        saveBtn.html(originalText);
+                        saveBtn.removeClass('disabled').prop('disabled', false);
+
+                        console.error('AJAX Error:', status, error);
+                        console.log('Response:', xhr.responseText);
+
                         Swal.fire({
-                            title: 'Error',
-                            text: response.message ||
-                                'Failed to submit your request. Please try again.',
+                            title: 'Server Error',
+                            text: 'Unable to connect to the server. Please check your connection and try again.',
                             icon: 'error'
                         });
                     }
-                },
-                error: function(xhr, status, error) {
-                    saveBtn.html(originalText);
-                    saveBtn.removeClass('disabled').prop('disabled', false);
+                });
+            });
 
-                    console.error('AJAX Error:', status, error);
-                    console.log('Response:', xhr.responseText);
+            $('#dateOfOut').val(today);
 
-                    Swal.fire({
-                        title: 'Server Error',
-                        text: 'Unable to connect to the server. Please check your connection and try again.',
-                        icon: 'error'
-                    });
+            // Product selection for Request Out
+            $('#transactionOutModal').on('show.bs.modal', function() {
+                // Reset the modal to show product selection first
+                showProductSelectionView();
+
+                // Load products
+                loadProducts();
+            });
+
+            // Back button functionality
+            $('#backToProductsBtn').click(function() {
+                showProductSelectionView();
+            });
+
+            // Product search functionality
+            $('#productSearchInput').on('keyup', function() {
+                const searchTerm = $(this).val().toLowerCase();
+                filterProductTable(searchTerm);
+            });
+
+            // Quantity validation
+            $('#productOut_quantity').on('input', function() {
+                const availableQty = parseInt($('#availableQuantity').text());
+                const requestedQty = parseInt($(this).val());
+
+                if (requestedQty > availableQty) {
+                    $(this).addClass('is-invalid');
+                    $('#quantityContainer .invalid-feedback').remove();
+                    $('#quantityContainer').append(
+                        '<div class="invalid-feedback">Quantity cannot exceed available amount</div>'
+                    );
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $('#quantityContainer .invalid-feedback').remove();
                 }
+            });
+
+            $('#submitRequestOutBtn').click(function() {
+                // Enhanced validation with visual feedback
+                let isValid = true;
+                $('#outItemForm input:required').each(function() {
+                    if (!this.checkValidity()) {
+                        $(this).addClass('is-invalid');
+                        isValid = false;
+                    } else {
+                        $(this).addClass('is-valid').removeClass('is-invalid');
+                    }
+                });
+
+                // Check quantity specifically
+                const availableQty = parseInt($('#availableQuantity').text());
+                const requestedQty = parseInt($('#productOut_quantity').val());
+
+                if (requestedQty > availableQty) {
+                    $('#productOut_quantity').addClass('is-invalid');
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    return;
+                }
+
+                // Show loading state
+                const saveBtn = $(this);
+                const originalText = saveBtn.html();
+                saveBtn.html(
+                    '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Submitting...'
+                );
+                saveBtn.addClass('disabled').prop('disabled', true);
+
+                // Get form data
+
+
+                const formData = {
+                    productId: $('#productOut_id').val(), // Changed from product_id
+                    productName: $('#productOut_item').val(), // Changed from product_name
+                    quantity: $('#productOut_quantity').val(), // This one is fine
+                    date: $('#dateOfOut').val(), // This one is fine
+                    notes: $('#requestOutNotes').val() // This one is fine
+                };
+
+                // Send AJAX request
+                $.ajax({
+                    url: 'server_side/requestOutItem.php',
+                    type: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    success: function(response) {
+                        saveBtn.html(originalText);
+                        saveBtn.removeClass('disabled').prop('disabled', false);
+
+                        if (response.status === 'success') {
+                            // Show success message
+                            $('#transactionOutModal').modal('hide');
+
+                            Swal.fire({
+                                title: 'Request Submitted!',
+                                text: 'Your inventory request has been submitted for approval.',
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                timerProgressBar: true
+                            }).then(function() {
+                                // Reload with fade effect
+                                $('body').fadeOut(500, function() {
+                                    location.reload();
+                                });
+                            });
+
+                            // Reset form
+                            $('#outItemForm')[0].reset();
+                            $('#outItemForm input').removeClass('is-valid is-invalid');
+                        } else {
+                            // Show error message
+                            Swal.fire({
+                                title: 'Error',
+                                text: response.message ||
+                                    'Failed to submit your request. Please try again.',
+                                icon: 'error'
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        saveBtn.html(originalText);
+                        saveBtn.removeClass('disabled').prop('disabled', false);
+
+                        console.error('AJAX Error:', status, error);
+                        console.log('Response:', xhr.responseText);
+
+                        Swal.fire({
+                            title: 'Server Error',
+                            text: 'Unable to connect to the server. Please check your connection and try again.',
+                            icon: 'error'
+                        });
+                    }
+                });
+            });
+
+            // Edit transaction - populate modal
+            $(document).on('click', '.edit-btn', function() {
+                $('.tooltip').hide();
+
+                const id = $(this).data('id');
+                const row = $(this).closest('tr');
+
+                // Get data from the DataTable row
+                const table = $('#transactionsTable').DataTable();
+                const rowData = table.row(row).data();
+
+                // Populate the edit form
+                $('#edit_transaction_id').val(rowData.transactionId);
+                $('#edit_product_name').val(rowData.productName);
+                $('#edit_quantity').val(rowData.quantity);
+                $('#edit_status').val(rowData.status);
+
+                // Open modal
+                $('#transactionEditModal').modal('show');
+            });
+
+            // Update transaction
+            $('#updateTransactionBtn').click(function() {
+                // Validate form
+                if (!$('#editTransactionForm')[0].checkValidity()) {
+                    $('#editTransactionForm')[0].reportValidity();
+                    return;
+                }
+
+                // Get form data
+                const formData = {
+                    transaction_id: $('#edit_transaction_id').val(),
+                    product_name: $('#edit_product_name').val(),
+                    quantity: $('#edit_quantity').val(),
+                    status: $('#edit_status').val()
+                };
+
+                // Send AJAX request
+                $.ajax({
+                    url: 'server_side/update_transaction.php',
+                    type: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            $('#transactionEditModal').modal('hide');
+
+                            Swal.fire({
+                                title: 'Success',
+                                text: response.message ||
+                                    'Transaction updated successfully',
+                                icon: 'success',
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(function() {
+                                location.reload(); // Refresh the page
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: response.message || 'Error updating transaction',
+                                icon: 'error'
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Server error while updating transaction',
+                            icon: 'error'
+                        });
+                    }
+                });
             });
         });
 
-        // Edit transaction - populate modal
-        $(document).on('click', '.edit-btn', function() {
-            $('.tooltip').hide();
-
-            const id = $(this).data('id');
-            const row = $(this).closest('tr');
-
-            // Get data from the DataTable row
-            const table = $('#transactionsTable').DataTable();
-            const rowData = table.row(row).data();
-
-            // Populate the edit form
-            $('#edit_transaction_id').val(rowData.transactionId);
-            $('#edit_product_name').val(rowData.productName);
-            $('#edit_quantity').val(rowData.quantity);
-            $('#edit_status').val(rowData.status);
-
-            // Open modal
-            $('#transactionEditModal').modal('show');
-        });
-
-        // Update transaction
-        $('#updateTransactionBtn').click(function() {
-            // Validate form
-            if (!$('#editTransactionForm')[0].checkValidity()) {
-                $('#editTransactionForm')[0].reportValidity();
-                return;
-            }
-
-            // Get form data
-            const formData = {
-                transaction_id: $('#edit_transaction_id').val(),
-                product_name: $('#edit_product_name').val(),
-                quantity: $('#edit_quantity').val(),
-                status: $('#edit_status').val()
-            };
-
-            // Send AJAX request
+        function loadProducts() {
+            console.log("Loading products...");
             $.ajax({
-                url: 'server_side/update_transaction.php',
-                type: 'POST',
-                data: formData,
+                url: 'server_side/fetchRequestOutItem.php',
+                type: 'GET',
                 dataType: 'json',
                 success: function(response) {
-                    if (response.success) {
-                        $('#transactionEditModal').modal('hide');
-
-                        Swal.fire({
-                            title: 'Success',
-                            text: response.message ||
-                                'Transaction updated successfully',
-                            icon: 'success',
-                            timer: 1500,
-                            showConfirmButton: false
-                        }).then(function() {
-                            location.reload(); // Refresh the page
-                        });
+                    console.log("API response:", response);
+                    if (response.status === 'success') {
+                        renderProductList(response.products);
                     } else {
-                        Swal.fire({
-                            title: 'Error',
-                            text: response.message || 'Error updating transaction',
-                            icon: 'error'
-                        });
-                    }
-                },
-                error: function() {
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Server error while updating transaction',
-                        icon: 'error'
-                    });
-                }
-            });
-        });
-    });
-
-    function loadProducts() {
-        console.log("Loading products...");
-        $.ajax({
-            url: 'server_side/fetchRequestOutItem.php',
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                console.log("API response:", response);
-                if (response.status === 'success') {
-                    renderProductList(response.products);
-                } else {
-                    $('#productListBody').html(`
+                        $('#productListBody').html(`
                     <tr>
                         <td colspan="3" class="text-center text-danger">
                             <i class="fas fa-exclamation-circle me-2"></i>${response.message || 'Error loading products'}
                         </td>
                     </tr>
                 `);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX error:", status, error);
-                console.log("Response text:", xhr.responseText);
-                $('#productListBody').html(`
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX error:", status, error);
+                    console.log("Response text:", xhr.responseText);
+                    $('#productListBody').html(`
                 <tr>
                     <td colspan="3" class="text-center text-danger">
                         <i class="fas fa-exclamation-circle me-2"></i>Server error. Unable to load products.
                     </td>
                 </tr>
             `);
-            }
-        });
-    }
+                }
+            });
+        }
 
-    function renderProductList(products) {
-        console.log("Rendering products:", products);
-        if (!products || products.length === 0) {
-            $('#productListBody').html(`
+        function renderProductList(products) {
+            console.log("Rendering products:", products);
+            if (!products || products.length === 0) {
+                $('#productListBody').html(`
             <tr>
                 <td colspan="3" class="text-center">
                     <i class="fas fa-info-circle me-2"></i>No products available
                 </td>
             </tr>
         `);
-            return;
-        }
+                return;
+            }
 
-        let html = '';
-        products.forEach(product => {
-            html += `
+            let html = '';
+            products.forEach(product => {
+                html += `
             <tr>
                 <td>${product.name}</td>
                 <td>${product.quantity}</td>
@@ -865,60 +865,60 @@ include('server_side/check_session.php');
                 </td>
             </tr>
         `;
-        });
+            });
 
-        $('#productListBody').html(html);
+            $('#productListBody').html(html);
 
-        // Add click event for product selection
-        $('.select-product').click(function() {
-            const productId = $(this).data('id');
-            const productName = $(this).data('name');
-            const availableQty = $(this).data('quantity');
+            // Add click event for product selection
+            $('.select-product').click(function() {
+                const productId = $(this).data('id');
+                const productName = $(this).data('name');
+                const availableQty = $(this).data('quantity');
 
-            // Fill the form with selected product data
-            $('#productOut_id').val(productId);
-            $('#productOut_item').val(productName);
-            $('#availableQuantity').text(availableQty);
+                // Fill the form with selected product data
+                $('#productOut_id').val(productId);
+                $('#productOut_item').val(productName);
+                $('#availableQuantity').text(availableQty);
 
-            // Show the request form section
-            showRequestFormView();
-        });
-    }
-
-    function filterProductTable(searchTerm) {
-        const rows = $('#productListBody tr');
-        let matchFound = false;
-
-        rows.each(function() {
-            const productName = $(this).find('td:first').text().toLowerCase();
-
-            if (productName.includes(searchTerm)) {
-                $(this).show();
-                matchFound = true;
-            } else {
-                $(this).hide();
-            }
-        });
-
-        // Show/hide no products message
-        if (matchFound) {
-            $('#noProductsMessage').addClass('d-none');
-        } else {
-            $('#noProductsMessage').removeClass('d-none');
+                // Show the request form section
+                showRequestFormView();
+            });
         }
-    }
 
-    function showProductSelectionView() {
-        $('#selectProductSection').removeClass('d-none');
-        $('#requestFormSection').addClass('d-none');
-        $('#submitRequestOutBtn').addClass('d-none');
-    }
+        function filterProductTable(searchTerm) {
+            const rows = $('#productListBody tr');
+            let matchFound = false;
 
-    function showRequestFormView() {
-        $('#selectProductSection').addClass('d-none');
-        $('#requestFormSection').removeClass('d-none');
-        $('#submitRequestOutBtn').removeClass('d-none');
-    }
+            rows.each(function() {
+                const productName = $(this).find('td:first').text().toLowerCase();
+
+                if (productName.includes(searchTerm)) {
+                    $(this).show();
+                    matchFound = true;
+                } else {
+                    $(this).hide();
+                }
+            });
+
+            // Show/hide no products message
+            if (matchFound) {
+                $('#noProductsMessage').addClass('d-none');
+            } else {
+                $('#noProductsMessage').removeClass('d-none');
+            }
+        }
+
+        function showProductSelectionView() {
+            $('#selectProductSection').removeClass('d-none');
+            $('#requestFormSection').addClass('d-none');
+            $('#submitRequestOutBtn').addClass('d-none');
+        }
+
+        function showRequestFormView() {
+            $('#selectProductSection').addClass('d-none');
+            $('#requestFormSection').removeClass('d-none');
+            $('#submitRequestOutBtn').removeClass('d-none');
+        }
     </script>
 </body>
 

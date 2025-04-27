@@ -60,11 +60,11 @@ $inventoryQuery = "SELECT SUM(quantity * (SELECT AVG(totalCost/quantity) FROM or
 $inventoryResult = $connection->query($inventoryQuery);
 $inventoryValue = $inventoryResult->fetch_assoc()['inventoryValue'] ?: 0;
 
-// For inventory trend, we would need historical data
+// For inventory trend, we would need histo
 // For now, let's just use a placeholder value of 3%
-$inventoryPercentChange = 3;
-$inventoryTrend = $inventoryPercentChange >= 0 ? 'trend-up' : 'trend-down';
-$inventoryIcon = $inventoryPercentChange >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+// $inventoryPercentChange = 3;
+// $inventoryTrend = $inventoryPercentChange >= 0 ? 'trend-up' : 'trend-down';
+// $inventoryIcon = $inventoryPercentChange >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
 
 // Format numbers for display
 $salesDisplay = '₱' . number_format($currentMonthSales, 2);
@@ -156,37 +156,21 @@ $connection->close();
                     <div class="stat-title">Total Sales</div>
                     <div class="stat-value"><?php echo $salesDisplay; ?></div>
                     <div class="stat-period">This Month (<?php echo date('F Y'); ?>)</div>
-                    <div class="stat-trend <?php echo $salesTrend; ?>">
-                        <i class="fas <?php echo $salesIcon; ?>"></i>
-                        <?php echo abs(round($salesPercentChange)); ?>% from last month
-                    </div>
                 </div>
                 <div class="stat-card card-expenses">
                     <div class="stat-title">Total Expenses</div>
                     <div class="stat-value"><?php echo $expensesDisplay; ?></div>
                     <div class="stat-period">This Month (<?php echo date('F Y'); ?>)</div>
-                    <div class="stat-trend <?php echo $expensesTrend; ?>">
-                        <i class="fas <?php echo $expensesIcon; ?>"></i>
-                        <?php echo abs(round($expensesPercentChange)); ?>% from last month
-                    </div>
                 </div>
                 <div class="stat-card card-profit">
                     <div class="stat-title">Net Profit</div>
                     <div class="stat-value"><?php echo $profitDisplay; ?></div>
                     <div class="stat-period">This Month (<?php echo date('F Y'); ?>)</div>
-                    <div class="stat-trend <?php echo $profitTrend; ?>">
-                        <i class="fas <?php echo $profitIcon; ?>"></i>
-                        <?php echo abs(round($profitPercentChange)); ?>% from last month
-                    </div>
                 </div>
                 <div class="stat-card card-inventory">
                     <div class="stat-title">Inventory Value</div>
                     <div class="stat-value"><?php echo $inventoryDisplay; ?></div>
                     <div class="stat-period">Current Inventory</div>
-                    <div class="stat-trend <?php echo $inventoryTrend; ?>">
-                        <i class="fas <?php echo $inventoryIcon; ?>"></i>
-                        <?php echo $inventoryPercentChange; ?>% estimated change
-                    </div>
                 </div>
             </div>
 
@@ -201,6 +185,9 @@ $connection->close();
                         <div class="chart-header">
                             <h3 class="chart-title">Weekly Revenue</h3>
                             <div class="chart-actions">
+                                <button class="btn btn-sm btn-view view-chart" data-chart="weekly">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
                                 <button class="btn btn-sm btn-outline-secondary" id="refresh-weekly">
                                     <i class="fas fa-sync-alt"></i> Refresh
                                 </button>
@@ -216,6 +203,9 @@ $connection->close();
                         <div class="chart-header">
                             <h3 class="chart-title">Monthly Revenue</h3>
                             <div class="chart-actions">
+                                <button class="btn btn-sm btn-view view-chart" data-chart="monthly">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
                                 <button class="btn btn-sm btn-outline-secondary" id="refresh-monthly">
                                     <i class="fas fa-sync-alt"></i> Refresh
                                 </button>
@@ -228,6 +218,7 @@ $connection->close();
         </div>
     </div>
 
+    // ...existing code...
     <script>
         // Handle refresh buttons
         document.getElementById('refresh-weekly').addEventListener('click', function() {
@@ -237,7 +228,100 @@ $connection->close();
         document.getElementById('refresh-monthly').addEventListener('click', function() {
             document.getElementById('monthly-chart-iframe').src = 'graphs/chart.php?t=' + new Date().getTime();
         });
+
+        // Improved view chart function
+        document.querySelectorAll('.view-chart').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const chartType = this.getAttribute('data-chart');
+
+                // Instead of opening the raw PHP file, create a wrapper HTML page
+                let url = '';
+                let title = '';
+
+                if (chartType === 'weekly') {
+                    url = 'graphs/chartWeekly.php';
+                    title = 'Weekly Revenue Chart';
+                } else if (chartType === 'monthly') {
+                    url = 'graphs/chart.php';
+                    title = 'Monthly Revenue Chart';
+                }
+
+                if (url) {
+                    // Create a wrapper HTML page that properly includes the chart
+                    const wrapperHTML = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>${title}</title>
+                    <style>
+                        body { 
+                            margin: 0; 
+                            padding: 20px; 
+                            font-family: Arial, sans-serif; 
+                            background-color: #f8f9fa;
+                            text-align: center;
+                        }
+                        .chart-container {
+                            width: 90%;
+                            height: 85vh;
+                            margin: 0 auto;
+                            background-color: white;
+                            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                            border-radius: 8px;
+                            padding: 20px;
+                            overflow: hidden;
+                        }
+                        h2 {
+                            color: #0A3981;
+                            margin-bottom: 20px;
+                            font-size: 24px;
+                        }
+                        iframe {
+                            width: 100%;
+                            height: 100%;
+                            border: none;
+                        }
+                        .print-btn {
+                            margin-top: 20px;
+                            padding: 8px 15px;
+                            background-color: #0A3981;
+                            color: white;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-size: 14px;
+                        }
+                        .print-btn:hover {
+                            background-color: #072a5f;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h2>${title}</h2>
+                    <div class="chart-container">
+                        <iframe src="${url}?t=${new Date().getTime()}" frameborder="0"></iframe>
+                    </div>
+                    <button class="print-btn" onclick="window.print()">Print Chart</button>
+                </body>
+                </html>
+                `;
+
+                    // Open a new window and write the wrapper HTML to it
+                    const newWindow = window.open('', '_blank', 'width=1000,height=800,resizable=yes');
+                    if (newWindow) {
+                        newWindow.document.write(wrapperHTML);
+                        newWindow.document.close(); // Important to finish the document
+                        newWindow.focus();
+                    } else {
+                        alert('Unable to open new window. Please check your popup blocker settings.');
+                    }
+                }
+            });
+        });
     </script>
+    // ...existing code...
 </body>
 
 </html>
