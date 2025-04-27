@@ -49,9 +49,15 @@ try {
     }
     $stmt->close();
 
-    // Step 3: Insert order summary into orderhistory
-    $orderStmt = $connection->prepare("INSERT INTO orderedhistory (orderId, totalCost, dateOfOrder, timeOfOrder) VALUES (?, ?, ?, ?)");
-    $orderStmt->bind_param("sdss", $orderId, $subtotal, $dateOfOrder, $timeOfOrder);
+    // Calculate week information
+    $orderDate = new DateTime($dateOfOrder);
+    $weekNumber = intval($orderDate->format('W')); // ISO week number (1-53)
+    $weekYear = intval($orderDate->format('Y'));   // Year
+    $weekLabel = "Week $weekNumber, $weekYear";
+
+    // Step 3: Insert order summary into orderhistory with week information
+    $orderStmt = $connection->prepare("INSERT INTO orderedhistory (orderId, totalCost, dateOfOrder, timeOfOrder, weekNumber, weekYear, weekLabel) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $orderStmt->bind_param("sdssiis", $orderId, $subtotal, $dateOfOrder, $timeOfOrder, $weekNumber, $weekYear, $weekLabel);
 
     if (!$orderStmt->execute()) {
         throw new Exception("Error inserting order summary: " . $orderStmt->error);

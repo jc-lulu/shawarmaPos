@@ -33,6 +33,10 @@ if ($type !== null) {
 if ($status !== null) {
     $query .= " AND notificationStatus = $status";
 }
+//check if admin (pending only)
+if ($userRole == 0) {
+    $query .= " AND requestStatus = 0 ";
+}
 
 // Order by most recent first
 $query .= " ORDER BY notificationId DESC";

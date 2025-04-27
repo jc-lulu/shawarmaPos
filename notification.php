@@ -119,7 +119,7 @@ include('server_side/check_session.php');
                             } else {
                                 typeIcon = "fa-regular fa-bell";
                                 typeBadge = "badge bg-info";
-                                typeText = "Response";
+                                typeText = "Message";
                             }
 
                             notificationsHTML += `
@@ -429,8 +429,72 @@ include('server_side/check_session.php');
         //     updateTransactionStatus(transactionId, 1);
         // }
 
-        function declineTransaction(transactionId) {
-            updateTransactionStatus(transactionId, 2);
+        function declineTransaction(notificationId, transactionId) {
+            Swal.fire({
+                title: 'Confirm Decline',
+                text: 'Are you sure you want to decline this transaction?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#C5172E',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, decline it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading state
+                    Swal.fire({
+                        title: 'Processing...',
+                        text: 'Approving transaction',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    $.ajax({
+                        url: 'server_side/decline_transaction.php',
+                        type: 'POST',
+                        data: {
+                            notificationId: notificationId,
+                            transactionId: transactionId
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'Declined',
+                                    text: response.message,
+                                    icon: 'success',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    // Close modal
+                                    $("#notificationDetailModal").modal("hide");
+                                    // Reload notifications
+                                    loadNotifications();
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: response.message || 'Failed to approve transaction',
+                                    icon: 'error'
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("AJAX Error:", status, error);
+                            console.log("Response:", xhr.responseText);
+
+                            Swal.fire({
+                                title: 'Server Error!',
+                                text: 'There was a problem connecting to the server',
+                                icon: 'error'
+                            });
+                        }
+                    });
+                }
+            });
         }
 
         function updateTransactionStatus(transactionId, status) {

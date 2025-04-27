@@ -1,9 +1,7 @@
 <?php
-// Turn off PHP notices and warnings to prevent HTML in output
 error_reporting(E_ERROR);
 ini_set('display_errors', 0);
 
-// Include required files
 include('check_session.php');
 include('../cedric_dbConnection.php');
 
@@ -111,6 +109,7 @@ try {
     $productType = $transaction['productType'];
     $transactionType = $transaction['transactionType'];
 
+
     // Check if product exists in inventory
     $checkInventoryQuery = "SELECT * FROM inventory WHERE productName = ?";
     $stmt = $connection->prepare($checkInventoryQuery);
@@ -126,16 +125,23 @@ try {
     if ($inventoryResult->num_rows > 0) {
         // Update existing inventory item
         $inventoryItem = $inventoryResult->fetch_assoc();
-        $productId = $inventoryItem['productId'];
-        $currentQuantity = $inventoryItem['quantity'];
+        // Log the inventory item for debugging
+        error_log("Found existing inventory item: " . json_encode($inventoryItem));
 
+        $productId = $inventoryItem['productId'];
+        $currentQuantity = intval($inventoryItem['quantity']); // Ensure it's an integer
+
+        error_log("Current inventory: ID=$productId, Quantity=$currentQuantity");
         // Calculate new quantity based on transaction type
         // 0 = In (add), 1 = Out (subtract)
         $newQuantity = ($transactionType == 0)
             ? $currentQuantity + $quantity
             : $currentQuantity - $quantity;
 
-        // Ensure quantity doesn't go negative
+        // Log the calculation
+        error_log("Calculated new quantity: $currentQuantity " .
+            ($transactionType == 0 ? "+" : "-") . " $quantity = $newQuantity");
+
         if ($newQuantity < 0) {
             throw new Exception("Cannot approve: Transaction would result in negative inventory");
         }
@@ -153,21 +159,54 @@ try {
         if (!$stmt->execute()) {
             throw new Exception("Failed to update inventory: " . $stmt->error);
         }
+
+        // Check if any rows were affected
+        $affectedRows = $stmt->affected_rows;
+        error_log("Inventory update affected $affectedRows rows");
+
+        if ($affectedRows == 0) {
+            // This could indicate a problem with the WHERE clause
+            error_log("WARNING: Inventory update didn't affect any rows. Checking if product exists...");
+
+            // Double-check if the product exists
+            $checkQuery = "SELECT COUNT(*) as count FROM inventory WHERE productId = ?";
+            $checkStmt = $connection->prepare($checkQuery);
+            $checkStmt->bind_param('i', $productId);
+            $checkStmt->execute();
+            $checkResult = $checkStmt->get_result()->fetch_assoc();
+
+            if ($checkResult['count'] == 0) {
+                throw new Exception("Product with ID $productId no longer exists in inventory");
+            } else if ($currentQuantity == $newQuantity) {
+                // This is okay - no change needed
+                error_log("No rows affected because quantity didn't change ($currentQuantity == $newQuantity)");
+            } else {
+                throw new Exception("Failed to update inventory quantity (no rows affected)");
+            }
+        }
     } else if ($transactionType == 0) {
 
         $type = 0; // In type
-        $insertInventoryQuery = "INSERT INTO inventory (productName, quantity, productType, type) VALUES (?, ?, ?, ?)";
+        //check if int, making sure to prevent errrors in the database
+        $quantity = intval($quantity);
+        $productType = intval($productType);
+        $date = date('Y-m-d'); // Current date and time   
+
+        $insertInventoryQuery = "INSERT INTO inventory (productName, quantity, productType, type, transactionStatus, dateOfIn, requestedBy) VALUES (?, ?, ?, ?, 1, ?, 1)";
         $stmt = $connection->prepare($insertInventoryQuery);
 
         if (!$stmt) {
             throw new Exception("Prepare failed: " . $connection->error);
         }
 
-        $stmt->bind_param('siii', $productName, $quantity, $productType, $type);
+        $stmt->bind_param('siiis', $productName, $quantity, $productType, $type, $date);
 
         if (!$stmt->execute()) {
             throw new Exception("Failed to add new inventory item: " . $stmt->error);
         }
+        // Log the insert ID for confirmation
+        $newInventoryId = $connection->insert_id;
+        error_log("Successfully inserted new inventory item with ID: $newInventoryId");
     } else {
         // Cannot approve "Out" transaction for non-existent inventory
         throw new Exception("Cannot approve: Product does not exist in inventory");
