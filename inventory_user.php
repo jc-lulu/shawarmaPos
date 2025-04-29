@@ -167,137 +167,6 @@ include('server_side/check_session.php');
         </div>
     </div>
 
-    <!-- Out Item Modal -->
-    <div class="modal fade" id="transactionOutModal" tabindex="-1" aria-labelledby="transactionOutModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-gradient-danger text-white">
-                    <h5 class="modal-title" id="transactionOutModalLabel">
-                        <i class="fas fa-minus-circle me-2"></i>Out Items from Inventory
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <!-- Search Bar -->
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="input-group">
-                                <span class="input-group-text bg-light border-0">
-                                    <i class="fas fa-search text-muted"></i>
-                                </span>
-                                <input type="text" class="form-control form-control-lg border-0 bg-light"
-                                    id="productIdSearch" placeholder="Search by Product ID...">
-                            </div>
-                        </div>
-                        <div class="col-md-6 text-md-end mt-3 mt-md-0">
-                            <span class="badge bg-info py-2 px-3">
-                                <i class="fas fa-info-circle me-1"></i>
-                                Select items to mark as "Out"
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Products Table -->
-                    <div class="table-responsive inventory-table">
-                        <table class="table table-hover" id="outItemsTable">
-                            <thead class="table-light">
-                                <tr>
-                                    <th width="15%">Product ID</th>
-                                    <th width="50%">Product Name</th>
-                                    <th width="15%">Available</th>
-                                    <th width="20%">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="outItemsTableBody">
-                                <!-- Products will be loaded here via AJAX -->
-                                <tr>
-                                    <td colspan="4" class="text-center py-4">
-                                        <div class="spinner-border text-primary" role="status">
-                                            <span class="visually-hidden">Loading...</span>
-                                        </div>
-                                        <p class="mt-2 text-muted">Loading inventory items...</p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-2"></i>Cancel
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Out Item Quantity Modal -->
-    <div class="modal fade" id="outItemQuantityModal" tabindex="-1" aria-labelledby="outItemQuantityModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-gradient-danger text-white">
-                    <h5 class="modal-title" id="outItemQuantityModalLabel">
-                        <i class="fas fa-minus-circle me-2"></i>Remove Item from Inventory
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <div class="text-center mb-4">
-                        <div class="product-icon mb-3">
-                            <i class="fas fa-box-open fa-3x text-danger"></i>
-                        </div>
-                        <h4 class="product-name fw-bold">Product Name</h4>
-                        <p class="product-id text-muted">Product ID: <span id="selectedProductId"></span></p>
-                    </div>
-
-                    <form id="outItemForm">
-                        <input type="hidden" id="outProductId" name="productId">
-                        <input type="hidden" id="outProductName" name="productName">
-
-                        <div class="mb-4">
-                            <label for="outQuantity" class="form-label fw-bold">
-                                <i class="fas fa-hashtag me-2 text-danger"></i>Out Quantity
-                            </label>
-                            <div class="input-group">
-                                <input type="number" class="form-control form-control-lg border-0 bg-light"
-                                    id="outQuantity" name="quantity" min="1" placeholder="0" required>
-                                <span class="input-group-text bg-light border-0">units</span>
-                            </div>
-                            <div class="form-text mt-2">
-                                Available: <span class="fw-bold text-success" id="availableQuantity">0</span> units
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="dateOfOut" class="form-label fw-bold">
-                                <i class="fas fa-calendar-alt me-2 text-danger"></i>Date
-                            </label>
-                            <input type="date" class="form-control form-control-lg border-0 bg-light" id="dateOfOut"
-                                name="dateOfOut" required>
-                        </div>
-
-                        <div class="alert alert-warning" role="alert">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            This action will mark items as "OUT" in your inventory.
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-outline-secondary" id="backToListBtn">
-                        <i class="fas fa-arrow-left me-2"></i>Back
-                    </button>
-                    <button type="button" class="btn btn-danger btn-lg px-4" id="confirmOutBtn">
-                        <i class="fas fa-minus-circle me-2"></i>Mark as Out
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Add New Item Modal - Enhanced Design -->
     <div class="modal fade" id="transactionInModal" tabindex="-1" aria-labelledby="transactionInModalLabel"
         aria-hidden="true">
@@ -428,67 +297,6 @@ include('server_side/check_session.php');
             </div>
         </div>
     </div>
-
-    <!-- Edit Inventory Item Modal -->
-    <div class="modal fade" id="editItemModal" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editItemModalLabel">Edit Inventory Item</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editItemForm">
-                        <input type="hidden" id="edit-product-id" name="productId">
-
-                        <div class="mb-3">
-                            <label for="edit-product-name" class="form-label">Product Name</label>
-                            <input type="text" class="form-control" id="edit-product-name" name="productName" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="edit-product-type" class="form-label">Transaction Type</label>
-                            <select class="form-select" id="edit-product-type" name="type" required>
-                                <option value="0">IN</option>
-                                <option value="1">OUT</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="edit-product-quantity" class="form-label">Quantity</label>
-                            <input type="number" class="form-control" id="edit-product-quantity" name="quantity" min="1"
-                                required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="edit-product-status" class="form-label">Status</label>
-                            <select class="form-select" id="edit-product-status" name="status" required>
-                                <option value="Completed">Completed</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Cancelled">Cancelled</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="edit-date-in" class="form-label">Date In</label>
-                            <input type="date" class="form-control" id="edit-date-in" name="dateIn">
-                        </div>
-
-                        <div class="mb-3" id="edit-date-out-container">
-                            <label for="edit-date-out" class="form-label">Date Out</label>
-                            <input type="date" class="form-control" id="edit-date-out" name="dateOut">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="saveEditBtn">Save Changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Replace the current View OUT Items Modal with this enhanced version -->
 
     <!-- View OUT Items Modal - Enhanced UI -->
     <div class="modal fade" id="viewOutItemsModal" tabindex="-1" aria-labelledby="viewOutItemsModalLabel"
@@ -631,323 +439,102 @@ include('server_side/check_session.php');
         </div>
     </div>
 
+    <!-- Out Item Modal -->
+    <div class="modal fade" id="transactionOutModal" tabindex="-1" aria-labelledby="transactionOutModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-gradient-danger text-white">
+                    <h5 class="modal-title" id="transactionOutModalLabel">
+                        <i class="fas fa-minus-circle me-2"></i>Mark Item as OUT
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="outItemForm">
+                        <div class="mb-4">
+                            <label for="product_select" class="form-label fw-bold">
+                                <i class="fas fa-box me-2 text-danger"></i>Select Product
+                            </label>
+                            <select class="form-select form-select-lg border-0 bg-light" id="product_select"
+                                name="product_select" required>
+                                <option value="" selected disabled>Choose a product</option>
+                                <!-- Products will be loaded dynamically -->
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="out_quantity" class="form-label fw-bold">
+                                <i class="fas fa-hashtag me-2 text-danger"></i>Quantity
+                            </label>
+                            <div class="input-group">
+                                <input type="number" class="form-control form-control-lg border-0 bg-light"
+                                    id="out_quantity" name="out_quantity" min="1" placeholder="0" required>
+                                <span class="input-group-text bg-light border-0">units</span>
+                            </div>
+                            <small class="form-text text-muted">Available: <span id="available_quantity">0</span>
+                                units</small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="dateOfOut" class="form-label fw-bold">
+                                <i class="fas fa-calendar-alt me-2 text-danger"></i>Date Out
+                            </label>
+                            <input type="date" class="form-control form-control-lg border-0 bg-light" id="dateOfOut"
+                                name="dateOfOut" required>
+                        </div>
+
+                        <div class="alert alert-info" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            This will mark the selected quantity as OUT in your inventory.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                    <button type="button" class="btn btn-danger btn-lg px-4" id="saveOutItemBtn">
+                        <i class="fas fa-minus me-2"></i>Mark as OUT
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <?php
     //Footer
     include("header/footer.php");
     ?>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
+            console.log('Document ready');
+
+            // Debug modal opening
+            $('.btn-out').on('click', function () {
+                console.log('Out button clicked');
+            });
+
             // Initialize tooltips
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
 
-
             const today = new Date().toISOString().split('T')[0];
-
-            $('#transactionOutModal').on('show.bs.modal', function() {
-                loadInventoryItems();
-            });
-
-            // Handle search by product ID
-            $('#productIdSearch').on('keyup', function() {
-                const searchTerm = $(this).val().toLowerCase();
-
-                $('#outItemsTableBody tr').each(function() {
-                    const productId = $(this).find('td:first').text().toLowerCase();
-
-                    if (productId.includes(searchTerm) || searchTerm === '') {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
-            });
-
-            // Handle "Out" button click
-            $(document).on('click', '.btn-mark-out', function() {
-                const productId = $(this).data('id');
-                const productName = $(this).data('name');
-                const availableQty = $(this).data('quantity');
-
-                // Set values in the quantity modal
-                $('#selectedProductId').text(productId);
-                $('.product-name').text(productName);
-                $('#outProductId').val(productId);
-                $('#outProductName').val(productName);
-                $('#availableQuantity').text(availableQty);
-
-                // Set max quantity
-                $('#outQuantity').attr('max', availableQty);
-
-                // Set default date to today
-                const today = new Date().toISOString().split('T')[0];
-                $('#dateOfOut').val(today);
-
-                // Hide the list modal and show the quantity modal
-                $('#transactionOutModal').modal('hide');
-                $('#outItemQuantityModal').modal('show');
-            });
-
-            // Handle Back button click
-            $('#backToListBtn').on('click', function() {
-                $('#outItemQuantityModal').modal('hide');
-                $('#transactionOutModal').modal('show');
-            });
-
-            // Handle Out Quantity validation
-            $('#outQuantity').on('input', function() {
-                const maxQty = parseInt($('#availableQuantity').text());
-                const enteredQty = parseInt($(this).val());
-
-                if (enteredQty > maxQty) {
-                    $(this).addClass('is-invalid');
-                    $(this).val(maxQty);
-                } else if (enteredQty < 1) {
-                    $(this).addClass('is-invalid');
-                } else {
-                    $(this).removeClass('is-invalid').addClass('is-valid');
-                }
-            });
-
-            // Handle Confirm Out button click
-            // Update the Confirm Out button click handler
-            $('#confirmOutBtn').on('click', function() {
-                // Validate form
-                if (!$('#outItemForm')[0].checkValidity()) {
-                    $('#outItemForm')[0].reportValidity();
-                    return;
-                }
-
-                const outQty = parseInt($('#outQuantity').val());
-                const maxQty = parseInt($('#availableQuantity').text());
-
-                if (outQty > maxQty || outQty < 1) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Invalid Quantity',
-                        text: `Please enter a quantity between 1 and ${maxQty}.`
-                    });
-                    return;
-                }
-
-                // Show loading state
-                const confirmBtn = $(this);
-                const originalText = confirmBtn.html();
-                confirmBtn.html(
-                    '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Processing...'
-                );
-                confirmBtn.prop('disabled', true);
-
-                // Prepare data for submission
-                const formData = {
-                    productId: $('#outProductId').val(),
-                    productName: $('#outProductName').val(),
-                    quantity: $('#outQuantity').val(),
-                    dateOfOut: $('#dateOfOut').val(),
-                    isConfirmation: false,
-                    deleteZeroStock: false
-                };
-
-                processOutItem(formData, confirmBtn, originalText);
-            });
-
-            // Function to process the Out Item request
-            function processOutItem(formData, button, originalBtnText) {
-                $.ajax({
-                    url: 'server_side/OutItem.php',
-                    type: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        if (response.trim() === 'zero_stock_confirmation') {
-                            // Reset button state
-                            button.html(originalBtnText);
-                            button.prop('disabled', false);
-
-                            // Show zero stock confirmation dialog
-                            Swal.fire({
-                                title: 'Zero Stock Warning!',
-                                html: `<div class="text-center mb-4">
-                        <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
-                        <p>This action will reduce <strong>${formData.productName}</strong> stock to zero.</p>
-                        <p>Do you want to also remove this product from inventory?</p>
-                    </div>`,
-                                showCancelButton: false,
-                                showDenyButton: true,
-                                confirmButtonColor: '#dc3545',
-                                cancelButtonColor: '#6c757d',
-                                denyButtonColor: '#28a745',
-                                confirmButtonText: 'Cancel Operation',
-                                denyButtonText: 'Yes, Remove Item',
-                                cancelButtonText: 'No, Keep Item'
-                            }).then((result) => {
-                                if (result.isDenied) { // Yes, Remove Item
-                                    // Send request again with confirmation and delete flag
-                                    const updatedFormData = {
-                                        ...formData,
-                                        isConfirmation: true,
-                                        deleteZeroStock: true
-                                    };
-
-                                    button.html(
-                                        '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Processing...'
-                                    );
-                                    button.prop('disabled', true);
-                                    processOutItem(updatedFormData, button, originalBtnText);
-
-                                } else if (result.dismiss === Swal.DismissReason
-                                    .cancel) { // No, Keep Item
-                                    // Send request again with confirmation but no delete
-                                    const updatedFormData = {
-                                        ...formData,
-                                        isConfirmation: true,
-                                        deleteZeroStock: false
-                                    };
-
-                                    button.html(
-                                        '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Processing...'
-                                    );
-                                    button.prop('disabled', true);
-                                    processOutItem(updatedFormData, button, originalBtnText);
-                                }
-                                // If clicked "Cancel Operation", do nothing
-                            });
-
-                        } else if (response.trim() === 'success') {
-                            // Reset button state
-                            button.html(originalBtnText);
-                            button.prop('disabled', false);
-
-                            // Show success message
-                            $('#outItemQuantityModal').modal('hide');
-
-                            Swal.fire({
-                                title: 'Item Marked as Out!',
-                                html: `<strong>${formData.productName}</strong> has been marked as out successfully.
-                           ${formData.deleteZeroStock ? '<br>The item has been removed from inventory.' : ''}`,
-                                icon: 'success',
-                                showConfirmButton: false,
-                                timer: 2000,
-                                timerProgressBar: true
-                            }).then(function() {
-                                // Reload with fade effect
-                                $('body').fadeOut(500, function() {
-                                    location.reload();
-                                });
-                            });
-
-                        } else if (response.trim() === 'invalid_quantity') {
-                            button.html(originalBtnText);
-                            button.prop('disabled', false);
-
-                            Swal.fire({
-                                title: 'Invalid Quantity',
-                                text: 'Please enter a valid quantity.',
-                                icon: 'error'
-                            });
-
-                        } else if (response.trim() === 'product_not_found') {
-                            button.html(originalBtnText);
-                            button.prop('disabled', false);
-
-                            Swal.fire({
-                                title: 'Product Not Found',
-                                text: 'This product no longer exists in inventory.',
-                                icon: 'error'
-                            });
-
-                        } else {
-                            // Handle other errors
-                            button.html(originalBtnText);
-                            button.prop('disabled', false);
-
-                            Swal.fire({
-                                title: 'Error',
-                                text: 'Failed to process the request. Please try again.',
-                                icon: 'error'
-                            });
-                        }
-                    },
-                    error: function() {
-                        button.html(originalBtnText);
-                        button.prop('disabled', false);
-
-                        Swal.fire({
-                            title: 'Server Error',
-                            text: 'Unable to connect to the server. Please check your connection and try again.',
-                            icon: 'error'
-                        });
-                    }
-                });
-            }
-
-            // Function to load inventory items
-            function loadInventoryItems() {
-                $.ajax({
-                    url: 'server_side/get_items_outmodal.php',
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        if (data.length > 0) {
-                            let tableRows = '';
-
-                            // Create table rows for each item
-                            data.forEach(function(item) {
-                                tableRows += `
-                            <tr>
-                                <td>${item.productId}</td>
-                                <td>${item.productName}</td>
-                                <td>${item.quantity} units</td>
-                                <td>
-                                    <button class="btn btn-danger btn-sm btn-mark-out" 
-                                        data-id="${item.productId}" 
-                                        data-name="${item.productName}" 
-                                        data-quantity="${item.quantity}">
-                                        <i class="fas fa-minus-circle me-1"></i> Out
-                                    </button>
-                                </td>
-                            </tr>
-                        `;
-                            });
-
-                            // Update table content
-                            $('#outItemsTableBody').html(tableRows);
-                        } else {
-                            $('#outItemsTableBody').html(`
-                        <tr>
-                            <td colspan="4" class="text-center py-4">
-                                <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
-                                <p>No inventory items available</p>
-                            </td>
-                        </tr>
-                    `);
-                        }
-                    },
-                    error: function() {
-                        $('#outItemsTableBody').html(`
-                    <tr>
-                        <td colspan="4" class="text-center py-4">
-                            <i class="fas fa-exclamation-circle fa-3x text-danger mb-3"></i>
-                            <p>Error loading inventory items. Please try again.</p>
-                        </td>
-                    </tr>
-                `);
-                    }
-                });
-            }
             $('#dateOfIn').val(today);
 
             // Add animation when opening the modal
-            $('#transactionInModal').on('show.bs.modal', function() {
-                setTimeout(function() {
+            $('#transactionInModal').on('show.bs.modal', function () {
+                setTimeout(function () {
                     $('#productIn_item').focus();
                 }, 500);
             });
 
             // Handle form inputs validation with visual feedback
-            $('#addItemForm input, #addItemForm select').on('input change', function() {
+            $('#addItemForm input, #addItemForm select').on('input change', function () {
                 if ($(this).val()) {
                     $(this).addClass('is-valid').removeClass('is-invalid');
                 } else {
@@ -956,10 +543,10 @@ include('server_side/check_session.php');
             });
 
             // Handle Add Item submission with enhanced UX
-            $('#saveNewItemBtn').click(function() {
+            $('#saveNewItemBtn').click(function () {
                 // Enhanced validation with visual feedback
                 let isValid = true;
-                $('#addItemForm input, #addItemForm select').each(function() {
+                $('#addItemForm input, #addItemForm select').each(function () {
                     if (!$(this).val()) {
                         $(this).addClass('is-invalid');
                         isValid = false;
@@ -971,7 +558,7 @@ include('server_side/check_session.php');
                 if (!isValid) {
                     // Shake the modal slightly to indicate validation error
                     $('.modal-content').addClass('animate__animated animate__shakeX');
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $('.modal-content').removeClass('animate__animated animate__shakeX');
                     }, 500);
                     return;
@@ -1006,7 +593,7 @@ include('server_side/check_session.php');
                     url: 'server_side/InItem.php',
                     type: 'POST',
                     data: formData,
-                    success: function(response) {
+                    success: function (response) {
                         saveBtn.html(originalText);
                         saveBtn.removeClass('disabled').prop('disabled', false);
                         $('.loading-overlay').remove();
@@ -1028,9 +615,9 @@ include('server_side/check_session.php');
                                     toast.addEventListener('mouseleave', Swal
                                         .resumeTimer)
                                 }
-                            }).then(function() {
+                            }).then(function () {
                                 // Reload with fade effect
-                                $('body').fadeOut(500, function() {
+                                $('body').fadeOut(500, function () {
                                     location.reload();
                                 });
                             });
@@ -1050,7 +637,7 @@ include('server_side/check_session.php');
                             });
                         }
                     },
-                    error: function() {
+                    error: function () {
                         saveBtn.html(originalText);
                         saveBtn.removeClass('disabled').prop('disabled', false);
                         $('.loading-overlay').remove();
@@ -1066,7 +653,7 @@ include('server_side/check_session.php');
             });
 
             // Add keyboard shortcuts
-            $(document).on('keydown', function(e) {
+            $(document).on('keydown', function (e) {
                 if ($('#transactionInModal').hasClass('show')) {
                     if (e.key === "Enter" && !e.shiftKey) {
                         // Prevent default form submission
@@ -1082,35 +669,29 @@ include('server_side/check_session.php');
                 responsive: true,
                 dom: '<"dt-buttons"B><"clear">lfrtip',
                 buttons: [{
-                        extend: 'copy',
-                        className: 'btn btn-outline-secondary btn-sm me-1',
-                        text: '<i class="fas fa-copy me-1"></i> Copy',
-                        titleAttr: 'Copy to clipboard'
-                    },
-                    // {
-                    //     extend: 'csv',
-                    //     className: 'btn btn-outline-success btn-sm me-1',
-                    //     text: '<i class="fas fa-file-csv me-1"></i> CSV',
-                    //     titleAttr: 'Export as CSV'
-                    // },
-                    {
-                        extend: 'excel',
-                        className: 'btn btn-outline-primary btn-sm me-1',
-                        text: '<i class="fas fa-file-excel me-1"></i> Excel',
-                        titleAttr: 'Export as Excel'
-                    },
-                    {
-                        extend: 'pdf',
-                        className: 'btn btn-outline-danger btn-sm me-1',
-                        text: '<i class="fas fa-file-pdf me-1"></i> PDF',
-                        titleAttr: 'Export as PDF'
-                    },
-                    {
-                        extend: 'print',
-                        className: 'btn btn-outline-dark btn-sm',
-                        text: '<i class="fas fa-print me-1"></i> Print',
-                        titleAttr: 'Print table'
-                    }
+                    extend: 'copy',
+                    className: 'btn btn-outline-secondary btn-sm me-1',
+                    text: '<i class="fas fa-copy me-1"></i> Copy',
+                    titleAttr: 'Copy to clipboard'
+                },
+                {
+                    extend: 'excel',
+                    className: 'btn btn-outline-primary btn-sm me-1',
+                    text: '<i class="fas fa-file-excel me-1"></i> Excel',
+                    titleAttr: 'Export as Excel'
+                },
+                {
+                    extend: 'pdf',
+                    className: 'btn btn-outline-danger btn-sm me-1',
+                    text: '<i class="fas fa-file-pdf me-1"></i> PDF',
+                    titleAttr: 'Export as PDF'
+                },
+                {
+                    extend: 'print',
+                    className: 'btn btn-outline-dark btn-sm',
+                    text: '<i class="fas fa-print me-1"></i> Print',
+                    titleAttr: 'Print table'
+                }
                 ],
 
                 pageLength: 10,
@@ -1127,7 +708,7 @@ include('server_side/check_session.php');
             $('.dt-buttons').addClass('mb-3');
 
             // Handle View Details button click
-            $(document).on('click', '.view-details-btn', function() {
+            $(document).on('click', '.view-details-btn', function () {
                 const id = $(this).data('id');
                 const name = $(this).data('name');
                 const type = $(this).data('type');
@@ -1167,35 +748,34 @@ include('server_side/check_session.php');
             });
 
             // Handle print button click
-            $('#print-receipt').on('click', function() {
+            $('#print-receipt').on('click', function () {
                 const modalContent = document.querySelector('.receipt-modal .modal-content').innerHTML;
                 const printWindow = window.open('', '_blank');
 
                 printWindow.document.write(`
-                <html>
-                <head>
-                    <title>Inventory Receipt</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto; padding: 20px; }
-                        .receipt-header { text-align: center; border-bottom: 2px dashed #ddd; padding-bottom: 10px; margin-bottom: 15px; }
-                        .receipt-body { padding: 0 15px; }
-                        .receipt-item { display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; }
-                        .receipt-item-label { font-weight: bold; color: #555; }
-                        .receipt-footer { border-top: 2px dashed #ddd; margin-top: 15px; padding-top: 10px; text-align: center; font-size: 0.9rem; }
-                        .type-in { color: #28a745; font-weight: bold; }
-                        .type-out { color: #dc3545; font-weight: bold; }
-                        .modal-header, .modal-footer, .btn-close { display: none; }
-                    </style>
-                </head>
-                <body>
-                    ${modalContent}
-                </body>
-                </html>
-            `);
+            <html>
+            <head>
+                <title>Inventory Receipt</title>
+                <style>
+                    body { font-family: Arial, sans-serif; max-width: 400px; margin: 0 auto; padding: 20px; }
+                    .receipt-header { text-align: center; border-bottom: 2px dashed #ddd; padding-bottom: 10px; margin-bottom: 15px; }
+                    .receipt-body { padding: 0 15px; }
+                    .receipt-item { display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px solid #f0f0f0; padding-bottom: 8px; }
+                    .receipt-item-label { font-weight: bold; color: #555; }
+                    .receipt-footer { border-top: 2px dashed #ddd; margin-top: 15px; padding-top: 10px; text-align: center; font-size: 0.9rem; }
+                    .type-in { color: #28a745; font-weight: bold; }
+                    .type-out { color: #dc3545; font-weight: bold; }
+                    .modal-header, .modal-footer, .btn-close { display: none; }
+                </style>
+            </head>
+            <body>
+                ${modalContent}
+            </body>
+            </html>
+        `);
 
                 printWindow.document.close();
                 printWindow.focus();
-
 
                 setTimeout(() => {
                     printWindow.print();
@@ -1204,7 +784,7 @@ include('server_side/check_session.php');
             });
 
             //edit button click
-            $(document).on('click', '.edit-btn', function() {
+            $(document).on('click', '.edit-btn', function () {
                 const id = $(this).data('id');
 
                 // Hide any active tooltips
@@ -1218,7 +798,7 @@ include('server_side/check_session.php');
                         id: id
                     },
                     dataType: 'json',
-                    success: function(data) {
+                    success: function (data) {
                         if (data.success) {
                             const item = data.item;
 
@@ -1228,7 +808,6 @@ include('server_side/check_session.php');
                             $('#edit-product-type').val(item.type);
                             $('#edit-product-quantity').val(item.quantity);
                             $('#edit-product-status').val(item.transactionStatus);
-
 
                             if (item.dateOfIn) {
                                 $('#edit-date-in').val(item.dateOfIn.substring(0,
@@ -1240,7 +819,6 @@ include('server_side/check_session.php');
                             } else {
                                 $('#edit-date-out').val('');
                             }
-
 
                             if (item.type == 0) { // IN
                                 $('#edit-date-out-container').hide();
@@ -1258,7 +836,7 @@ include('server_side/check_session.php');
                             });
                         }
                     },
-                    error: function() {
+                    error: function () {
                         Swal.fire({
                             title: 'Error',
                             text: 'Server error while retrieving item details',
@@ -1267,7 +845,8 @@ include('server_side/check_session.php');
                     }
                 });
             });
-            $('#edit-product-type').change(function() {
+
+            $('#edit-product-type').change(function () {
                 if ($(this).val() == 0) { // IN
                     $('#edit-date-out-container').hide();
                 } else { // OUT
@@ -1276,7 +855,7 @@ include('server_side/check_session.php');
             });
 
             //save button click
-            $('#saveEditBtn').click(function() {
+            $('#saveEditBtn').click(function () {
                 // Validate form
                 if (!$('#editItemForm')[0].checkValidity()) {
                     $('#editItemForm')[0].reportValidity();
@@ -1299,7 +878,7 @@ include('server_side/check_session.php');
                     type: 'POST',
                     data: formData,
                     dataType: 'json',
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             $('#editItemModal').modal('hide');
 
@@ -1309,7 +888,7 @@ include('server_side/check_session.php');
                                 icon: 'success',
                                 timer: 1500,
                                 showConfirmButton: false
-                            }).then(function() {
+                            }).then(function () {
                                 location
                                     .reload(); // Refresh the page to show updated data
                             });
@@ -1321,7 +900,7 @@ include('server_side/check_session.php');
                             });
                         }
                     },
-                    error: function() {
+                    error: function () {
                         Swal.fire({
                             title: 'Error',
                             text: 'Server error while updating inventory',
@@ -1332,7 +911,7 @@ include('server_side/check_session.php');
             });
 
             //delete button click
-            $(document).on('click', '.delete-btn', function() {
+            $(document).on('click', '.delete-btn', function () {
                 const id = $(this).data('id');
 
                 // Hide any active tooltips
@@ -1356,7 +935,7 @@ include('server_side/check_session.php');
                                 id: id
                             },
                             dataType: 'json',
-                            success: function(response) {
+                            success: function (response) {
                                 if (response.success) {
                                     Swal.fire({
                                         title: 'Deleted!',
@@ -1364,7 +943,7 @@ include('server_side/check_session.php');
                                         icon: 'success',
                                         timer: 1500,
                                         showConfirmButton: false
-                                    }).then(function() {
+                                    }).then(function () {
                                         location.reload(); // Refresh the page
                                     });
                                 } else {
@@ -1375,7 +954,7 @@ include('server_side/check_session.php');
                                     });
                                 }
                             },
-                            error: function() {
+                            error: function () {
                                 Swal.fire({
                                     title: 'Error',
                                     text: 'Server error while deleting inventory item',
@@ -1388,16 +967,16 @@ include('server_side/check_session.php');
             });
 
             // View OUT Items Button click
-            $('.view-out-items').on('click', function() {
+            $('.view-out-items').on('click', function () {
                 $('#viewOutItemsModal').modal('show');
                 loadOutItems();
             });
 
             // Search functionality for OUT items list
-            $('#outItemsSearch').on('keyup', function() {
+            $('#outItemsSearch').on('keyup', function () {
                 const searchTerm = $(this).val().toLowerCase();
 
-                $('#outItemsListBody tr').each(function() {
+                $('#outItemsListBody tr').each(function () {
                     const productId = $(this).find('td:eq(0)').text().toLowerCase();
                     const productName = $(this).find('td:eq(1)').text().toLowerCase();
 
@@ -1411,7 +990,7 @@ include('server_side/check_session.php');
             });
 
             // Refresh button for OUT items list
-            $('#refreshOutItems').on('click', function() {
+            $('#refreshOutItems').on('click', function () {
                 loadOutItems();
             });
 
@@ -1432,7 +1011,7 @@ include('server_side/check_session.php');
                     url: 'server_side/getOutItems_inventory.php',
                     type: 'GET',
                     dataType: 'json',
-                    success: function(data) {
+                    success: function (data) {
                         console.log('AJAX Success:', data);
 
                         if (data && data.length > 0) {
@@ -1441,7 +1020,7 @@ include('server_side/check_session.php');
                             let latestDate = null;
 
                             // Process each item
-                            data.forEach(function(item) {
+                            data.forEach(function (item) {
                                 // Safely handle dateOut
                                 let dateOut = 'N/A';
                                 let dateOutObj = null;
@@ -1546,7 +1125,7 @@ include('server_side/check_session.php');
                             $('#visibleItemCount').text('0');
                         }
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error('AJAX Error:', status, error);
                         console.log('Response:', xhr.responseText);
 
@@ -1571,168 +1150,13 @@ include('server_side/check_session.php');
                 });
             }
 
-            $(document).on('click', '.sort-items', function(e) {
-                e.preventDefault();
-                const sortType = $(this).data('sort');
-
-                const rows = $('#outItemsListBody tr').toArray();
-
-                rows.sort(function(a, b) {
-                    let comparison = 0;
-
-                    if (sortType === 'id-asc') {
-                        comparison = $(a).data('id') - $(b).data('id');
-                    } else if (sortType === 'id-desc') {
-                        comparison = $(b).data('id') - $(a).data('id');
-                    } else if (sortType === 'name-asc') {
-                        comparison = $(a).data('name').localeCompare($(b).data('name'));
-                    } else if (sortType === 'name-desc') {
-                        comparison = $(b).data('name').localeCompare($(a).data('name'));
-                    } else if (sortType === 'qty-asc') {
-                        comparison = parseInt($(a).data('quantity')) - parseInt($(b).data(
-                            'quantity'));
-                    } else if (sortType === 'qty-desc') {
-                        comparison = parseInt($(b).data('quantity')) - parseInt($(a).data(
-                            'quantity'));
-                    } else if (sortType === 'date-asc' || sortType === 'date-desc') {
-                        const dateA = $(a).data('date');
-                        const dateB = $(b).data('date');
-
-                        // Handle N/A values
-                        if (dateA === 'N/A' && dateB === 'N/A') {
-                            comparison = 0;
-                        } else if (dateA === 'N/A') {
-                            comparison = 1; // N/A is "greater" (comes last)
-                        } else if (dateB === 'N/A') {
-                            comparison = -1; // N/A is "greater" (comes last)
-                        } else {
-                            comparison = new Date(dateA) - new Date(dateB);
-                        }
-
-                        if (sortType === 'date-desc') {
-                            comparison = -comparison;
-                        }
-                    }
-
-                    return comparison;
-                });
-
-                // Re-add the sorted rows
-                $('#outItemsListBody').empty();
-                $.each(rows, function(index, row) {
-                    $('#outItemsListBody').append(row);
-                });
-            });
-
-            $(document).on('click', '.export-excel', function() {
-                // Create a workbook
-                const data = [];
-
-                // Add header row
-                data.push(['Product ID', 'Product Name', 'Quantity', 'Date OUT']);
-
-                // Add data rows
-                $('#outItemsListBody tr').each(function() {
-                    const id = $(this).find('td:eq(0)').text().trim();
-                    const name = $(this).find('td:eq(1)').text().trim();
-                    const qty = $(this).find('td:eq(2)').text().trim();
-                    const date = $(this).find('td:eq(3)').text().trim();
-
-                    if (id && name) { // Skip empty rows
-                        data.push([id, name, qty, date]);
-                    }
-                });
-
-                if (data.length <= 1) {
-                    Swal.fire({
-                        title: 'No Data',
-                        text: 'There is no data to export',
-                        icon: 'warning'
-                    });
-                    return;
-                }
-
-                // Generate Excel file
-                const workbook = XLSX.utils.book_new();
-                const worksheet = XLSX.utils.aoa_to_sheet(data);
-                XLSX.utils.book_append_sheet(workbook, worksheet, 'OUT Items');
-
-                // Generate file and trigger download
-                XLSX.writeFile(workbook, 'OutItems_Export_' + new Date().toISOString().slice(0, 10) +
-                    '.xlsx');
-            });
-
-            $(document).on('click', '.export-pdf', function() {
-                // Check if there's data to export
-                if ($('#outItemsListBody tr').length === 0 || $('#outItemsListBody tr:first td').length ===
-                    1) {
-                    Swal.fire({
-                        title: 'No Data',
-                        text: 'There is no data to export',
-                        icon: 'warning'
-                    });
-                    return;
-                }
-
-                // Define PDF document
-                const {
-                    jsPDF
-                } = window.jspdf;
-                const doc = new jsPDF();
-
-                // Add title
-                doc.setFontSize(16);
-                doc.text('OUT Items Inventory Report', 14, 15);
-
-                // Add date
-                doc.setFontSize(10);
-                doc.text('Generated on: ' + new Date().toLocaleString(), 14, 22);
-
-                // Add table using autoTable plugin if available
-                if (typeof doc.autoTable === 'function') {
-                    doc.autoTable({
-                        startY: 30,
-                        head: [
-                            ['Product ID', 'Product Name', 'Quantity', 'Date OUT']
-                        ],
-                        body: Array.from($('#outItemsListBody tr')).map(row => {
-                            const $row = $(row);
-                            return [
-                                $row.find('td:eq(0)').text().trim(),
-                                $row.find('td:eq(1)').text().trim(),
-                                $row.find('td:eq(2)').text().trim(),
-                                $row.find('td:eq(3)').text().trim()
-                            ];
-                        }),
-                        theme: 'striped',
-                        headStyles: {
-                            fillColor: [220, 53, 69],
-                            textColor: 255
-                        }
-                    });
-                } else {
-                    // Fallback if autoTable not available
-                    doc.text('PDF export requires the jspdf-autotable plugin', 14, 30);
-                }
-
-                // Save PDF
-                doc.save('OutItems_Report_' + new Date().toISOString().slice(0, 10) + '.pdf');
-            });
-
-            // Retry loading on button click
-            $(document).on('click', '#retry-load', function() {
-                loadOutItems();
-            });
-
-            // Add this to your $(document).ready() function
-
             // Load inventory summary for dashboard cards
             function loadInventorySummary() {
                 $.ajax({
                     url: 'server_side/get_inventory_summary.php',
                     type: 'GET',
                     dataType: 'json',
-                    success: function(data) {
+                    success: function (data) {
                         if (data.success) {
                             // Update IN items card
                             $('#inItemCount').text(data.inItemCount || 0);
@@ -1754,12 +1178,12 @@ include('server_side/check_session.php');
                             $('#lowStockCount').text(data.lowStockCount || 0);
 
                             // Add animations
-                            $('.card-text').each(function() {
+                            $('.card-text').each(function () {
                                 $(this).addClass('animate__animated animate__fadeIn');
                             });
                         }
                     },
-                    error: function() {
+                    error: function () {
                         // Show error indicators
                         $('#inItemCount, #totalStockCount, #lowStockCount').html(
                             '<i class="fas fa-exclamation-circle text-danger"></i>');
@@ -1771,6 +1195,292 @@ include('server_side/check_session.php');
             // Call this on page load
             loadInventorySummary();
 
+            // Initialize the Out Item modal with debugging
+            $('#transactionOutModal').on('show.bs.modal', function () {
+                console.log('Modal is opening');
+
+                // Set current date as default
+                const today = new Date().toISOString().split('T')[0];
+                $('#dateOfOut').val(today);
+
+                // Show a simple message before attempting to load products
+                $('#available_quantity').text('0');
+
+                // Display a message in the select box temporarily
+                $('#product_select').html('<option>Loading products...</option>');
+
+                // Load available products
+                loadAvailableProducts();
+            });
+
+            // Function to load available products
+            function loadAvailableProducts() {
+                console.log('Loading available products...');
+                $.ajax({
+                    url: 'server_side/get_available_products.php',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log('Products loaded:', data);
+                        if (data.length > 0) {
+                            let options =
+                                '<option value="" selected disabled>Choose a product</option>';
+
+                            data.forEach(function (product) {
+                                options += `<option value="${product.productId}" 
+                                    data-name="${product.productName}" 
+                                    data-quantity="${product.quantity}">
+                                ${product.productName} (Available: ${product.quantity})
+                            </option>`;
+                            });
+
+                            $('#product_select').html(options);
+                        } else {
+                            $('#product_select').html(
+                                '<option value="" disabled selected>No products available</option>');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error loading products:', error);
+                        console.log('Response:', xhr.responseText);
+
+                        $('#product_select').html(
+                            '<option value="" disabled selected>Error loading products</option>');
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Failed to load available products. Check console for details.',
+                            icon: 'error'
+                        });
+                    }
+                });
+            }
+
+            // Update available quantity when a product is selected
+            $('#product_select').on('change', function () {
+                const selectedOption = $(this).find('option:selected');
+                const availableQty = selectedOption.data('quantity');
+
+                $('#available_quantity').text(availableQty);
+                $('#out_quantity').attr('max', availableQty);
+
+                // Reset and focus quantity field
+                $('#out_quantity').val('').removeClass('is-invalid is-valid').focus();
+            });
+
+            // Validate quantity input
+            $('#out_quantity').on('input', function () {
+                const availableQty = parseInt($('#available_quantity').text());
+                const enteredQty = parseInt($(this).val());
+
+                if (isNaN(enteredQty) || enteredQty <= 0) {
+                    $(this).addClass('is-invalid').removeClass('is-valid');
+                } else if (enteredQty > availableQty) {
+                    $(this).addClass('is-invalid').removeClass('is-valid');
+                    $(this).val(availableQty); // Cap at maximum available
+                } else {
+                    $(this).removeClass('is-invalid').addClass('is-valid');
+                }
+            });
+
+            // Handle Out Item form submission
+            $('#saveOutItemBtn').on('click', function () {
+                console.log('Save out item button clicked');
+
+                // Validate form
+                let isValid = true;
+                $('#outItemForm select, #outItemForm input').each(function () {
+                    if (!$(this).val()) {
+                        $(this).addClass('is-invalid');
+                        isValid = false;
+                    } else {
+                        $(this).removeClass('is-invalid');
+                    }
+                });
+
+                if (!isValid) {
+                    console.log('Form validation failed');
+                    $('.modal-content').addClass('animate__animated animate__shakeX');
+                    setTimeout(function () {
+                        $('.modal-content').removeClass('animate__animated animate__shakeX');
+                    }, 500);
+                    return;
+                }
+
+                // Get form data
+                const selectedProduct = $('#product_select option:selected');
+                const productId = selectedProduct.val();
+                const productName = selectedProduct.data('name');
+                const quantity = $('#out_quantity').val();
+                const dateOfOut = $('#dateOfOut').val();
+
+                console.log('Form data:', {
+                    productId,
+                    productName,
+                    quantity,
+                    dateOfOut
+                });
+
+                // Show loading state
+                const button = $(this);
+                const originalBtnText = button.html();
+                button.html(
+                    '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Processing...'
+                );
+                button.prop('disabled', true);
+
+                // Send request to server
+                const formData = {
+                    productId: productId,
+                    productName: productName,
+                    quantity: quantity,
+                    dateOfOut: dateOfOut,
+                    deleteZeroStock: false,
+                    isConfirmation: false
+                };
+
+                // Process the out item request
+                processOutItem(formData, button, originalBtnText);
+            });
+
+            // Function to process the Out Item request
+            function processOutItem(formData, button, originalBtnText) {
+                console.log('Processing out item request with data:', formData);
+                $.ajax({
+                    url: 'server_side/OutItem.php',
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        console.log('Server response:', response);
+
+                        if (response.trim() === 'zero_stock_confirmation') {
+                            // Reset button state
+                            button.html(originalBtnText);
+                            button.prop('disabled', false);
+
+                            // Show zero stock confirmation dialog
+                            Swal.fire({
+                                title: 'Zero Stock Warning!',
+                                html: `<div class="text-center mb-4">
+                            <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                            <p>This action will reduce <strong>${formData.productName}</strong> stock to zero.</p>
+                            <p>Do you want to also remove this product from inventory?</p>
+                        </div>`,
+                                showDenyButton: true,
+                                showCancelButton: true,
+                                confirmButtonColor: '#28a745',
+                                denyButtonColor: '#dc3545',
+                                cancelButtonColor: '#6c757d',
+                                confirmButtonText: 'Yes, Remove Item',
+                                denyButtonText: 'No, Keep Item',
+                                cancelButtonText: 'Cancel Operation'
+                            }).then((result) => {
+                                if (result.isConfirmed) { // Yes, Remove Item
+                                    // Send request again with confirmation and delete flag
+                                    const updatedFormData = {
+                                        ...formData,
+                                        isConfirmation: true,
+                                        deleteZeroStock: true
+                                    };
+
+                                    button.html(
+                                        '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Processing...'
+                                    );
+                                    button.prop('disabled', true);
+                                    processOutItem(updatedFormData, button, originalBtnText);
+
+                                } else if (result.isDenied) { // No, Keep Item
+                                    // Send request again with confirmation but no delete
+                                    const updatedFormData = {
+                                        ...formData,
+                                        isConfirmation: true,
+                                        deleteZeroStock: false
+                                    };
+
+                                    button.html(
+                                        '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Processing...'
+                                    );
+                                    button.prop('disabled', true);
+                                    processOutItem(updatedFormData, button, originalBtnText);
+                                }
+                                // If clicked "Cancel Operation", do nothing
+                            });
+
+                        } else if (response.trim() === 'success') {
+                            // Reset button state
+                            button.html(originalBtnText);
+                            button.prop('disabled', false);
+
+                            // Show success message
+                            $('#transactionOutModal').modal('hide');
+
+                            Swal.fire({
+                                title: 'Item Marked as Out!',
+                                html: `<strong>${formData.productName}</strong> has been marked as out successfully.
+                               ${formData.deleteZeroStock ? '<br>The item has been removed from inventory.' : ''}`,
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                timerProgressBar: true
+                            }).then(function () {
+                                // Reload with fade effect
+                                $('body').fadeOut(500, function () {
+                                    location.reload();
+                                });
+                            });
+
+                        } else if (response.trim() === 'invalid_quantity') {
+                            button.html(originalBtnText);
+                            button.prop('disabled', false);
+
+                            Swal.fire({
+                                title: 'Invalid Quantity',
+                                text: 'Please enter a valid quantity.',
+                                icon: 'error'
+                            });
+
+                        } else if (response.trim() === 'product_not_found') {
+                            button.html(originalBtnText);
+                            button.prop('disabled', false);
+
+                            Swal.fire({
+                                title: 'Product Not Found',
+                                text: 'This product no longer exists in inventory.',
+                                icon: 'error'
+                            });
+
+                        } else {
+                            // Handle other errors
+                            button.html(originalBtnText);
+                            button.prop('disabled', false);
+
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Failed to process the request. Server responded: ' +
+                                    response,
+                                icon: 'error'
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('AJAX Error:', status, error);
+                        console.log('Response:', xhr.responseText);
+
+                        button.html(originalBtnText);
+                        button.prop('disabled', false);
+
+                        Swal.fire({
+                            title: 'Server Error',
+                            text: 'Unable to connect to the server: ' + error,
+                            icon: 'error'
+                        });
+                    }
+                });
+            }
+
+            // Retry loading on button click
+            $(document).on('click', '#retry-load', function () {
+                loadOutItems();
+            });
         });
     </script>
 </body>
