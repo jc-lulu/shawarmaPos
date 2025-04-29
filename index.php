@@ -4,19 +4,25 @@ session_start();
 include('cedric_dbConnection.php');
 
 $message = '';
+$lowStockAlert = false;
+$notificationCount = 0;
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    $sql = "SELECT usersId, username, role, email, password FROM userstable WHERE email = '$email'";
-    $result = $connection->query($sql);
+    $sql = "SELECT usersId, username, role, email, password FROM userstable WHERE email = ?";
+    $stmt = $connection->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         $hashed_password = $row['password'];
 
         if (password_verify($password, $hashed_password)) {
-            //session variables
+            // Session variables
             $_SESSION['user_id'] = $row['usersId'];
             $_SESSION['user_name'] = $row['username'];
             $_SESSION['user_email'] = $row['email'];
@@ -24,16 +30,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['logged_in'] = true;
             $_SESSION['last_activity'] = time();
 
+            $message = "Login successful";
+
+            // Check for low stock items
             $stockValue = 20;
-            // Join with products table to get product names and order by quantity ASC
-            $sql = "SELECT i.productId, i.quantity, p.productName 
+            $sql = "SELECT i.productId, i.quantity, i.productName 
                     FROM inventory i 
-                    INNER JOIN inventory p ON i.productId = p.productId 
-                    WHERE i.transactionStatus = 1 AND i.type = 0 AND i.quantity <= $stockValue 
+                    WHERE i.transactionStatus = 1 AND i.type = 0 AND i.quantity <= ? 
                     ORDER BY i.quantity ASC";
-            $result = $connection->query($sql);
+
+            $stmt = $connection->prepare($sql);
+            $stmt->bind_param("i", $stockValue);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
             if ($result->num_rows > 0) {
+                $lowStockAlert = true;
+
                 // Create notifications for all low stock products
                 while ($row = $result->fetch_assoc()) {
                     $productId = $row["productId"];
@@ -42,65 +55,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     // Check if notification already exists for this product
                     $checkSql = "SELECT * FROM notifications 
-                                WHERE productId = $productId 
+                                WHERE productId = ? 
                                 AND notificationType = 1 
                                 AND notificationStatus = 0";
-                    $checkResult = $connection->query($checkSql);
+                    $checkStmt = $connection->prepare($checkSql);
+                    $checkStmt->bind_param("i", $productId);
+                    $checkStmt->execute();
+                    $checkResult = $checkStmt->get_result();
 
                     // Only insert if no active notification exists for this product
                     if ($checkResult->num_rows == 0) {
                         $messageNotification = "Low stock alert! $productName is running low on stock (only $quantity remaining). Please restock it.";
                         $sqlInsert = "INSERT INTO notifications (productId, notificationMessage, notificationType, notificationStatus) 
-                                    VALUES ($productId, '$messageNotification', 1, 0)";
-                        $connection->query($sqlInsert);
+                                    VALUES (?, ?, 1, 0)";
+                        $insertStmt = $connection->prepare($sqlInsert);
+                        $insertStmt->bind_param("is", $productId, $messageNotification);
+                        $insertStmt->execute();
                     }
                 }
 
-                $lowStockAlert = false;
-                $notificationCount = 0;
-
-                if ($result->num_rows > 0) {
-                    $lowStockAlert = true;
-
-                    // Get count of all active notifications
-                    $notifCountSql = "SELECT COUNT(*) as count FROM notifications WHERE notificationStatus = 0";
-                    $notifCountResult = $connection->query($notifCountSql);
-                    if ($notifCountResult && $notifCountRow = $notifCountResult->fetch_assoc()) {
-                        $notificationCount = $notifCountRow['count'];
-                    }
+                // Get count of all active notifications
+                $notifCountSql = "SELECT COUNT(*) as count FROM notifications WHERE notificationStatus = 0";
+                $notifCountResult = $connection->query($notifCountSql);
+                if ($notifCountResult && $notifCountRow = $notifCountResult->fetch_assoc()) {
+                    $notificationCount = $notifCountRow['count'];
                 }
-
-                $message = "Login successful";
-            } else {
-                $message = "Login successful"; //set login message
             }
-
-            //set login message
         } else {
             $message = "Wrong email or password";
         }
-        //check if account status
-        // if ($accountStatus == 0) {
-        //     $message = "Account is not verified. Waiting for approval.";
-        // } else {
-        //     if (password_verify($password, $hashed_password)) {
-        //         //session variables
-        //         $_SESSION['user_id'] = $row['usersId'];
-        //         $_SESSION['user_name'] = $row['username'];
-        //         $_SESSION['user_email'] = $row['email'];
-        //         $_SESSION['user_role'] = $row['role'];
-        //         $_SESSION['logged_in'] = true;
-        //         $_SESSION['last_activity'] = time();
-
-        //         $message = "Login successful"; //set login message
-        //     } else {
-        //         $message = "Wrong email or password";
-        //     }
-        // }
     } else {
         $message = "Wrong email or password";
     }
-    $connection->close();
 }
 ?>
 <!DOCTYPE html>
@@ -148,65 +134,65 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <script>
-    $(document).ready(function() {
-        var message = "<?php echo $message; ?>";
-        var lowStockAlert = <?php echo $lowStockAlert ? 'true' : 'false'; ?>;
-        var notificationCount = <?php echo $notificationCount; ?>;
+        $(document).ready(function () {
+            var message = "<?php echo $message; ?>";
+            var lowStockAlert = <?php echo $lowStockAlert ? 'true' : 'false'; ?>;
+            var notificationCount = <?php echo $notificationCount; ?>;
 
-        if (message !== '') {
-            Swal.fire({
-                title: message === "Login successful" ? 'Success!' : 'Error',
-                text: message,
-                icon: message === "Login successful" ? 'success' : 'error',
-                timer: 1500,
-                timerProgressBar: true,
-                showConfirmButton: false
-            }).then(function() {
-                if (message === "Login successful") {
-                    if (lowStockAlert) {
-                        showLowStockAlert();
+            if (message !== '') {
+                Swal.fire({
+                    title: message === "Login successful" ? 'Success!' : 'Error',
+                    text: message,
+                    icon: message === "Login successful" ? 'success' : 'error',
+                    timer: message === "Login successful" ? 1500 : 3000,
+                    timerProgressBar: true,
+                    showConfirmButton: message !== "Login successful"
+                }).then(function (result) {
+                    if (message === "Login successful") {
+                        if (lowStockAlert) {
+                            showLowStockAlert();
+                        } else {
+                            window.location.href = 'menu.php';
+                        }
+                    }
+                });
+            }
+
+            function showLowStockAlert() {
+                Swal.fire({
+                    title: 'Low Stock Alert!',
+                    text: 'Some products are running low on stock. Please check notifications.',
+                    icon: 'warning',
+                    allowOutsideClick: false,
+                    confirmButtonText: 'OK'
+                }).then(function () {
+                    if (notificationCount > 0) {
+                        showNotificationAlert();
                     } else {
                         window.location.href = 'menu.php';
                     }
-                }
-            });
-        }
+                });
+            }
 
-        function showLowStockAlert() {
-            Swal.fire({
-                title: 'Low Stock Alert!',
-                text: 'Some products are running low on stock. Please check notifications.',
-                icon: 'warning',
-                allowOutsideClick: false,
-                confirmButtonText: 'OK'
-            }).then(function() {
-                if (notificationCount > 0) {
-                    showNotificationAlert();
-                } else {
-                    window.location.href = 'menu.php';
-                }
-            });
-        }
+            function showNotificationAlert() {
+                Swal.fire({
+                    title: 'Notifications',
+                    text: 'You have ' + notificationCount + ' unread notification' + (notificationCount >
+                        1 ? 's' : '') + '.',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    confirmButtonText: 'View Notifications'
+                }).then(function () {
+                    // Redirect to notifications page or menu with notifications tab active
+                    window.location.href = 'notification.php';
+                });
+            }
+        });
 
-        function showNotificationAlert() {
-            Swal.fire({
-                title: 'Notifications',
-                text: 'You have ' + notificationCount + ' unread notification' + (notificationCount >
-                    1 ? 's' : '') + '.',
-                icon: 'info',
-                allowOutsideClick: false,
-                confirmButtonText: 'View Notifications'
-            }).then(function() {
-                // Redirect to notifications page or menu with notifications tab active
-                window.location.href = 'notification.php';
-            });
+        function togglePassword() {
+            var passwordInput = document.getElementById("password");
+            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
         }
-    });
-
-    function togglePassword() {
-        var passwordInput = document.getElementById("password");
-        passwordInput.type = passwordInput.type === "password" ? "text" : "password";
-    }
     </script>
 </body>
 
