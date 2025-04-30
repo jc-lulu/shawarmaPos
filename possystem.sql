@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2025 at 12:16 PM
+-- Generation Time: Apr 30, 2025 at 04:31 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -31,7 +31,6 @@ CREATE TABLE `inventory` (
   `productId` int(11) NOT NULL,
   `productName` varchar(255) NOT NULL,
   `quantity` int(11) NOT NULL,
-  `productType` varchar(255) NOT NULL,
   `type` int(11) NOT NULL COMMENT '0-In, 1-Out\r\n',
   `requestedBy` int(11) NOT NULL COMMENT '0-admin, 1-staff',
   `transactionId` int(11) NOT NULL,
@@ -44,19 +43,24 @@ CREATE TABLE `inventory` (
 -- Dumping data for table `inventory`
 --
 
-INSERT INTO `inventory` (`productId`, `productName`, `quantity`, `productType`, `type`, `requestedBy`, `transactionId`, `transactionStatus`, `dateOfIn`, `dateOfOut`) VALUES
-(4, 'Bans', 0, '', 1, 0, 0, 1, '0000-00-00', '2025-04-17'),
-(5, 'Bans', 5, '', 1, 0, 0, 1, '0000-00-00', '2025-04-17'),
-(6, 'Sugar', 100, '2', 1, 0, 0, 1, '0000-00-00', '2025-04-17'),
-(7, 'Sugar', 100, '2', 1, 0, 0, 1, '0000-00-00', '2025-04-17'),
-(8, 'Bans', 20, '1', 0, 0, 0, 1, '2025-04-17', '0000-00-00'),
-(11, 'Hotdog', 210, '2', 0, 0, 0, 1, '2025-04-23', '0000-00-00'),
-(13, 'cheese', 30, '3', 0, 0, 0, 1, '2025-04-25', '0000-00-00'),
-(14, 'Chicken', 120, '1', 0, 0, 0, 1, '2025-04-10', '0000-00-00'),
-(15, 'Beef', 400, '1', 0, 0, 0, 1, '2025-04-27', '0000-00-00'),
-(17, 'garlic', 100, '1', 0, 0, 0, 1, '2025-04-26', '0000-00-00'),
-(18, 'garlic', 10, '1', 0, 0, 0, 1, '2025-04-26', '0000-00-00'),
-(19, 'garlic', 50, '1', 1, 0, 0, 1, '0000-00-00', '2025-04-27');
+INSERT INTO `inventory` (`productId`, `productName`, `quantity`, `type`, `requestedBy`, `transactionId`, `transactionStatus`, `dateOfIn`, `dateOfOut`) VALUES
+(5, 'Bans', 5, 1, 0, 0, 1, '0000-00-00', '2025-04-17'),
+(6, 'Sugar', 100, 1, 0, 0, 1, '0000-00-00', '2025-04-17'),
+(7, 'Sugar', 100, 1, 0, 0, 1, '0000-00-00', '2025-04-17'),
+(11, 'Hotdog', 220, 0, 0, 0, 1, '2025-04-23', '0000-00-00'),
+(13, 'cheese', 60, 0, 0, 0, 1, '2025-04-25', '0000-00-00'),
+(14, 'Chicken', 120, 0, 0, 0, 1, '2025-04-10', '0000-00-00'),
+(15, 'Beef', 290, 0, 0, 0, 1, '2025-04-27', '0000-00-00'),
+(17, 'garlic', 100, 0, 0, 0, 1, '2025-04-26', '0000-00-00'),
+(19, 'garlic', 50, 1, 0, 0, 1, '0000-00-00', '2025-04-27'),
+(21, 'Cheese Dog', 100, 0, 0, 0, 1, '2025-04-27', '0000-00-00'),
+(22, 'Egg', 100, 0, 0, 0, 1, '2025-04-29', '0000-00-00'),
+(23, 'Beef', 10, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
+(24, 'Beef', 100, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
+(25, 'Bans', 20, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
+(26, 'garlic', 10, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
+(27, 'Cabage', 10, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
+(28, 'cheese', 20, 1, 0, 0, 1, '0000-00-00', '2025-04-29');
 
 -- --------------------------------------------------------
 
@@ -97,7 +101,7 @@ CREATE TABLE `notifications` (
   `notificationType` int(11) NOT NULL COMMENT '0-Request, 1-Alert, 2-Message\r\n',
   `transactionKey` int(11) NOT NULL,
   `productId` int(11) NOT NULL,
-  `notificationStatus` int(11) NOT NULL COMMENT '0-unread, 1-mark as read\r\n',
+  `notificationStatus` int(11) NOT NULL COMMENT '0-unread, 1-mark as read, 2 - archive\r\n',
   `requestStatus` int(11) NOT NULL COMMENT '0 - pending, 1 - Finish',
   `notificationMessage` varchar(255) NOT NULL,
   `notes` varchar(255) NOT NULL
@@ -120,18 +124,18 @@ INSERT INTO `notifications` (`notificationId`, `notificationTarget`, `notificati
 (10, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', ''),
 (11, 7, 2, 0, 0, 1, 0, 'Your request for Bans has been approved', ''),
 (12, 7, 2, 0, 0, 1, 0, 'Your request for Banana has been approved', ''),
-(13, 7, 2, 0, 0, 0, 0, 'Your request for Hotdog has been approved', ''),
+(13, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', ''),
 (14, 7, 2, 0, 0, 1, 0, 'Your request for cheese has been approved', ''),
 (15, 0, 0, 30, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided'),
 (16, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', ''),
 (17, 0, 0, 31, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided'),
 (18, 7, 2, 0, 0, 1, 0, 'Your request for Chicken has been approved', ''),
 (19, 0, 0, 32, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided'),
-(20, 7, 2, 0, 0, 0, 0, 'Your request for Chicken has been approved', ''),
+(20, 7, 2, 0, 0, 1, 0, 'Your request for Chicken has been approved', ''),
 (21, 0, 0, 33, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided'),
-(22, 7, 2, 0, 0, 0, 0, 'Your request for Beef has been approved', ''),
+(22, 7, 2, 0, 0, 1, 0, 'Your request for Beef has been approved', ''),
 (23, 0, 0, 34, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided'),
-(24, 7, 2, 0, 0, 0, 0, 'Your request for garlic has been approved', ''),
+(24, 7, 2, 0, 0, 1, 0, 'Your request for garlic has been approved', ''),
 (25, 0, 0, 35, 0, 1, 1, 'You have a request for Out item that need your approval', 'pang ulam ko muna'),
 (26, 7, 2, 0, 0, 1, 0, 'Your request for Beef has been approved', ''),
 (27, 0, 0, 36, 0, 1, 1, 'You have a request for Out item that need your approval', 'No notes provided'),
@@ -145,7 +149,30 @@ INSERT INTO `notifications` (`notificationId`, `notificationTarget`, `notificati
 (35, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', ''),
 (36, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', ''),
 (37, 0, 0, 40, 0, 1, 1, 'You have a request for Out item that need your approval', 'No notes provided'),
-(38, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', '');
+(38, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', ''),
+(39, 0, 0, 41, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided'),
+(40, 7, 2, 0, 0, 1, 0, 'Your request for Cabage has been approved', ''),
+(41, 0, 0, 42, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided'),
+(42, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', ''),
+(43, 0, 1, 0, 8, 1, 0, 'Low stock alert! Product ID: 8 is running low on stock. Please restock it.', ''),
+(44, 0, 1, 0, 18, 1, 0, 'Low stock alert! garlic is running low on stock (only 10 remaining). Please restock it.', ''),
+(45, 0, 1, 0, 20, 1, 0, 'Low stock alert! Cabage is running low on stock (only 10 remaining). Please restock it.', ''),
+(46, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', ''),
+(47, 0, 1, 0, 18, 1, 0, 'Low stock alert! garlic is running low on stock (only 10 remaining). Please restock it.', ''),
+(48, 0, 1, 0, 20, 1, 0, 'Low stock alert! Cabage is running low on stock (only 10 remaining). Please restock it.', ''),
+(49, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', ''),
+(50, 0, 1, 0, 20, 1, 0, 'Low stock alert! Cabage is running low on stock (only 10 remaining). Please restock it.', ''),
+(51, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', ''),
+(52, 0, 1, 0, 18, 1, 0, 'Low stock alert! garlic is running low on stock (only 10 remaining). Please restock it.', ''),
+(53, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', ''),
+(54, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', ''),
+(55, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', ''),
+(56, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', ''),
+(57, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', ''),
+(58, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', ''),
+(59, 0, 0, 43, 0, 1, 1, 'You have a request for In item that need your approval', 'restock'),
+(60, 0, 1, 0, 13, 0, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', ''),
+(61, 7, 2, 0, 0, 1, 0, 'Your request for cheese has been approved', '');
 
 -- --------------------------------------------------------
 
@@ -201,7 +228,9 @@ INSERT INTO `orderedhistory` (`historyId`, `orderId`, `totalCost`, `dateOfOrder`
 (30, 30, 420, '2025-04-27', '08:01:12', 17, 2025, 'Week 17, 2025'),
 (31, 31, 280, '2025-04-27', '08:11:07', 17, 2025, 'Week 17, 2025'),
 (32, 32, 535, '2025-04-27', '08:15:51', 17, 2025, 'Week 17, 2025'),
-(33, 33, 380, '2025-04-27', '08:15:55', 17, 2025, 'Week 17, 2025');
+(33, 33, 380, '2025-04-27', '08:15:55', 17, 2025, 'Week 17, 2025'),
+(34, 34, 285, '2025-04-27', '13:43:48', 17, 2025, 'Week 17, 2025'),
+(35, 35, 575, '2025-04-30', '04:19:06', 18, 2025, 'Week 18, 2025');
 
 -- --------------------------------------------------------
 
@@ -292,7 +321,14 @@ INSERT INTO `ordereditemhistory` (`historyId`, `itemKey`, `productName`, `produc
 (74, 32, 'Shawarma Rice', 130, 1, 130, '2025-04-27'),
 (75, 32, 'Fries', 45, 1, 45, '2025-04-27'),
 (76, 33, 'Shawarma Rice', 130, 2, 260, '2025-04-27'),
-(77, 33, 'Chicken Shawarma Burger', 120, 1, 120, '2025-04-27');
+(77, 33, 'Chicken Shawarma Burger', 120, 1, 120, '2025-04-27'),
+(78, 34, 'Chicken Shawarma Burger', 120, 2, 240, '2025-04-27'),
+(79, 34, 'Fries', 45, 1, 45, '2025-04-27'),
+(80, 35, 'Shawarma Large', 100, 3, 300, '2025-04-30'),
+(81, 35, 'Chicken Shawarma Burger', 120, 1, 120, '2025-04-30'),
+(82, 35, 'Shawarma Solo', 80, 1, 80, '2025-04-30'),
+(83, 35, 'Fries', 45, 1, 45, '2025-04-30'),
+(84, 35, 'Coke', 30, 1, 30, '2025-04-30');
 
 -- --------------------------------------------------------
 
@@ -357,7 +393,10 @@ INSERT INTO `transaction` (`transactionId`, `requestorId`, `productId`, `product
 (37, 7, 8, 'Bans', 19, '', 1, 2, '2025-04-27', ''),
 (38, 7, 8, 'Bans', 10, '', 1, 2, '2025-04-27', ''),
 (39, 7, 8, 'Bans', 5, '', 1, 1, '2025-04-27', ''),
-(40, 7, 15, 'Beef', 100, '', 1, 2, '2025-04-27', '');
+(40, 7, 15, 'Beef', 100, '', 1, 2, '2025-04-27', ''),
+(41, 7, 0, 'Cabage', 10, '1', 0, 1, '2025-04-27', ''),
+(42, 7, 0, 'Hotdog', 10, '', 0, 1, '2025-04-27', ''),
+(43, 7, 0, 'cheese', 50, '', 0, 1, '2025-04-29', 'restock');
 
 -- --------------------------------------------------------
 
@@ -435,7 +474,7 @@ ALTER TABLE `userstable`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `menu`
@@ -447,25 +486,25 @@ ALTER TABLE `menu`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notificationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `notificationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `orderedhistory`
 --
 ALTER TABLE `orderedhistory`
-  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `ordereditemhistory`
 --
 ALTER TABLE `ordereditemhistory`
-  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `userstable`
