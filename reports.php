@@ -30,7 +30,7 @@ if ($previousMonthSales > 0) {
 $salesTrend = $salesPercentChange >= 0 ? 'trend-up' : 'trend-down';
 $salesIcon = $salesPercentChange >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
 
-// For expenses, let's assume expenses are 70% of sales (you can replace with actual expense data)
+// For expenses, assume expenses are 70% of sales 
 $currentMonthExpenses = $currentMonthSales * 0.7;
 $previousMonthExpenses = $previousMonthSales * 0.7;
 
@@ -167,11 +167,11 @@ $connection->close();
                     <div class="stat-value"><?php echo $profitDisplay; ?></div>
                     <div class="stat-period">This Month (<?php echo date('F Y'); ?>)</div>
                 </div>
-                <div class="stat-card card-inventory">
+                <!-- <div class="stat-card card-inventory">
                     <div class="stat-title">Inventory Value</div>
-                    <div class="stat-value"><?php echo $inventoryDisplay; ?></div>
+                    <div class="stat-value"><?php //echo $inventoryDisplay; ?></div>
                     <div class="stat-period">Current Inventory</div>
-                </div>
+                </div> -->
             </div>
 
             <!-- Revenue Analysis Section Header -->
@@ -217,21 +217,19 @@ $connection->close();
             </div>
         </div>
     </div>
-
-    // ...existing code...
     <script>
         // Handle refresh buttons
-        document.getElementById('refresh-weekly').addEventListener('click', function() {
+        document.getElementById('refresh-weekly').addEventListener('click', function () {
             document.getElementById('weekly-chart-iframe').src = 'graphs/chartWeekly.php?t=' + new Date().getTime();
         });
 
-        document.getElementById('refresh-monthly').addEventListener('click', function() {
+        document.getElementById('refresh-monthly').addEventListener('click', function () {
             document.getElementById('monthly-chart-iframe').src = 'graphs/chart.php?t=' + new Date().getTime();
         });
 
         // Improved view chart function
-        document.querySelectorAll('.view-chart').forEach(function(button) {
-            button.addEventListener('click', function() {
+        document.querySelectorAll('.view-chart').forEach(function (button) {
+            button.addEventListener('click', function () {
                 const chartType = this.getAttribute('data-chart');
 
                 // Instead of opening the raw PHP file, create a wrapper HTML page
@@ -321,7 +319,6 @@ $connection->close();
             });
         });
     </script>
-    // ...existing code...
 </body>
 
 </html>

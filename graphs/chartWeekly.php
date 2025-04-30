@@ -85,8 +85,7 @@ if ($result->num_rows > 0) {
             'period' => $row['periodLabel'],
             'year' => intval($row['year']),
             'week' => intval($row['week']),
-            'revenue' => floatval($row['revenue']),
-            'expenses' => floatval($row['revenue'] * 0.7) // Example: expenses as 70% of revenue
+            'revenue' => floatval($row['revenue'])
         ];
 
         // Check if this is the current week
@@ -101,8 +100,7 @@ if ($result->num_rows > 0) {
         'period' => 'No Data',
         'year' => $currentYear,
         'week' => $currentWeekNumber,
-        'revenue' => 0,
-        'expenses' => 0
+        'revenue' => 0
     ];
 }
 
@@ -114,7 +112,6 @@ if ($currentWeekIndex === -1 && count($chartData) < 5) {
         'year' => $currentYear,
         'week' => $currentWeekNumber,
         'revenue' => 0,
-        'expenses' => 0,
         'isCurrent' => true
     ];
     $currentWeekIndex = count($chartData) - 1;
@@ -130,7 +127,7 @@ $currentWeekIndexJSON = json_encode($currentWeekIndex);
 
 <!-- Chart code -->
 <script>
-    am5.ready(function() {
+    am5.ready(function () {
         // Create root element
         var root = am5.Root.new("chartdiv");
 
@@ -139,12 +136,10 @@ $currentWeekIndexJSON = json_encode($currentWeekIndex);
 
         var colors = {
             lightBlue: am5.color("#D4EBF8"),
-            //mediumBlue: am5.color("#1F509A"),
             mediumBlue: am5.color("#60B5FF"),
             darkBlue: am5.color("#0A3981"),
             orange: am5.color("#E38E49"),
-            background: am5.color("#FFFFFF"),
-            lightMediumBlue: am5.color("#6085C6") // Add this lighter blue
+            background: am5.color("#FFFFFF")
         };
 
         // Create chart
@@ -170,9 +165,6 @@ $currentWeekIndexJSON = json_encode($currentWeekIndex);
                 })
             })
         );
-
-        // Remove scrollbar since we're only showing 5 weeks
-        // chart.set("scrollbarX", am5.Scrollbar.new(root, { orientation: "horizontal" }));
 
         // Get data from PHP
         var data = <?php echo $chartDataJSON; ?>;
@@ -218,7 +210,7 @@ $currentWeekIndexJSON = json_encode($currentWeekIndex);
             text: "₱{value}"
         });
 
-        // Add series
+        // Add revenue series only
         var series1 = chart.series.push(
             am5xy.ColumnSeries.new(root, {
                 name: "Weekly Revenue",
@@ -227,24 +219,24 @@ $currentWeekIndexJSON = json_encode($currentWeekIndex);
                 valueYField: "revenue",
                 categoryXField: "period",
                 tooltip: am5.Tooltip.new(root, {
-                    labelText: "{name}: ₱{valueY}"
+                    labelText: "Revenue: ₱{valueY}"
                 })
             })
         );
 
         // Customize columns - highlight current week
-        series1.columns.template.adapters.add("fill", function(fill, target) {
+        series1.columns.template.adapters.add("fill", function (fill, target) {
             if (target.dataItem && target.dataItem.dataContext.isCurrent) {
                 return colors.orange;
             }
-            return colors.mediumBlue; // Use the predefined lighter blue
+            return colors.mediumBlue;
         });
 
-        series1.columns.template.adapters.add("stroke", function(stroke, target) {
+        series1.columns.template.adapters.add("stroke", function (stroke, target) {
             if (target.dataItem && target.dataItem.dataContext.isCurrent) {
                 return colors.darkBlue;
             }
-            return colors.darkBlue; // Use the predefined lighter blue
+            return colors.darkBlue;
         });
 
         series1.columns.template.setAll({
@@ -255,43 +247,6 @@ $currentWeekIndexJSON = json_encode($currentWeekIndex);
         });
 
         series1.data.setAll(data);
-
-        var series2 = chart.series.push(
-            am5xy.LineSeries.new(root, {
-                name: "Weekly Expenses",
-                xAxis: xAxis,
-                yAxis: yAxis,
-                valueYField: "expenses",
-                categoryXField: "period",
-                tooltip: am5.Tooltip.new(root, {
-                    labelText: "{name}: ₱{valueY}"
-                })
-            })
-        );
-
-        series2.strokes.template.setAll({
-            strokeWidth: 3
-        });
-
-        series2.data.setAll(data);
-
-        series2.bullets.push(function() {
-            return am5.Bullet.new(root, {
-                sprite: am5.Circle.new(root, {
-                    radius: 5,
-                    fill: series2.get("stroke")
-                })
-            });
-        });
-
-        // Add legend
-        var legend = chart.children.push(
-            am5.Legend.new(root, {
-                centerX: am5.p50,
-                x: am5.p50
-            })
-        );
-        legend.data.setAll(chart.series.values);
 
         // Add cursor
         chart.set("cursor", am5xy.XYCursor.new(root, {
@@ -318,11 +273,10 @@ $currentWeekIndexJSON = json_encode($currentWeekIndex);
         // Make stuff animate on load
         chart.appear(1000, 100);
         series1.appear(1000);
-        series2.appear(1000);
 
         // After chart is fully loaded, add a "You are here" indicator for current week
         if (currentWeekIndex >= 0) {
-            setTimeout(function() {
+            setTimeout(function () {
                 const container = document.getElementById("chartdiv");
                 const indicator = document.createElement("div");
                 indicator.className = "current-week-indicator";
@@ -330,7 +284,7 @@ $currentWeekIndexJSON = json_encode($currentWeekIndex);
                 container.appendChild(indicator);
 
                 // Position the indicator - need to wait for rendering
-                setTimeout(function() {
+                setTimeout(function () {
                     const columns = document.querySelectorAll("#chartdiv .am5-column");
                     if (columns.length > currentWeekIndex) {
                         const column = columns[currentWeekIndex];
@@ -349,10 +303,3 @@ $currentWeekIndexJSON = json_encode($currentWeekIndex);
 
 <!-- HTML -->
 <div id="chartdiv"></div>
-
-<!-- Add a title with current week indicator -->
-<!-- <div class="mt-3 text-center">
-    <h4>Last 5 Weeks Revenue and Expenses</h4>
-    <p class="text-muted small">Current week: <?php echo $currentWeekLabel; ?>
-        <?php echo ($currentWeekIndex >= 0) ? '(highlighted in green)' : '(not in view)'; ?></p>
-</div> -->
