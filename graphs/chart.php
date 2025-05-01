@@ -179,14 +179,14 @@ $currentMonthIndexJSON = json_encode($currentMonthIndex);
         // Add only the revenue series
         var series1 = chart.series.push(
             am5xy.ColumnSeries.new(root, {
-                name: "Monthly Revenue",
+                name: "Total Sales (Monthly)",
                 xAxis: xAxis,
                 yAxis: yAxis,
                 valueYField: "revenue",
                 categoryXField: "period",
                 tooltip: am5.Tooltip.new(root, {
                     pointerOrientation: "horizontal",
-                    labelText: "Revenue: ₱{valueY}"
+                    labelText: "₱{valueY}"
                 })
             })
         );

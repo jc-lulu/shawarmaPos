@@ -213,13 +213,13 @@ $currentWeekIndexJSON = json_encode($currentWeekIndex);
         // Add revenue series only
         var series1 = chart.series.push(
             am5xy.ColumnSeries.new(root, {
-                name: "Weekly Revenue",
+                name: "Total Sales (Weekly)",
                 xAxis: xAxis,
                 yAxis: yAxis,
                 valueYField: "revenue",
                 categoryXField: "period",
                 tooltip: am5.Tooltip.new(root, {
-                    labelText: "Revenue: ₱{valueY}"
+                    labelText: "₱{valueY}"
                 })
             })
         );

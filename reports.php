@@ -155,18 +155,30 @@ $connection->close();
                 <div class="stat-card card-sales">
                     <div class="stat-title">Total Sales</div>
                     <div class="stat-value"><?php echo $salesDisplay; ?></div>
+                    <div class="stat-trend <?php echo $salesTrend; ?>">
+                        <i class="fas <?php echo $salesIcon; ?>"></i>
+                        <?php echo number_format(abs($salesPercentChange), 1); ?>%
+                    </div>
                     <div class="stat-period">This Month (<?php echo date('F Y'); ?>)</div>
                 </div>
-                <div class="stat-card card-expenses">
+                <!-- <div class="stat-card card-expenses">
                     <div class="stat-title">Total Expenses</div>
-                    <div class="stat-value"><?php echo $expensesDisplay; ?></div>
+                    <div class="stat-value"><?php //echo $expensesDisplay; ?></div>
+                    <div class="stat-trend <?php //echo $expensesTrend; ?>">
+                        <i class="fas <?php //echo $expensesIcon; ?>"></i>
+                        <?php //echo number_format(abs($expensesPercentChange), 1); ?>%
+                    </div>
                     <div class="stat-period">This Month (<?php echo date('F Y'); ?>)</div>
                 </div>
                 <div class="stat-card card-profit">
                     <div class="stat-title">Net Profit</div>
-                    <div class="stat-value"><?php echo $profitDisplay; ?></div>
+                    <div class="stat-value"><?php //echo $profitDisplay; ?></div>
+                    <div class="stat-trend <?php //echo $profitTrend; ?>">
+                        <i class="fas <? php// echo $profitIcon; ?>"></i>
+                        <?php //echo number_format(abs($profitPercentChange), 1); ?>%
+                    </div>
                     <div class="stat-period">This Month (<?php echo date('F Y'); ?>)</div>
-                </div>
+                </div> -->
                 <!-- <div class="stat-card card-inventory">
                     <div class="stat-title">Inventory Value</div>
                     <div class="stat-value"><?php //echo $inventoryDisplay; ?></div>
@@ -175,7 +187,7 @@ $connection->close();
             </div>
 
             <!-- Revenue Analysis Section Header -->
-            <h2 class="section-title mb-3" style="color: #0A3981;">Revenue Analysis</h2>
+            <h2 class="section-title mb-3" style="color: #0A3981;">Sales Analysis</h2>
 
             <!-- Charts Row - Both Charts Side by Side -->
             <div class="charts-row">
@@ -183,7 +195,7 @@ $connection->close();
                 <div class="chart-col">
                     <div class="chart-container">
                         <div class="chart-header">
-                            <h3 class="chart-title">Weekly Revenue</h3>
+                            <h3 class="chart-title">Total Sales (Weekly)</h3>
                             <div class="chart-actions">
                                 <button class="btn btn-sm btn-view view-chart" data-chart="weekly">
                                     <i class="fas fa-eye"></i> View
@@ -201,7 +213,7 @@ $connection->close();
                 <div class="chart-col">
                     <div class="chart-container">
                         <div class="chart-header">
-                            <h3 class="chart-title">Monthly Revenue</h3>
+                            <h3 class="chart-title">Total Sales (Monthly)</h3>
                             <div class="chart-actions">
                                 <button class="btn btn-sm btn-view view-chart" data-chart="monthly">
                                     <i class="fas fa-eye"></i> View

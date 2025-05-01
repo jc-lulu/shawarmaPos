@@ -12,7 +12,7 @@ $search = isset($_GET['search']) ? mysqli_real_escape_string($connection, $_GET[
 $type = isset($_GET['type']) && $_GET['type'] !== '' ? intval($_GET['type']) : null;
 $status = isset($_GET['status']) && $_GET['status'] !== '' ? intval($_GET['status']) : null;
 
-$query = "SELECT * FROM notifications WHERE 1=1";
+$query = "SELECT * FROM notifications WHERE notificationFlag = 0";
 
 // If not admin (role != 1), exclude request notifications (type 0)
 if ($userRole != 0) {
