@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 30, 2025 at 04:31 AM
+-- Generation Time: May 01, 2025 at 02:12 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -49,7 +49,7 @@ INSERT INTO `inventory` (`productId`, `productName`, `quantity`, `type`, `reques
 (7, 'Sugar', 100, 1, 0, 0, 1, '0000-00-00', '2025-04-17'),
 (11, 'Hotdog', 220, 0, 0, 0, 1, '2025-04-23', '0000-00-00'),
 (13, 'cheese', 60, 0, 0, 0, 1, '2025-04-25', '0000-00-00'),
-(14, 'Chicken', 120, 0, 0, 0, 1, '2025-04-10', '0000-00-00'),
+(14, 'Chicken', 20, 0, 0, 0, 1, '2025-04-10', '0000-00-00'),
 (15, 'Beef', 290, 0, 0, 0, 1, '2025-04-27', '0000-00-00'),
 (17, 'garlic', 100, 0, 0, 0, 1, '2025-04-26', '0000-00-00'),
 (19, 'garlic', 50, 1, 0, 0, 1, '0000-00-00', '2025-04-27'),
@@ -60,7 +60,8 @@ INSERT INTO `inventory` (`productId`, `productName`, `quantity`, `type`, `reques
 (25, 'Bans', 20, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
 (26, 'garlic', 10, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
 (27, 'Cabage', 10, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
-(28, 'cheese', 20, 1, 0, 0, 1, '0000-00-00', '2025-04-29');
+(28, 'cheese', 20, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
+(29, 'Chicken', 100, 1, 0, 0, 1, '0000-00-00', '2025-04-30');
 
 -- --------------------------------------------------------
 
@@ -101,78 +102,81 @@ CREATE TABLE `notifications` (
   `notificationType` int(11) NOT NULL COMMENT '0-Request, 1-Alert, 2-Message\r\n',
   `transactionKey` int(11) NOT NULL,
   `productId` int(11) NOT NULL,
-  `notificationStatus` int(11) NOT NULL COMMENT '0-unread, 1-mark as read, 2 - archive\r\n',
+  `notificationStatus` int(11) NOT NULL COMMENT '0-unread, 1-mark as read\r\n',
   `requestStatus` int(11) NOT NULL COMMENT '0 - pending, 1 - Finish',
   `notificationMessage` varchar(255) NOT NULL,
-  `notes` varchar(255) NOT NULL
+  `notes` varchar(255) NOT NULL,
+  `notificationFlag` int(11) NOT NULL COMMENT '0-unarchive, 1-archive'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `notifications`
 --
 
-INSERT INTO `notifications` (`notificationId`, `notificationTarget`, `notificationType`, `transactionKey`, `productId`, `notificationStatus`, `requestStatus`, `notificationMessage`, `notes`) VALUES
-(1, 0, 0, 21, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided'),
-(2, 0, 0, 23, 0, 1, 0, 'You have a request for Out item that need your approval', 'eme lang'),
-(3, 0, 0, 24, 0, 1, 1, 'You have a request for In item that need your approval', 'pukpok mo sa ulo mo'),
-(4, 0, 0, 25, 0, 1, 1, 'You have a request for In item that need your approval', 'pamukpok sa ulo'),
-(5, 0, 0, 26, 0, 1, 0, 'You have a request for Out item that need your approval', 'No notes provided'),
-(6, 0, 0, 27, 0, 1, 1, 'You have a request for Out item that need your approval', 'Pang bato sa ulo'),
-(7, 0, 0, 28, 0, 1, 1, 'You have a request for In item that need your approval', 'Pamalo sa Ulo'),
-(8, 0, 0, 29, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided'),
-(9, 7, 2, 0, 0, 1, 0, 'Your request for Bans has been approved', ''),
-(10, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', ''),
-(11, 7, 2, 0, 0, 1, 0, 'Your request for Bans has been approved', ''),
-(12, 7, 2, 0, 0, 1, 0, 'Your request for Banana has been approved', ''),
-(13, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', ''),
-(14, 7, 2, 0, 0, 1, 0, 'Your request for cheese has been approved', ''),
-(15, 0, 0, 30, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided'),
-(16, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', ''),
-(17, 0, 0, 31, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided'),
-(18, 7, 2, 0, 0, 1, 0, 'Your request for Chicken has been approved', ''),
-(19, 0, 0, 32, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided'),
-(20, 7, 2, 0, 0, 1, 0, 'Your request for Chicken has been approved', ''),
-(21, 0, 0, 33, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided'),
-(22, 7, 2, 0, 0, 1, 0, 'Your request for Beef has been approved', ''),
-(23, 0, 0, 34, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided'),
-(24, 7, 2, 0, 0, 1, 0, 'Your request for garlic has been approved', ''),
-(25, 0, 0, 35, 0, 1, 1, 'You have a request for Out item that need your approval', 'pang ulam ko muna'),
-(26, 7, 2, 0, 0, 1, 0, 'Your request for Beef has been approved', ''),
-(27, 0, 0, 36, 0, 1, 1, 'You have a request for Out item that need your approval', 'No notes provided'),
-(28, 0, 0, 37, 0, 1, 1, 'You have a request for Out item that need your approval', 'No notes provided'),
-(29, 0, 0, 38, 0, 1, 1, 'You have a request for Out item that need your approval', 'No notes provided'),
-(30, 0, 0, 39, 0, 1, 1, 'You have a request for Out item that need your approval', 'No notes provided'),
-(31, 7, 2, 0, 0, 1, 0, 'Your request for Bans has been approved', ''),
-(32, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', ''),
-(33, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', ''),
-(34, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', ''),
-(35, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', ''),
-(36, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', ''),
-(37, 0, 0, 40, 0, 1, 1, 'You have a request for Out item that need your approval', 'No notes provided'),
-(38, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', ''),
-(39, 0, 0, 41, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided'),
-(40, 7, 2, 0, 0, 1, 0, 'Your request for Cabage has been approved', ''),
-(41, 0, 0, 42, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided'),
-(42, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', ''),
-(43, 0, 1, 0, 8, 1, 0, 'Low stock alert! Product ID: 8 is running low on stock. Please restock it.', ''),
-(44, 0, 1, 0, 18, 1, 0, 'Low stock alert! garlic is running low on stock (only 10 remaining). Please restock it.', ''),
-(45, 0, 1, 0, 20, 1, 0, 'Low stock alert! Cabage is running low on stock (only 10 remaining). Please restock it.', ''),
-(46, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', ''),
-(47, 0, 1, 0, 18, 1, 0, 'Low stock alert! garlic is running low on stock (only 10 remaining). Please restock it.', ''),
-(48, 0, 1, 0, 20, 1, 0, 'Low stock alert! Cabage is running low on stock (only 10 remaining). Please restock it.', ''),
-(49, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', ''),
-(50, 0, 1, 0, 20, 1, 0, 'Low stock alert! Cabage is running low on stock (only 10 remaining). Please restock it.', ''),
-(51, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', ''),
-(52, 0, 1, 0, 18, 1, 0, 'Low stock alert! garlic is running low on stock (only 10 remaining). Please restock it.', ''),
-(53, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', ''),
-(54, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', ''),
-(55, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', ''),
-(56, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', ''),
-(57, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', ''),
-(58, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', ''),
-(59, 0, 0, 43, 0, 1, 1, 'You have a request for In item that need your approval', 'restock'),
-(60, 0, 1, 0, 13, 0, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', ''),
-(61, 7, 2, 0, 0, 1, 0, 'Your request for cheese has been approved', '');
+INSERT INTO `notifications` (`notificationId`, `notificationTarget`, `notificationType`, `transactionKey`, `productId`, `notificationStatus`, `requestStatus`, `notificationMessage`, `notes`, `notificationFlag`) VALUES
+(1, 0, 0, 21, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided', 0),
+(2, 0, 0, 23, 0, 1, 0, 'You have a request for Out item that need your approval', 'eme lang', 0),
+(3, 0, 0, 24, 0, 1, 1, 'You have a request for In item that need your approval', 'pukpok mo sa ulo mo', 0),
+(4, 0, 0, 25, 0, 1, 1, 'You have a request for In item that need your approval', 'pamukpok sa ulo', 0),
+(5, 0, 0, 26, 0, 1, 0, 'You have a request for Out item that need your approval', 'No notes provided', 0),
+(6, 0, 0, 27, 0, 1, 1, 'You have a request for Out item that need your approval', 'Pang bato sa ulo', 0),
+(7, 0, 0, 28, 0, 1, 1, 'You have a request for In item that need your approval', 'Pamalo sa Ulo', 0),
+(8, 0, 0, 29, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided', 0),
+(9, 7, 2, 0, 0, 1, 0, 'Your request for Bans has been approved', '', 0),
+(10, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', '', 0),
+(11, 7, 2, 0, 0, 1, 0, 'Your request for Bans has been approved', '', 0),
+(12, 7, 2, 0, 0, 1, 0, 'Your request for Banana has been approved', '', 0),
+(13, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', '', 0),
+(14, 7, 2, 0, 0, 1, 0, 'Your request for cheese has been approved', '', 0),
+(15, 0, 0, 30, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided', 0),
+(16, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', '', 0),
+(17, 0, 0, 31, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided', 0),
+(18, 7, 2, 0, 0, 1, 0, 'Your request for Chicken has been approved', '', 0),
+(19, 0, 0, 32, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided', 0),
+(20, 7, 2, 0, 0, 1, 0, 'Your request for Chicken has been approved', '', 0),
+(21, 0, 0, 33, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided', 0),
+(22, 7, 2, 0, 0, 1, 0, 'Your request for Beef has been approved', '', 0),
+(23, 0, 0, 34, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided', 0),
+(24, 7, 2, 0, 0, 1, 0, 'Your request for garlic has been approved', '', 0),
+(25, 0, 0, 35, 0, 1, 1, 'You have a request for Out item that need your approval', 'pang ulam ko muna', 0),
+(26, 7, 2, 0, 0, 1, 0, 'Your request for Beef has been approved', '', 0),
+(27, 0, 0, 36, 0, 1, 1, 'You have a request for Out item that need your approval', 'No notes provided', 0),
+(28, 0, 0, 37, 0, 1, 1, 'You have a request for Out item that need your approval', 'No notes provided', 0),
+(29, 0, 0, 38, 0, 1, 1, 'You have a request for Out item that need your approval', 'No notes provided', 0),
+(30, 0, 0, 39, 0, 1, 1, 'You have a request for Out item that need your approval', 'No notes provided', 0),
+(31, 7, 2, 0, 0, 1, 0, 'Your request for Bans has been approved', '', 0),
+(32, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', '', 0),
+(33, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', '', 0),
+(34, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', '', 0),
+(35, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', '', 0),
+(36, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', '', 0),
+(37, 0, 0, 40, 0, 1, 1, 'You have a request for Out item that need your approval', 'No notes provided', 0),
+(38, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', '', 0),
+(39, 0, 0, 41, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided', 0),
+(40, 7, 2, 0, 0, 1, 0, 'Your request for Cabage has been approved', '', 0),
+(41, 0, 0, 42, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided', 0),
+(42, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', '', 1),
+(43, 0, 1, 0, 8, 1, 0, 'Low stock alert! Product ID: 8 is running low on stock. Please restock it.', '', 0),
+(44, 0, 1, 0, 18, 1, 0, 'Low stock alert! garlic is running low on stock (only 10 remaining). Please restock it.', '', 0),
+(45, 0, 1, 0, 20, 1, 0, 'Low stock alert! Cabage is running low on stock (only 10 remaining). Please restock it.', '', 0),
+(46, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', '', 0),
+(47, 0, 1, 0, 18, 1, 0, 'Low stock alert! garlic is running low on stock (only 10 remaining). Please restock it.', '', 0),
+(48, 0, 1, 0, 20, 1, 0, 'Low stock alert! Cabage is running low on stock (only 10 remaining). Please restock it.', '', 0),
+(49, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', '', 0),
+(50, 0, 1, 0, 20, 1, 0, 'Low stock alert! Cabage is running low on stock (only 10 remaining). Please restock it.', '', 0),
+(51, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', '', 0),
+(52, 0, 1, 0, 18, 1, 0, 'Low stock alert! garlic is running low on stock (only 10 remaining). Please restock it.', '', 0),
+(53, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', '', 0),
+(55, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', '', 1),
+(56, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', '', 1),
+(57, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', '', 1),
+(58, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', '', 1),
+(59, 0, 0, 43, 0, 1, 1, 'You have a request for In item that need your approval', 'restock', 0),
+(62, 0, 0, 44, 0, 1, 0, 'You have a request for In item that need your approval', 'No notes provided', 1),
+(63, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 20 remaining). Please restock it.', '', 1),
+(64, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 20 remaining). Please restock it.', '', 1),
+(65, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 20 remaining). Please restock it.', '', 0),
+(66, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 20 remaining). Please restock it.', '', 0);
 
 -- --------------------------------------------------------
 
@@ -230,7 +234,14 @@ INSERT INTO `orderedhistory` (`historyId`, `orderId`, `totalCost`, `dateOfOrder`
 (32, 32, 535, '2025-04-27', '08:15:51', 17, 2025, 'Week 17, 2025'),
 (33, 33, 380, '2025-04-27', '08:15:55', 17, 2025, 'Week 17, 2025'),
 (34, 34, 285, '2025-04-27', '13:43:48', 17, 2025, 'Week 17, 2025'),
-(35, 35, 575, '2025-04-30', '04:19:06', 18, 2025, 'Week 18, 2025');
+(35, 35, 575, '2025-04-30', '04:19:06', 18, 2025, 'Week 18, 2025'),
+(36, 36, 200, '2025-05-01', '02:44:56', 18, 2025, 'Week 18, 2025'),
+(37, 37, 100, '2025-05-01', '04:04:11', 18, 2025, 'Week 18, 2025'),
+(38, 38, 280, '2025-05-01', '07:09:05', 18, 2025, 'Week 18, 2025'),
+(39, 39, 200, '2025-05-01', '10:10:39', 18, 2025, 'Week 18, 2025'),
+(40, 40, 160, '2025-05-01', '10:12:00', 18, 2025, 'Week 18, 2025'),
+(41, 41, 240, '2025-05-01', '10:15:23', 18, 2025, 'Week 18, 2025'),
+(42, 42, 240, '2025-05-01', '10:18:07', 18, 2025, 'Week 18, 2025');
 
 -- --------------------------------------------------------
 
@@ -328,7 +339,16 @@ INSERT INTO `ordereditemhistory` (`historyId`, `itemKey`, `productName`, `produc
 (81, 35, 'Chicken Shawarma Burger', 120, 1, 120, '2025-04-30'),
 (82, 35, 'Shawarma Solo', 80, 1, 80, '2025-04-30'),
 (83, 35, 'Fries', 45, 1, 45, '2025-04-30'),
-(84, 35, 'Coke', 30, 1, 30, '2025-04-30');
+(84, 35, 'Coke', 30, 1, 30, '2025-04-30'),
+(85, 36, 'Shawarma Large', 100, 2, 200, '2025-05-01'),
+(86, 37, 'Shawarma Large', 100, 1, 100, '2025-05-01'),
+(87, 38, 'Shawarma Solo', 80, 2, 160, '2025-05-01'),
+(88, 38, 'Chicken Shawarma Burger', 120, 1, 120, '2025-05-01'),
+(89, 39, 'Shawarma Solo', 80, 1, 80, '2025-05-01'),
+(90, 39, 'Chicken Shawarma Burger', 120, 1, 120, '2025-05-01'),
+(91, 40, 'Shawarma Solo', 80, 2, 160, '2025-05-01'),
+(92, 41, 'Chicken Shawarma Burger', 120, 2, 240, '2025-05-01'),
+(93, 42, 'Chicken Shawarma Burger', 120, 2, 240, '2025-05-01');
 
 -- --------------------------------------------------------
 
@@ -396,7 +416,8 @@ INSERT INTO `transaction` (`transactionId`, `requestorId`, `productId`, `product
 (40, 7, 15, 'Beef', 100, '', 1, 2, '2025-04-27', ''),
 (41, 7, 0, 'Cabage', 10, '1', 0, 1, '2025-04-27', ''),
 (42, 7, 0, 'Hotdog', 10, '', 0, 1, '2025-04-27', ''),
-(43, 7, 0, 'cheese', 50, '', 0, 1, '2025-04-29', 'restock');
+(43, 7, 0, 'cheese', 50, '', 0, 1, '2025-04-29', 'restock'),
+(44, 7, 0, 'Bans', 200, '', 0, 0, '2025-04-30', '');
 
 -- --------------------------------------------------------
 
@@ -474,37 +495,37 @@ ALTER TABLE `userstable`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `menuId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `menuId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notificationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `notificationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT for table `orderedhistory`
 --
 ALTER TABLE `orderedhistory`
-  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `ordereditemhistory`
 --
 ALTER TABLE `ordereditemhistory`
-  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `userstable`
