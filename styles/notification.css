@@ -1,0 +1,151 @@
+body {
+  background-color: #f8f9fa;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container-fluid {
+  width: 100%;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.main-content {
+  padding: 2rem;
+  width: 100%;
+  transition: all 0.3s;
+}
+
+h1 {
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 3px solid #ff8c00;
+  display: inline-block;
+}
+
+.action-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.filters-section {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.notifications-container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 0;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.notification-item {
+  display: flex;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #eee;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.notification-item:hover {
+  background-color: #f8f9fa;
+}
+
+.notification-item.unread {
+  background-color: rgba(13, 110, 253, 0.05);
+}
+
+.notification-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(13, 110, 253, 0.1);
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.notification-time {
+  color: #6c757d;
+  font-size: 0.85rem;
+}
+
+.notification-message {
+  color: #343a40;
+}
+
+.notification-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.notification-actions button {
+  background: none;
+  border: none;
+  color: #6c757d;
+  transition: color 0.2s;
+}
+
+.notification-actions button:hover {
+  color: #0d6efd;
+}
+
+.no-notifications {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: #6c757d;
+}
+
+.no-notifications i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.notification-detail-header {
+  margin-bottom: 1rem;
+}
+
+.notification-detail-header h6 {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.notification-detail-body h6 {
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .notification-time {
+    display: none;
+  }
+}
