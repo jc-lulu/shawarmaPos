@@ -35,7 +35,7 @@ include('server_side/check_session.php');
                         <?php
                         include('cedric_dbConnection.php');
 
-                        $query = "SELECT historyId, orderId, totalCost, dateOfOrder, timeOfOrder FROM orderedHistory ORDER BY dateOfOrder DESC, timeOfOrder DESC";
+                        $query = "SELECT historyId, orderId, totalCost, dateOfOrder, timeOfOrder FROM orderedHistory WHERE historyStatus = 0 ORDER BY dateOfOrder DESC, timeOfOrder DESC";
                         $result = $connection->query($query);
 
                         if ($result && $result->num_rows > 0) {
@@ -158,6 +158,54 @@ include('server_side/check_session.php');
 
             // Custom styling for the buttons container
             $('.dt-buttons').addClass('mb-3');
+
+            $(document).on('click', '.archive-btn', function () {
+                const orderId = $(this).data('id');
+                Swal.fire({
+                    title: 'Archive Receipt',
+                    text: `Are you sure you want to archive Order #${orderId}?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Archive it!',
+                    cancelButtonText: 'No, Cancel!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform the archiving action here
+                        $.ajax({
+                            url: 'server_side/archiveReceiptHistory.php',
+                            type: 'POST',
+                            data: {
+                                orderId: [orderId]
+                            },
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire(
+                                        'Archived!',
+                                        `Order #${orderId} has been archived.`,
+                                        'success'
+                                    ).then(() => {
+                                        location
+                                            .reload(); // Reload the page to see changes
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        'Error!',
+                                        response.message,
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function () {
+                                Swal.fire(
+                                    'Error!',
+                                    'Failed to archive the receipt. Please try again.',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
 
             // View order details
             $(document).on('click', '.view-details-btn', function () {
