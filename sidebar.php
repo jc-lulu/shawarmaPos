@@ -236,11 +236,11 @@
         </a>
     </div>
 
-    <div class="menu-label">Administration</div>
-
     <div class="nav-links">
         <?php
         if ($_SESSION['user_role'] == 0) {
+            echo '<div class="menu-label">Administration</div>';
+
             $activeClass = (basename($_SERVER['PHP_SELF']) == 'menuManagement.php') ? 'active' : '';
             echo '<a href="menuManagement.php" class="' . $activeClass . '">
             <i class="fas fa-list-alt"></i> <span>Menu Management</span>
@@ -249,11 +249,12 @@
             echo '<a href="manageAccounts.php" class="' . $activeClass . '">
                 <i class="fas fa-users-cog"></i> <span>Manage Accounts</span>
             </a>';
+            $activeClass = (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : '';
+            echo '<a href="reports.php" class="' . $activeClass . '">
+                <i class="fas fa-chart-bar"></i> <span>Reports</span>
+            </a>';
         }
         ?>
-        <a href="reports.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'reports.php' ? 'active' : ''; ?>">
-            <i class="fas fa-chart-bar"></i> <span>Reports</span>
-        </a>
     </div>
 
     <div class="user-info">
