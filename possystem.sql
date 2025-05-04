@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 04, 2025 at 06:17 AM
+-- Generation Time: May 04, 2025 at 02:40 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -46,23 +46,27 @@ CREATE TABLE `inventory` (
 INSERT INTO `inventory` (`productId`, `productName`, `quantity`, `type`, `requestedBy`, `transactionId`, `transactionStatus`, `dateOfIn`, `dateOfOut`) VALUES
 (7, 'Sugar', 100, 1, 0, 0, 1, '0000-00-00', '2025-04-17'),
 (11, 'Hotdog', 220, 0, 0, 0, 1, '2025-04-23', '0000-00-00'),
-(13, 'cheese', 10, 0, 0, 0, 1, '2025-04-25', '0000-00-00'),
 (14, 'Chicken', 10, 0, 0, 0, 1, '2025-04-10', '0000-00-00'),
-(15, 'Beef', 290, 0, 0, 0, 1, '2025-04-27', '0000-00-00'),
+(15, 'Beef', 90, 0, 0, 0, 1, '2025-04-27', '0000-00-00'),
 (17, 'garlic', 100, 0, 0, 0, 1, '2025-04-26', '0000-00-00'),
 (19, 'garlic', 50, 1, 0, 0, 1, '0000-00-00', '2025-04-27'),
-(21, 'Cheese Dog', 100, 0, 0, 0, 1, '2025-04-27', '0000-00-00'),
+(21, 'Cheese Dog', 50, 0, 0, 0, 1, '2025-04-27', '0000-00-00'),
 (22, 'Egg', 90, 0, 0, 0, 1, '2025-04-29', '0000-00-00'),
 (23, 'Beef', 10, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
 (24, 'Beef', 100, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
-(25, 'Bans', 20, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
+(25, 'Bans', 220, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
 (26, 'garlic', 10, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
 (27, 'Cabage', 10, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
 (28, 'cheese', 20, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
 (29, 'Chicken', 100, 1, 0, 0, 1, '0000-00-00', '2025-04-30'),
 (30, 'Chicken', 10, 1, 0, 0, 1, '0000-00-00', '2025-05-01'),
 (31, 'cheese', 50, 1, 0, 0, 1, '0000-00-00', '2025-05-03'),
-(32, 'Egg', 10, 1, 0, 0, 1, '0000-00-00', '2025-05-04');
+(32, 'Egg', 10, 1, 0, 0, 1, '0000-00-00', '2025-05-04'),
+(33, 'Egg', 10, 0, 0, 0, 1, '2025-05-04', '0000-00-00'),
+(34, 'cheese', 10, 1, 0, 0, 1, '0000-00-00', '2025-05-02'),
+(35, 'Cheese Dog', 50, 1, 0, 0, 1, '0000-00-00', '2025-05-04'),
+(36, 'Banananaaaaaaaaaaaaa', 2300, 0, 0, 0, 1, '2025-05-04', '0000-00-00'),
+(37, 'Bans', 20, 0, 0, 0, 1, '2025-05-04', '0000-00-00');
 
 -- --------------------------------------------------------
 
@@ -162,7 +166,7 @@ INSERT INTO `notifications` (`notificationId`, `notificationTarget`, `notificati
 (57, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', '', 0),
 (58, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', '', 0),
 (59, 0, 0, 43, 0, 1, 1, 'You have a request for In item that need your approval', 'restock', 0),
-(62, 0, 0, 44, 0, 0, 0, 'You have a request for In item that need your approval', 'No notes provided', 0),
+(62, 0, 0, 44, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided', 0),
 (63, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 20 remaining). Please restock it.', '', 0),
 (64, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 20 remaining). Please restock it.', '', 0),
 (67, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 20 remaining). Please restock it.', '', 0),
@@ -171,7 +175,15 @@ INSERT INTO `notifications` (`notificationId`, `notificationTarget`, `notificati
 (72, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 10 remaining). Please restock it.', '', 1),
 (73, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 10 remaining). Please restock it.', '', 1),
 (74, 0, 1, 0, 13, 0, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', '', 0),
-(75, 0, 1, 0, 14, 0, 0, 'Low stock alert! Chicken is running low on stock (only 10 remaining). Please restock it.', '', 0);
+(75, 0, 1, 0, 14, 0, 0, 'Low stock alert! Chicken is running low on stock (only 10 remaining). Please restock it.', '', 0),
+(76, 0, 1, 0, 33, 0, 0, 'Low stock alert! Egg is running low on stock (only 10 remaining). Please restock it.', '', 0),
+(77, 0, 1, 0, 37, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', '', 0),
+(78, 0, 0, 45, 0, 1, 1, 'You have a request for Out item that need your approval', 'No notes provided', 0),
+(79, 0, 0, 46, 0, 1, 1, 'You have a request for Out item that need your approval', 'No notes provided', 0),
+(80, 7, 2, 0, 0, 0, 0, 'Your request for Beef has been approved', '', 0),
+(81, 7, 2, 0, 0, 0, 0, 'Your request for Banananaaaaaaaaaaaaa has been approved', '', 0),
+(82, 7, 2, 0, 0, 0, 0, 'Your request for Bans has been approved', '', 0),
+(83, 0, 1, 0, 37, 0, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', '', 0);
 
 -- --------------------------------------------------------
 
@@ -389,58 +401,59 @@ CREATE TABLE `transaction` (
   `transactionType` int(11) NOT NULL COMMENT '0-In, 1-Out',
   `transactionStatus` int(11) NOT NULL COMMENT '0-Pending, 1-Approved, 2-Declined',
   `dateOfRequest` date NOT NULL,
-  `notes` varchar(255) NOT NULL
+  `notes` varchar(255) NOT NULL,
+  `is_archived` int(11) NOT NULL COMMENT '0-unarchived, 1-archived\r\n'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `transaction`
 --
 
-INSERT INTO `transaction` (`transactionId`, `requestorId`, `productId`, `productName`, `quantity`, `productType`, `transactionType`, `transactionStatus`, `dateOfRequest`, `notes`) VALUES
-(1, 5, 0, 'Patty\'s', 100, '1', 0, 0, '2025-04-17', ''),
-(2, 6, 0, 'Bans', 200, '1', 0, 0, '2025-04-17', ''),
-(3, 6, 0, 'Bans', 200, '1', 0, 0, '2025-04-17', ''),
-(4, 6, 0, 'Bans', 200, '1', 0, 0, '2025-04-17', ''),
-(5, 6, 0, 'Bans', 200, '1', 0, 0, '2025-04-17', ''),
-(6, 6, 0, 'Bans', 200, '1', 0, 0, '2025-04-17', ''),
-(7, 6, 0, 'Bans', 200, '1', 0, 2, '2025-04-17', ''),
-(8, 6, 0, 'Bans', 200, '1', 0, 0, '2025-04-17', ''),
-(9, 6, 0, 'Bans', 200, '1', 0, 0, '2025-04-17', ''),
-(10, 6, 0, 'Bans', 200, '1', 0, 0, '2025-04-17', ''),
-(11, 6, 0, 'Beef', 300, '2', 0, 0, '2025-04-17', ''),
-(12, 7, 8, 'Bans', 20, '', 1, 0, '2025-04-19', ''),
-(13, 7, 0, 'meat', 50, '2', 0, 0, '2025-04-19', ''),
-(14, 7, 0, 'meat', 50, '2', 0, 0, '2025-04-19', ''),
-(15, 7, 0, 'meat', 50, '2', 0, 0, '2025-04-19', ''),
-(16, 7, 0, 'Bans', 100, '3', 0, 0, '2025-04-19', ''),
-(17, 7, 0, 'banana', 20, '1', 0, 0, '2025-04-19', ''),
-(18, 7, 0, 'Banana', 20, '2', 0, 0, '2025-04-19', ''),
-(19, 7, 0, 'Hotdog', 10, '1', 0, 0, '2025-04-19', ''),
-(20, 7, 0, 'Hotdog', 20, '1', 0, 0, '2025-04-19', ''),
-(21, 7, 0, 'cheese', 30, '3', 0, 1, '2025-04-19', ''),
-(22, 7, 8, 'Bans', 10, '', 1, 0, '2025-04-19', 'eme lang'),
-(23, 7, 8, 'Bans', 10, '', 1, 2, '2025-04-19', 'eme lang'),
-(24, 7, 0, 'Hotdog', 10, '1', 0, 1, '2025-04-19', 'pukpok mo sa ulo mo'),
-(25, 7, 0, 'Banana', 50, '1', 0, 1, '2025-04-19', 'pamukpok sa ulo'),
-(26, 7, 8, 'Bans', 10, '', 1, 2, '2025-04-20', ''),
-(27, 7, 8, 'Bans', 20, '', 1, 2, '2025-04-20', 'Pang bato sa ulo'),
-(28, 7, 0, 'Hotdog', 100, '2', 0, 1, '2025-04-20', 'Pamalo sa Ulo'),
-(29, 7, 0, 'Bans', 20, '1', 0, 2, '2025-04-21', ''),
-(30, 7, 0, 'Hotdog', 100, '1', 0, 1, '2025-04-26', ''),
-(31, 7, 0, 'Chicken', 100, '1', 0, 1, '2025-04-26', ''),
-(32, 7, 0, 'Chicken', 20, '1', 0, 1, '2025-04-26', ''),
-(33, 7, 0, 'Beef', 500, '1', 0, 1, '2025-04-26', ''),
-(34, 7, 0, 'garlic', 50, '1', 0, 1, '2025-04-26', ''),
-(35, 7, 15, 'Beef', 100, '', 1, 1, '2025-04-26', 'pang ulam ko muna'),
-(36, 7, 8, 'Bans', 20, '', 1, 2, '2025-04-26', ''),
-(37, 7, 8, 'Bans', 19, '', 1, 2, '2025-04-27', ''),
-(38, 7, 8, 'Bans', 10, '', 1, 2, '2025-04-27', ''),
-(39, 7, 8, 'Bans', 5, '', 1, 1, '2025-04-27', ''),
-(40, 7, 15, 'Beef', 100, '', 1, 2, '2025-04-27', ''),
-(41, 7, 0, 'Cabage', 10, '1', 0, 1, '2025-04-27', ''),
-(42, 7, 0, 'Hotdog', 10, '', 0, 1, '2025-04-27', ''),
-(43, 7, 0, 'cheese', 50, '', 0, 1, '2025-04-29', 'restock'),
-(44, 7, 0, 'Bans', 200, '', 0, 0, '2025-04-30', '');
+INSERT INTO `transaction` (`transactionId`, `requestorId`, `productId`, `productName`, `quantity`, `productType`, `transactionType`, `transactionStatus`, `dateOfRequest`, `notes`, `is_archived`) VALUES
+(1, 5, 0, 'Patty\'s', 100, '1', 0, 0, '2025-04-17', '', 0),
+(2, 6, 0, 'Bans', 200, '1', 0, 0, '2025-04-17', '', 0),
+(3, 6, 0, 'Bans', 200, '1', 0, 0, '2025-04-17', '', 0),
+(4, 6, 0, 'Bans', 200, '1', 0, 0, '2025-04-17', '', 0),
+(5, 6, 0, 'Bans', 200, '1', 0, 0, '2025-04-17', '', 0),
+(6, 6, 0, 'Bans', 200, '1', 0, 0, '2025-04-17', '', 0),
+(7, 6, 0, 'Bans', 200, '1', 0, 2, '2025-04-17', '', 0),
+(8, 6, 0, 'Bans', 200, '1', 0, 0, '2025-04-17', '', 0),
+(9, 6, 0, 'Bans', 200, '1', 0, 0, '2025-04-17', '', 0),
+(10, 6, 0, 'Bans', 200, '1', 0, 0, '2025-04-17', '', 0),
+(11, 6, 0, 'Beef', 300, '2', 0, 0, '2025-04-17', '', 0),
+(12, 7, 8, 'Bans', 20, '', 1, 0, '2025-04-19', '', 0),
+(13, 7, 0, 'meat', 50, '2', 0, 0, '2025-04-19', '', 0),
+(14, 7, 0, 'meat', 50, '2', 0, 0, '2025-04-19', '', 0),
+(15, 7, 0, 'meat', 50, '2', 0, 0, '2025-04-19', '', 0),
+(16, 7, 0, 'Bans', 100, '3', 0, 0, '2025-04-19', '', 0),
+(17, 7, 0, 'banana', 20, '1', 0, 0, '2025-04-19', '', 0),
+(18, 7, 0, 'Banana', 20, '2', 0, 0, '2025-04-19', '', 0),
+(19, 7, 0, 'Hotdog', 10, '1', 0, 0, '2025-04-19', '', 0),
+(20, 7, 0, 'Hotdog', 20, '1', 0, 0, '2025-04-19', '', 0),
+(21, 7, 0, 'cheese', 30, '3', 0, 1, '2025-04-19', '', 0),
+(22, 7, 8, 'Bans', 10, '', 1, 0, '2025-04-19', 'eme lang', 0),
+(23, 7, 8, 'Bans', 10, '', 1, 2, '2025-04-19', 'eme lang', 0),
+(24, 7, 0, 'Hotdog', 10, '1', 0, 1, '2025-04-19', 'pukpok mo sa ulo mo', 0),
+(25, 7, 0, 'Banana', 50, '1', 0, 1, '2025-04-19', 'pamukpok sa ulo', 0),
+(26, 7, 8, 'Bans', 10, '', 1, 2, '2025-04-20', '', 0),
+(27, 7, 8, 'Bans', 20, '', 1, 2, '2025-04-20', 'Pang bato sa ulo', 0),
+(28, 7, 0, 'Hotdog', 100, '2', 0, 1, '2025-04-20', 'Pamalo sa Ulo', 0),
+(29, 7, 0, 'Bans', 20, '1', 0, 2, '2025-04-21', '', 0),
+(30, 7, 0, 'Hotdog', 100, '1', 0, 1, '2025-04-26', '', 0),
+(31, 7, 0, 'Chicken', 100, '1', 0, 1, '2025-04-26', '', 0),
+(32, 7, 0, 'Chicken', 20, '1', 0, 1, '2025-04-26', '', 0),
+(33, 7, 0, 'Beef', 500, '1', 0, 1, '2025-04-26', '', 0),
+(34, 7, 0, 'garlic', 50, '1', 0, 1, '2025-04-26', '', 0),
+(35, 7, 15, 'Beef', 100, '', 1, 1, '2025-04-26', 'pang ulam ko muna', 0),
+(36, 7, 8, 'Bans', 20, '', 1, 2, '2025-04-26', '', 1),
+(39, 7, 8, 'Bans', 5, '', 1, 1, '2025-04-27', '', 0),
+(40, 7, 15, 'Beef', 100, '', 1, 2, '2025-04-27', '', 1),
+(41, 7, 0, 'Cabage', 10, '1', 0, 1, '2025-04-27', '', 0),
+(42, 7, 0, 'Hotdog', 10, '', 0, 1, '2025-04-27', '', 0),
+(43, 7, 0, 'cheese', 50, '', 0, 1, '2025-04-29', 'restock', 0),
+(44, 7, 0, 'Bans', 200, '', 0, 1, '2025-04-30', '', 0),
+(45, 7, 36, 'Banananaaaaaaaaaaaaa', 200, '', 1, 1, '2025-05-04', '', 0),
+(46, 7, 15, 'Beef', 200, '', 1, 1, '2025-05-04', '', 1);
 
 -- --------------------------------------------------------
 
@@ -519,7 +532,7 @@ ALTER TABLE `userstable`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `menu`
@@ -531,7 +544,7 @@ ALTER TABLE `menu`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notificationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `notificationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
 
 --
 -- AUTO_INCREMENT for table `orderedhistory`
@@ -549,7 +562,7 @@ ALTER TABLE `ordereditemhistory`
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `transactionId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `userstable`
