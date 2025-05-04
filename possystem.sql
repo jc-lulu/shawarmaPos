@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 01, 2025 at 02:12 PM
+-- Generation Time: May 04, 2025 at 06:17 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,24 +44,25 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`productId`, `productName`, `quantity`, `type`, `requestedBy`, `transactionId`, `transactionStatus`, `dateOfIn`, `dateOfOut`) VALUES
-(5, 'Bans', 5, 1, 0, 0, 1, '0000-00-00', '2025-04-17'),
-(6, 'Sugar', 100, 1, 0, 0, 1, '0000-00-00', '2025-04-17'),
 (7, 'Sugar', 100, 1, 0, 0, 1, '0000-00-00', '2025-04-17'),
 (11, 'Hotdog', 220, 0, 0, 0, 1, '2025-04-23', '0000-00-00'),
-(13, 'cheese', 60, 0, 0, 0, 1, '2025-04-25', '0000-00-00'),
-(14, 'Chicken', 20, 0, 0, 0, 1, '2025-04-10', '0000-00-00'),
+(13, 'cheese', 10, 0, 0, 0, 1, '2025-04-25', '0000-00-00'),
+(14, 'Chicken', 10, 0, 0, 0, 1, '2025-04-10', '0000-00-00'),
 (15, 'Beef', 290, 0, 0, 0, 1, '2025-04-27', '0000-00-00'),
 (17, 'garlic', 100, 0, 0, 0, 1, '2025-04-26', '0000-00-00'),
 (19, 'garlic', 50, 1, 0, 0, 1, '0000-00-00', '2025-04-27'),
 (21, 'Cheese Dog', 100, 0, 0, 0, 1, '2025-04-27', '0000-00-00'),
-(22, 'Egg', 100, 0, 0, 0, 1, '2025-04-29', '0000-00-00'),
+(22, 'Egg', 90, 0, 0, 0, 1, '2025-04-29', '0000-00-00'),
 (23, 'Beef', 10, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
 (24, 'Beef', 100, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
 (25, 'Bans', 20, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
 (26, 'garlic', 10, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
 (27, 'Cabage', 10, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
 (28, 'cheese', 20, 1, 0, 0, 1, '0000-00-00', '2025-04-29'),
-(29, 'Chicken', 100, 1, 0, 0, 1, '0000-00-00', '2025-04-30');
+(29, 'Chicken', 100, 1, 0, 0, 1, '0000-00-00', '2025-04-30'),
+(30, 'Chicken', 10, 1, 0, 0, 1, '0000-00-00', '2025-05-01'),
+(31, 'cheese', 50, 1, 0, 0, 1, '0000-00-00', '2025-05-03'),
+(32, 'Egg', 10, 1, 0, 0, 1, '0000-00-00', '2025-05-04');
 
 -- --------------------------------------------------------
 
@@ -122,14 +123,14 @@ INSERT INTO `notifications` (`notificationId`, `notificationTarget`, `notificati
 (6, 0, 0, 27, 0, 1, 1, 'You have a request for Out item that need your approval', 'Pang bato sa ulo', 0),
 (7, 0, 0, 28, 0, 1, 1, 'You have a request for In item that need your approval', 'Pamalo sa Ulo', 0),
 (8, 0, 0, 29, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided', 0),
-(9, 7, 2, 0, 0, 1, 0, 'Your request for Bans has been approved', '', 0),
-(10, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', '', 0),
-(11, 7, 2, 0, 0, 1, 0, 'Your request for Bans has been approved', '', 0),
-(12, 7, 2, 0, 0, 1, 0, 'Your request for Banana has been approved', '', 0),
-(13, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', '', 0),
-(14, 7, 2, 0, 0, 1, 0, 'Your request for cheese has been approved', '', 0),
+(9, 7, 2, 0, 0, 1, 0, 'Your request for Bans has been approved', '', 1),
+(10, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', '', 1),
+(11, 7, 2, 0, 0, 1, 0, 'Your request for Bans has been approved', '', 1),
+(12, 7, 2, 0, 0, 1, 0, 'Your request for Banana has been approved', '', 1),
+(13, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', '', 1),
+(14, 7, 2, 0, 0, 1, 0, 'Your request for cheese has been approved', '', 1),
 (15, 0, 0, 30, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided', 0),
-(16, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', '', 0),
+(16, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', '', 1),
 (17, 0, 0, 31, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided', 0),
 (18, 7, 2, 0, 0, 1, 0, 'Your request for Chicken has been approved', '', 0),
 (19, 0, 0, 32, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided', 0),
@@ -149,34 +150,28 @@ INSERT INTO `notifications` (`notificationId`, `notificationTarget`, `notificati
 (33, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', '', 0),
 (34, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', '', 0),
 (35, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', '', 0),
-(36, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', '', 0),
+(36, 7, 2, 0, 0, 0, 0, 'Your request for  has been declined', '', 0),
 (37, 0, 0, 40, 0, 1, 1, 'You have a request for Out item that need your approval', 'No notes provided', 0),
-(38, 7, 2, 0, 0, 1, 0, 'Your request for  has been declined', '', 0),
+(38, 7, 2, 0, 0, 0, 0, 'Your request for  has been declined', '', 0),
 (39, 0, 0, 41, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided', 0),
-(40, 7, 2, 0, 0, 1, 0, 'Your request for Cabage has been approved', '', 0),
+(40, 7, 2, 0, 0, 0, 0, 'Your request for Cabage has been approved', '', 0),
 (41, 0, 0, 42, 0, 1, 1, 'You have a request for In item that need your approval', 'No notes provided', 0),
-(42, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', '', 1),
-(43, 0, 1, 0, 8, 1, 0, 'Low stock alert! Product ID: 8 is running low on stock. Please restock it.', '', 0),
-(44, 0, 1, 0, 18, 1, 0, 'Low stock alert! garlic is running low on stock (only 10 remaining). Please restock it.', '', 0),
-(45, 0, 1, 0, 20, 1, 0, 'Low stock alert! Cabage is running low on stock (only 10 remaining). Please restock it.', '', 0),
-(46, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', '', 0),
-(47, 0, 1, 0, 18, 1, 0, 'Low stock alert! garlic is running low on stock (only 10 remaining). Please restock it.', '', 0),
-(48, 0, 1, 0, 20, 1, 0, 'Low stock alert! Cabage is running low on stock (only 10 remaining). Please restock it.', '', 0),
-(49, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', '', 0),
-(50, 0, 1, 0, 20, 1, 0, 'Low stock alert! Cabage is running low on stock (only 10 remaining). Please restock it.', '', 0),
-(51, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', '', 0),
-(52, 0, 1, 0, 18, 1, 0, 'Low stock alert! garlic is running low on stock (only 10 remaining). Please restock it.', '', 0),
-(53, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', '', 0),
-(55, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', '', 1),
-(56, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', '', 1),
-(57, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', '', 1),
-(58, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', '', 1),
+(42, 7, 2, 0, 0, 1, 0, 'Your request for Hotdog has been approved', '', 0),
+(55, 0, 1, 0, 8, 1, 0, 'Low stock alert! Bans is running low on stock (only 20 remaining). Please restock it.', '', 0),
+(56, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', '', 0),
+(57, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', '', 0),
+(58, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', '', 0),
 (59, 0, 0, 43, 0, 1, 1, 'You have a request for In item that need your approval', 'restock', 0),
-(62, 0, 0, 44, 0, 1, 0, 'You have a request for In item that need your approval', 'No notes provided', 1),
-(63, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 20 remaining). Please restock it.', '', 1),
-(64, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 20 remaining). Please restock it.', '', 1),
-(65, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 20 remaining). Please restock it.', '', 0),
-(66, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 20 remaining). Please restock it.', '', 0);
+(62, 0, 0, 44, 0, 0, 0, 'You have a request for In item that need your approval', 'No notes provided', 0),
+(63, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 20 remaining). Please restock it.', '', 0),
+(64, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 20 remaining). Please restock it.', '', 0),
+(67, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 20 remaining). Please restock it.', '', 0),
+(68, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 20 remaining). Please restock it.', '', 0),
+(71, 0, 1, 0, 13, 1, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', '', 0),
+(72, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 10 remaining). Please restock it.', '', 1),
+(73, 0, 1, 0, 14, 1, 0, 'Low stock alert! Chicken is running low on stock (only 10 remaining). Please restock it.', '', 1),
+(74, 0, 1, 0, 13, 0, 0, 'Low stock alert! cheese is running low on stock (only 10 remaining). Please restock it.', '', 0),
+(75, 0, 1, 0, 14, 0, 0, 'Low stock alert! Chicken is running low on stock (only 10 remaining). Please restock it.', '', 0);
 
 -- --------------------------------------------------------
 
@@ -192,56 +187,67 @@ CREATE TABLE `orderedhistory` (
   `timeOfOrder` time NOT NULL,
   `weekNumber` int(11) NOT NULL,
   `weekYear` int(11) NOT NULL,
-  `weekLabel` varchar(20) NOT NULL
+  `weekLabel` varchar(20) NOT NULL,
+  `historyStatus` int(11) NOT NULL COMMENT '0-unarchive, 1-archive'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `orderedhistory`
 --
 
-INSERT INTO `orderedhistory` (`historyId`, `orderId`, `totalCost`, `dateOfOrder`, `timeOfOrder`, `weekNumber`, `weekYear`, `weekLabel`) VALUES
-(1, 1, 210, '2025-02-13', '00:00:00', 10, 2025, 'Week 10, 2025'),
-(2, 2, 180, '2025-02-13', '07:05:19', 7, 2025, 'Week 7, 2025'),
-(3, 3, 310, '2025-02-13', '07:07:01', 7, 2025, 'Week 7, 2025'),
-(4, 4, 255, '2025-04-13', '07:27:50', 15, 2025, 'Week 15, 2025'),
-(5, 5, 450, '2025-04-13', '07:34:31', 15, 2025, 'Week 15, 2025'),
-(6, 6, 510, '2025-04-13', '07:44:55', 15, 2025, 'Week 15, 2025'),
-(7, 7, 240, '2025-04-16', '03:55:01', 16, 2025, 'Week 16, 2025'),
-(8, 8, 260, '2025-04-17', '09:13:24', 16, 2025, 'Week 16, 2025'),
-(9, 9, 120, '2025-04-17', '09:43:13', 16, 2025, 'Week 16, 2025'),
-(10, 10, 240, '2025-04-17', '09:46:28', 16, 2025, 'Week 16, 2025'),
-(11, 11, 240, '2025-04-17', '09:47:04', 16, 2025, 'Week 16, 2025'),
-(12, 12, 200, '2025-04-17', '09:51:35', 16, 2025, 'Week 16, 2025'),
-(13, 13, 180, '2025-04-17', '09:55:20', 16, 2025, 'Week 16, 2025'),
-(14, 14, 200, '2025-04-17', '09:55:39', 16, 2025, 'Week 16, 2025'),
-(15, 15, 240, '2025-04-17', '10:01:23', 16, 2025, 'Week 16, 2025'),
-(16, 16, 180, '2025-04-17', '10:02:23', 16, 2025, 'Week 16, 2025'),
-(17, 17, 160, '2025-04-17', '10:06:32', 16, 2025, 'Week 16, 2025'),
-(18, 18, 80, '2025-04-17', '10:07:28', 16, 2025, 'Week 16, 2025'),
-(19, 19, 600, '2025-04-17', '10:17:55', 16, 2025, 'Week 16, 2025'),
-(20, 20, 350, '2025-04-17', '10:36:17', 16, 2025, 'Week 16, 2025'),
-(21, 21, 230, '2025-04-17', '11:42:44', 16, 2025, 'Week 16, 2025'),
-(22, 22, 240, '2025-04-17', '11:46:54', 16, 2025, 'Week 16, 2025'),
-(23, 23, 180, '2025-02-17', '11:50:13', 8, 2025, 'Week 8, 2025'),
-(24, 24, 425, '2025-03-17', '12:16:25', 12, 2025, 'Week 12, 2025'),
-(25, 25, 200, '2025-03-17', '14:22:41', 12, 2025, 'Week 12, 2025'),
-(26, 26, 350, '2025-04-21', '15:57:54', 17, 2025, 'Week 17, 2025'),
-(27, 27, 180, '2025-04-25', '01:11:59', 17, 2025, 'Week 17, 2025'),
-(28, 28, 280, '2025-04-27', '06:38:50', 17, 2025, 'Week 17, 2025'),
-(29, 29, 200, '2025-04-27', '07:34:21', 17, 2025, 'Week 17, 2025'),
-(30, 30, 420, '2025-04-27', '08:01:12', 17, 2025, 'Week 17, 2025'),
-(31, 31, 280, '2025-04-27', '08:11:07', 17, 2025, 'Week 17, 2025'),
-(32, 32, 535, '2025-04-27', '08:15:51', 17, 2025, 'Week 17, 2025'),
-(33, 33, 380, '2025-04-27', '08:15:55', 17, 2025, 'Week 17, 2025'),
-(34, 34, 285, '2025-04-27', '13:43:48', 17, 2025, 'Week 17, 2025'),
-(35, 35, 575, '2025-04-30', '04:19:06', 18, 2025, 'Week 18, 2025'),
-(36, 36, 200, '2025-05-01', '02:44:56', 18, 2025, 'Week 18, 2025'),
-(37, 37, 100, '2025-05-01', '04:04:11', 18, 2025, 'Week 18, 2025'),
-(38, 38, 280, '2025-05-01', '07:09:05', 18, 2025, 'Week 18, 2025'),
-(39, 39, 200, '2025-05-01', '10:10:39', 18, 2025, 'Week 18, 2025'),
-(40, 40, 160, '2025-05-01', '10:12:00', 18, 2025, 'Week 18, 2025'),
-(41, 41, 240, '2025-05-01', '10:15:23', 18, 2025, 'Week 18, 2025'),
-(42, 42, 240, '2025-05-01', '10:18:07', 18, 2025, 'Week 18, 2025');
+INSERT INTO `orderedhistory` (`historyId`, `orderId`, `totalCost`, `dateOfOrder`, `timeOfOrder`, `weekNumber`, `weekYear`, `weekLabel`, `historyStatus`) VALUES
+(1, 1, 210, '2025-02-13', '00:00:00', 10, 2025, 'Week 10, 2025', 0),
+(2, 2, 180, '2025-02-13', '07:05:19', 7, 2025, 'Week 7, 2025', 0),
+(3, 3, 310, '2025-02-13', '07:07:01', 7, 2025, 'Week 7, 2025', 0),
+(4, 4, 255, '2025-04-13', '07:27:50', 15, 2025, 'Week 15, 2025', 0),
+(5, 5, 450, '2025-04-13', '07:34:31', 15, 2025, 'Week 15, 2025', 0),
+(6, 6, 510, '2025-04-13', '07:44:55', 15, 2025, 'Week 15, 2025', 0),
+(7, 7, 240, '2025-04-16', '03:55:01', 16, 2025, 'Week 16, 2025', 0),
+(8, 8, 260, '2025-04-17', '09:13:24', 16, 2025, 'Week 16, 2025', 0),
+(9, 9, 120, '2025-04-17', '09:43:13', 16, 2025, 'Week 16, 2025', 0),
+(10, 10, 240, '2025-04-17', '09:46:28', 16, 2025, 'Week 16, 2025', 0),
+(11, 11, 240, '2025-04-17', '09:47:04', 16, 2025, 'Week 16, 2025', 0),
+(12, 12, 200, '2025-04-17', '09:51:35', 16, 2025, 'Week 16, 2025', 0),
+(13, 13, 180, '2025-04-17', '09:55:20', 16, 2025, 'Week 16, 2025', 0),
+(14, 14, 200, '2025-04-17', '09:55:39', 16, 2025, 'Week 16, 2025', 0),
+(15, 15, 240, '2025-04-17', '10:01:23', 16, 2025, 'Week 16, 2025', 0),
+(16, 16, 180, '2025-04-17', '10:02:23', 16, 2025, 'Week 16, 2025', 0),
+(17, 17, 160, '2025-04-17', '10:06:32', 16, 2025, 'Week 16, 2025', 0),
+(18, 18, 80, '2025-04-17', '10:07:28', 16, 2025, 'Week 16, 2025', 0),
+(19, 19, 600, '2025-04-17', '10:17:55', 16, 2025, 'Week 16, 2025', 0),
+(20, 20, 350, '2025-04-17', '10:36:17', 16, 2025, 'Week 16, 2025', 0),
+(21, 21, 230, '2025-04-17', '11:42:44', 16, 2025, 'Week 16, 2025', 0),
+(22, 22, 240, '2025-04-17', '11:46:54', 16, 2025, 'Week 16, 2025', 0),
+(23, 23, 180, '2025-02-17', '11:50:13', 8, 2025, 'Week 8, 2025', 0),
+(24, 24, 425, '2025-03-17', '12:16:25', 12, 2025, 'Week 12, 2025', 0),
+(25, 25, 200, '2025-03-17', '14:22:41', 12, 2025, 'Week 12, 2025', 0),
+(26, 26, 350, '2025-04-21', '15:57:54', 17, 2025, 'Week 17, 2025', 0),
+(27, 27, 180, '2025-04-25', '01:11:59', 17, 2025, 'Week 17, 2025', 0),
+(28, 28, 280, '2025-04-27', '06:38:50', 17, 2025, 'Week 17, 2025', 0),
+(29, 29, 200, '2025-04-27', '07:34:21', 17, 2025, 'Week 17, 2025', 0),
+(30, 30, 420, '2025-04-27', '08:01:12', 17, 2025, 'Week 17, 2025', 0),
+(31, 31, 280, '2025-04-27', '08:11:07', 17, 2025, 'Week 17, 2025', 0),
+(32, 32, 535, '2025-04-27', '08:15:51', 17, 2025, 'Week 17, 2025', 0),
+(33, 33, 380, '2025-04-27', '08:15:55', 17, 2025, 'Week 17, 2025', 0),
+(34, 34, 285, '2025-04-27', '13:43:48', 17, 2025, 'Week 17, 2025', 0),
+(35, 35, 575, '2025-04-30', '04:19:06', 18, 2025, 'Week 18, 2025', 0),
+(36, 36, 200, '2025-05-01', '02:44:56', 18, 2025, 'Week 18, 2025', 0),
+(37, 37, 100, '2025-05-01', '04:04:11', 18, 2025, 'Week 18, 2025', 0),
+(38, 38, 280, '2025-05-01', '07:09:05', 18, 2025, 'Week 18, 2025', 0),
+(39, 39, 200, '2025-05-01', '10:10:39', 18, 2025, 'Week 18, 2025', 0),
+(40, 40, 160, '2025-05-01', '10:12:00', 18, 2025, 'Week 18, 2025', 0),
+(41, 41, 240, '2025-05-01', '10:15:23', 18, 2025, 'Week 18, 2025', 0),
+(42, 42, 240, '2025-05-01', '10:18:07', 18, 2025, 'Week 18, 2025', 0),
+(43, 43, 320, '2025-05-04', '02:27:18', 18, 2025, 'Week 18, 2025', 0),
+(44, 44, 180, '2025-05-04', '02:37:49', 18, 2025, 'Week 18, 2025', 0),
+(45, 45, 280, '2025-05-04', '02:41:41', 18, 2025, 'Week 18, 2025', 0),
+(46, 46, 280, '2025-05-04', '02:48:46', 18, 2025, 'Week 18, 2025', 0),
+(47, 47, 200, '2025-05-04', '02:49:42', 18, 2025, 'Week 18, 2025', 0),
+(48, 48, 200, '2025-05-04', '02:52:04', 18, 2025, 'Week 18, 2025', 0),
+(49, 49, 450, '2025-05-04', '02:52:33', 18, 2025, 'Week 18, 2025', 0),
+(50, 50, 240, '2025-05-04', '05:18:47', 18, 2025, 'Week 18, 2025', 0),
+(51, 51, 370, '2025-05-04', '05:19:45', 18, 2025, 'Week 18, 2025', 0),
+(52, 52, 240, '2025-05-04', '05:21:10', 18, 2025, 'Week 18, 2025', 1);
 
 -- --------------------------------------------------------
 
@@ -348,7 +354,24 @@ INSERT INTO `ordereditemhistory` (`historyId`, `itemKey`, `productName`, `produc
 (90, 39, 'Chicken Shawarma Burger', 120, 1, 120, '2025-05-01'),
 (91, 40, 'Shawarma Solo', 80, 2, 160, '2025-05-01'),
 (92, 41, 'Chicken Shawarma Burger', 120, 2, 240, '2025-05-01'),
-(93, 42, 'Chicken Shawarma Burger', 120, 2, 240, '2025-05-01');
+(93, 42, 'Chicken Shawarma Burger', 120, 2, 240, '2025-05-01'),
+(94, 43, 'Chicken Shawarma Burger', 120, 2, 240, '2025-05-04'),
+(95, 43, 'Shawarma Solo', 80, 1, 80, '2025-05-04'),
+(96, 44, 'Shawarma Solo', 80, 1, 80, '2025-05-04'),
+(97, 44, 'Shawarma Large', 100, 1, 100, '2025-05-04'),
+(98, 45, 'Chicken Shawarma Burger', 120, 1, 120, '2025-05-04'),
+(99, 45, 'Shawarma Solo', 80, 2, 160, '2025-05-04'),
+(100, 46, 'Chicken Shawarma Burger', 120, 1, 120, '2025-05-04'),
+(101, 46, 'Shawarma Solo', 80, 2, 160, '2025-05-04'),
+(102, 47, 'Shawarma Large', 100, 2, 200, '2025-05-04'),
+(103, 48, 'Shawarma Large', 100, 2, 200, '2025-05-04'),
+(104, 49, 'Shawarma Large', 100, 2, 200, '2025-05-04'),
+(105, 49, 'Chicken Shawarma Burger', 120, 1, 120, '2025-05-04'),
+(106, 49, 'Shawarma Rice', 130, 1, 130, '2025-05-04'),
+(107, 50, 'Chicken Shawarma Burger', 120, 2, 240, '2025-05-04'),
+(108, 51, 'Chicken Shawarma Burger', 120, 2, 240, '2025-05-04'),
+(109, 51, 'Shawarma Rice', 130, 1, 130, '2025-05-04'),
+(110, 52, 'Chicken Shawarma Burger', 120, 2, 240, '2025-05-04');
 
 -- --------------------------------------------------------
 
@@ -439,7 +462,8 @@ CREATE TABLE `userstable` (
 
 INSERT INTO `userstable` (`usersId`, `username`, `email`, `password`, `role`) VALUES
 (7, 'staff', 'staff@gmail.com', '$2y$10$N9g3lchYZdEvXYjT0eEI1.UXTcwVAnCuxUEOGfoERoNR0BwOqZvmm', 1),
-(8, 'admin', 'admin@gmail.com', '$2y$10$feIxMZi97grNE8WmkuxfFusz5wXqUVJcWj4m6Fw4Jh3Uzqu3yRTu6', 0);
+(8, 'admin', 'admin@gmail.com', '$2y$10$feIxMZi97grNE8WmkuxfFusz5wXqUVJcWj4m6Fw4Jh3Uzqu3yRTu6', 0),
+(9, 'staff2', 'staff2@gmail.com', '$2y$10$1h7Ey7CMYVs1w0tQgekJ/.gUciyiGmCt.WBNt.CFesyCOOXay4xOO', 1);
 
 --
 -- Indexes for dumped tables
@@ -495,7 +519,7 @@ ALTER TABLE `userstable`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `productId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `menu`
@@ -507,19 +531,19 @@ ALTER TABLE `menu`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notificationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `notificationId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `orderedhistory`
 --
 ALTER TABLE `orderedhistory`
-  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT for table `ordereditemhistory`
 --
 ALTER TABLE `ordereditemhistory`
-  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `historyId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
 -- AUTO_INCREMENT for table `transaction`
@@ -531,7 +555,7 @@ ALTER TABLE `transaction`
 -- AUTO_INCREMENT for table `userstable`
 --
 ALTER TABLE `userstable`
-  MODIFY `usersId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `usersId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
