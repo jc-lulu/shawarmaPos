@@ -27,14 +27,14 @@ try {
                     transactionStatus, 
                     dateOfRequest,
                     notes
-                  FROM transaction 
+                  FROM transaction WHERE is_archived = 0
                   ORDER BY transactionId DESC";
-                  
+
         $stmt = $connection->prepare($query);
         if ($stmt === false) {
             throw new Exception("Prepare statement error: " . $connection->error);
         }
-        
+
         $stmt->execute();
     } else {
         // staff
@@ -49,20 +49,20 @@ try {
                     dateOfRequest,
                     notes
                   FROM transaction 
-                  WHERE requestorId = ?
+                  WHERE requestorId = ? AND is_archived = 0
                   ORDER BY transactionId DESC";
-                  
+
         $stmt = $connection->prepare($query);
         if ($stmt === false) {
             throw new Exception("Prepare statement error: " . $connection->error);
         }
-        
+
         $stmt->bind_param("i", $currentUserId);
         $stmt->execute();
     }
-    
+
     $result = $stmt->get_result();
-    
+
     if ($result === false) {
         throw new Exception("Database query error: " . $connection->error);
     }
@@ -72,7 +72,7 @@ try {
         while ($row = $result->fetch_assoc()) {
             // Format date for display
             $requestDate = !empty($row['dateOfRequest']) ? date('Y-m-d', strtotime($row['dateOfRequest'])) : 'N/A';
-            
+
             // Determine status text
             $statusText = 'Unknown';
             if ($row['transactionStatus'] == 0) {
@@ -82,10 +82,10 @@ try {
             } else if ($row['transactionStatus'] == 2) {
                 $statusText = 'Rejected';
             }
-            
+
             // Determine transaction type text
             $typeText = $row['transactionType'] == 0 ? 'In' : 'Out';
-            
+
             // Build data row
             $response['data'][] = array(
                 'transactionId' => $row['transactionId'],
@@ -101,22 +101,22 @@ try {
             );
         }
     }
-    
+
     // Clear any output buffer and output clean JSON
     ob_end_clean();
-    
+
     // Set headers and return JSON
     header('Content-Type: application/json');
     header('Cache-Control: no-cache, no-store, must-revalidate');
     echo json_encode($response);
-    
+
 } catch (Exception $e) {
     // Clear buffer and return error JSON
     ob_end_clean();
-    
+
     // Log error
     error_log("Transaction fetch error: " . $e->getMessage());
-    
+
     // Return JSON with error info
     header('Content-Type: application/json');
     echo json_encode(array(

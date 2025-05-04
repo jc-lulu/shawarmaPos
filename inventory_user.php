@@ -186,7 +186,8 @@ include('server_side/check_session.php');
                                 <i class="fas fa-tag me-2 text-primary"></i>Product Name
                             </label>
                             <input type="text" class="form-control form-control-lg border-0 bg-light"
-                                id="productIn_item" name="productIn_item" placeholder="Enter product name" required>
+                                id="productIn_item" name="productIn_item" placeholder="Enter product name"
+                                maxlength="20" minlength="3" required>
                         </div>
 
                         <!-- <div class="mb-4">
@@ -210,7 +211,7 @@ include('server_side/check_session.php');
                                 <div class="input-group">
                                     <input type="number" class="form-control form-control-lg border-0 bg-light"
                                         id="productIn_quantity" name="productIn_quantity" min="1" placeholder="0"
-                                        required>
+                                        max="2000" min="1" required>
                                     <span class="input-group-text bg-light border-0">units</span>
                                 </div>
                             </div>
@@ -220,7 +221,8 @@ include('server_side/check_session.php');
                                     <i class="fas fa-calendar-alt me-2 text-primary"></i>Date
                                 </label>
                                 <input type="date" class="form-control form-control-lg border-0 bg-light" id="dateOfIn"
-                                    name="dateOfIn" required>
+                                    name="dateOfIn" min="<?php echo date('Y-m-d') ?>" max="<?php echo date('Y-m-d') ?>"
+                                    required>
                             </div>
                         </div>
 
@@ -482,7 +484,8 @@ include('server_side/check_session.php');
                                 <i class="fas fa-calendar-alt me-2 text-danger"></i>Date Out
                             </label>
                             <input type="date" class="form-control form-control-lg border-0 bg-light" id="dateOfOut"
-                                name="dateOfOut" required>
+                                name="dateOfOut" min="<?php echo date('Y-m-d') ?>" max="<?php echo date('Y-m-d') ?>"
+                                disable required>
                         </div>
 
                         <div class="alert alert-info" role="alert">
