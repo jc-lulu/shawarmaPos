@@ -45,13 +45,13 @@ include('server_side/check_session.php');
                         <form id="uploadMenu" method="POST" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label for="product_name" class="form-label">Product Name</label>
-                                <input type="text" class="form-control" id="product_name" name="product_name"
+                                <input type="text" class="form-control" id="product_name" name="product_name" minlenght="5" maxlength="10"
                                     placeholder="Enter product name" required>
                             </div>
 
                             <div class="mb-3">
                                 <label for="price" class="form-label">Price (₱)</label>
-                                <input type="number" class="form-control" id="price" name="price"
+                                <input type="number" class="form-control" id="price" name="price" min="0" max="2000"
                                     placeholder="Enter price" step="0.01" required>
                             </div>
 

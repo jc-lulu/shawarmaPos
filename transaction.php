@@ -107,7 +107,7 @@ include('server_side/check_session.php');
                                 <i class="fas fa-tag me-2 text-primary"></i>Product Name
                             </label>
                             <input type="text" class="form-control form-control-lg border-0 bg-light"
-                                id="productIn_item" name="productIn_item" placeholder="Enter product name" required>
+                                id="productIn_item" name="productIn_item" placeholder="Enter product name" maxlength = "20" minlength = "5" required>
                         </div>
 
                         <!-- <div class="mb-4">
@@ -130,7 +130,7 @@ include('server_side/check_session.php');
                                 </label>
                                 <div class="input-group">
                                     <input type="number" class="form-control form-control-lg border-0 bg-light"
-                                        id="productIn_quantity" name="productIn_quantity" min="1" placeholder="0"
+                                        id="productIn_quantity" name="productIn_quantity" min="1" placeholder="0" max="5000"
                                         required>
                                     <span class="input-group-text bg-light border-0">units</span>
                                 </div>
