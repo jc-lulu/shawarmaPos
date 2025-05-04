@@ -7,7 +7,7 @@ include('server_side/check_session.php');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POS System</title>
+    <title>Menu</title>
     <?php include('header/header.php') ?>
     <link href="styles/menu.css" rel="stylesheet">
 </head>
@@ -64,14 +64,14 @@ include('server_side/check_session.php');
                 url: "server_side/fetchMenu.php",
                 type: "GET",
                 dataType: "json",
-                success: function(products) {
+                success: function (products) {
                     // Store all products for filtering
                     allProducts = products;
 
                     // Apply initial filter (show all)
                     filterProducts(currentFilter);
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error("Error loading products:", error);
                     $("#product-list").html(`
                     <div class="col-12 text-center py-5">
@@ -124,7 +124,7 @@ include('server_side/check_session.php');
             let productHTML = "";
 
             if (products.length > 0) {
-                products.forEach(function(product) {
+                products.forEach(function (product) {
                     productHTML += `
                 <div class="col-md-3 product-container p-3">
                     <div class="image-container">
@@ -311,12 +311,12 @@ include('server_side/check_session.php');
                 <i class="fas fa-check-circle me-2"></i>Place Order (₱${subtotal.toFixed(2)})
             `);
 
-            $(".qty-btn.minus").on("click", function() {
+            $(".qty-btn.minus").on("click", function () {
                 const id = $(this).data("id");
                 removeFromCart(id);
             });
 
-            $(".qty-btn.plus").on("click", function() {
+            $(".qty-btn.plus").on("click", function () {
                 const id = $(this).data("id");
                 const item = cart.find(item => item.id === id);
                 if (item) {
@@ -325,7 +325,7 @@ include('server_side/check_session.php');
             });
 
             // clear cart button
-            $("#clear-cart").on("click", function() {
+            $("#clear-cart").on("click", function () {
                 Swal.fire({
                     title: 'Clear cart?',
                     text: "All items will be removed from your order.",
@@ -348,7 +348,7 @@ include('server_side/check_session.php');
         }
 
         // Document ready
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Initial load
             loadProducts();
 
@@ -356,37 +356,37 @@ include('server_side/check_session.php');
             updateInvoice();
 
             // Filter button click events
-            $('#filter-all').on('click', function() {
+            $('#filter-all').on('click', function () {
                 filterProducts('all');
             });
 
-            $('#filter-0').on('click', function() {
+            $('#filter-0').on('click', function () {
                 filterProducts('0');
             });
 
-            $('#filter-1').on('click', function() {
+            $('#filter-1').on('click', function () {
                 filterProducts('1');
             });
 
-            $('#filter-2').on('click', function() {
+            $('#filter-2').on('click', function () {
                 filterProducts('2');
             });
 
-            $('#filter-3').on('click', function() {
+            $('#filter-3').on('click', function () {
                 filterProducts('3');
             });
 
-            $('#filter-4').on('click', function() {
+            $('#filter-4').on('click', function () {
                 filterProducts('4');
             });
 
             // Search input event
-            $('#searchFood').on('input', function() {
+            $('#searchFood').on('input', function () {
                 filterProducts(currentFilter);
             });
 
             // Add to cart click handler
-            $(document).on('click', '.add-to-cart', function() {
+            $(document).on('click', '.add-to-cart', function () {
                 const productId = $(this).data('id');
                 const productName = $(this).data('name');
                 const productPrice = $(this).data('price');
@@ -408,7 +408,8 @@ include('server_side/check_session.php');
             });
 
             // Place order function
-            $(".invoice .btn-warning").on("click", function() {
+            // Replace the existing Place Order button click handler with this updated version
+            $(".invoice .btn-warning").on("click", function () {
                 if (cart.length === 0) {
                     Swal.fire({
                         icon: 'info',
@@ -428,206 +429,351 @@ include('server_side/check_session.php');
                     confirmButtonText: 'Yes, place order!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Show loading state
+                        // Add payment input prompt
                         Swal.fire({
-                            title: 'Processing Order...',
-                            text: 'Please wait while we process your order.',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
-                        });
-
-                        // send to server via ajax
-                        $.ajax({
-                            url: "server_side/place_order.php",
-                            type: "POST",
-                            contentType: "application/json",
-                            data: JSON.stringify({
-                                items: cart,
-                                subtotal: subtotal
-                            }),
-                            dataType: "json",
-                            success: function(response) {
-                                if (response.success) {
-                                    // Show receipt with order ID and print button
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Order Placed!',
-                                        html: `
-                <div class="text-center">
-                    <p>Your order has been placed successfully.</p>
-                    <div class="alert alert-success mt-3">
-                        <strong>Order ID:</strong> ${response.orderId}<br>
-                        <strong>Date:</strong> ${response.dateOfOrder}<br>
-                        <strong>Time:</strong> ${response.timeOfOrder}
-                    </div>
-                    <button id="print-receipt" class="btn btn-sm btn-outline-primary mt-3">
-                        <i class="fas fa-print me-2"></i>Print Receipt
-                    </button>
-                </div>
-            `,
-                                        didOpen: () => {
-                                            document.getElementById('print-receipt').addEventListener('click', function() {
-                                        // Generate printable receipt
-                                        const receiptWindow = window.open('', '_blank');
-                                        
-                                        // Create order data for QR code
-                                        const orderData = JSON.stringify({
-                                            orderId: response.orderId,
-                                            date: response.dateOfOrder,
-                                            time: response.timeOfOrder,
-                                            total: subtotal.toFixed(2),
-                                            items: cart.map(item => ({name: item.name, qty: item.quantity, price: item.price}))
-                                        });
-                                        
-                                        // Properly escape the data for JavaScript
-                                        const escapedOrderData = orderData.replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, '\\"');
-                                        
-                                        receiptWindow.document.write(`
-                                            <!DOCTYPE html>
-                                            <html>
-                                            <head>
-                                                <title>Receipt #${response.orderId}</title>
-                                                <style>
-                                                    body {
-                                                        font-family: 'Courier New', monospace;
-                                                        width: 300px;
-                                                        margin: 0 auto;
-                                                        padding: 10px;
-                                                    }
-                                                    .receipt-header, .receipt-footer {
-                                                        text-align: center;
-                                                        margin-bottom: 10px;
-                                                    }
-                                                    .divider {
-                                                        border-top: 1px dashed #000;
-                                                        margin: 10px 0;
-                                                    }
-                                                    table {
-                                                        width: 100%;
-                                                        border-collapse: collapse;
-                                                    }
-                                                    th, td {
-                                                        text-align: left;
-                                                        padding: 3px 0;
-                                                    }
-                                                    .amount {
-                                                        text-align: right;
-                                                    }
-                                                    .total {
-                                                        font-weight: bold;
-                                                        border-top: 1px solid #000;
-                                                        padding-top: 5px;
-                                                    }
-                                                    .qr-container {
-                                                        text-align: center;
-                                                        margin: 15px 0;
-                                                    }
-                                                    @media print {
-                                                        .no-print {
-                                                            display: none;
-                                                        }
-                                                    }
-                                                </style>
-                                            </head>
-                                            <body>
-                                                <div class="receipt-header">
-                                                    <h2>SHAWARMA POS</h2>
-                                                    <p>Receipt #${response.orderId}</p>
-                                                    <p>${response.dateOfOrder} - ${response.timeOfOrder}</p>
-                                                </div>
-                                                
-                                                <div class="divider"></div>
-                                                
-                                                <table>
-                                                    <tr>
-                                                        <th>Item</th>
-                                                        <th>Qty</th>
-                                                        <th class="amount">Price</th>
-                                                        <th class="amount">Total</th>
-                                                    </tr>
-                                        `);
-
-                                        // Add items to receipt
-                                        cart.forEach(item => {
-                                            receiptWindow.document.write(`
-                                                <tr>
-                                                    <td>${item.name}</td>
-                                                    <td>${item.quantity}</td>
-                                                    <td class="amount">₱${item.price.toFixed(2)}</td>
-                                                    <td class="amount">₱${item.totalPrice.toFixed(2)}</td>
-                                                </tr>
-                                            `);
-                                        });
-
-                                        // Add totals and footer
-                                        receiptWindow.document.write(`
-                                                    <tr class="total">
-                                                        <td colspan="2">Total:</td>
-                                                        <td colspan="2" class="amount">₱${subtotal.toFixed(2)}</td>
-                                                    </tr>
-                                                </table>
-                                                
-                                                <div class="divider"></div>
-                                                
-                                                <!-- QR Code Container -->
-                                                <div class="qr-container">
-                                                    <div id="qrcode"></div>
-                                                    <p style="font-size: 12px; margin-top: 5px;">Scan to verify order</p>
-                                                </div>
-
-                                                <div class="receipt-footer">
-                                                    <p>Thank you for your order!</p>
-                                                    <p>Please come again</p>
-                                                </div>
-                                                
-                                                <div class="no-print" style="text-align: center; margin-top: 20px;">
-                                                    <button onclick="window.print();" style="padding: 8px 16px; cursor: pointer;">
-                                                        Print Receipt
-                                                    </button>
-                                                </div>
-                                            </body>
-                                            </html>
-                                        `);
-                                        
-                                        // Add the QR code library and generate the QR code AFTER writing the document
-                                        receiptWindow.document.close();
-                                        
-                                        // Now add the script to the receipt window
-                                        const qrScript = receiptWindow.document.createElement('script');
-                                        qrScript.src = "assets/qrCode.min.js";
-                                        qrScript.onload = function() {
-                                            // Generate QR code after the script has loaded
-                                            const qr = receiptWindow.qrcode(0, 'M');
-                                            qr.addData(escapedOrderData);
-                                            qr.make();
-                                            receiptWindow.document.getElementById('qrcode').innerHTML = qr.createImgTag(4);
-                                        };
-                                        
-                                        receiptWindow.document.head.appendChild(qrScript);
-                                        receiptWindow.focus();
-                                    });
-                                        }
-                                    }).then(() => {
-                                        // Clear cart after order is placed
-                                        clearCart();
-                                    });
-                                } else {
-                                    // Show error message
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Order Failed',
-                                        text: response.message || 'There was an error processing your order. Please try again.',
-                                    });
-                                }
+                            title: 'Enter Payment Amount',
+                            input: 'number',
+                            inputLabel: `Total: ₱${subtotal.toFixed(2)}`,
+                            inputPlaceholder: 'Enter amount paid by customer',
+                            inputAttributes: {
+                                min: subtotal,
+                                step: '1',
+                                maxlength: '6', // Limit to 6 digits
+                                oninput: 'javascript: if(this.value.length > 6) this.value = this.value.slice(0, 6);' // Additional client-side validation
                             },
-                            error: function(xhr, status, error) {
-                                console.error("Error placing order:", error);
+                            showCancelButton: true,
+                            inputValidator: (value) => {
+                                const payment = parseFloat(value);
+                                if (!value || isNaN(payment)) {
+                                    return 'Please enter a valid amount';
+                                }
+                                if (payment < subtotal) {
+                                    return 'Payment amount must be at least equal to the total';
+                                }
+                                if (value.length > 6) {
+                                    return 'Maximum 6 digits allowed';
+                                }
+                            }
+                        }).then((paymentResult) => {
+                            if (paymentResult.isConfirmed) {
+                                const paymentAmount = parseFloat(paymentResult.value);
+                                const change = paymentAmount - subtotal;
+
+                                // Show loading state
                                 Swal.fire({
-                                    icon: 'error',
-                                    title: 'Server Error',
-                                    text: 'There was a problem connecting to the server. Please try again later.',
+                                    title: 'Processing Order...',
+                                    text: 'Please wait while we process your order.',
+                                    allowOutsideClick: false,
+                                    didOpen: () => {
+                                        Swal.showLoading();
+                                    }
+                                });
+
+                                // Send to server via ajax
+                                $.ajax({
+                                    url: "server_side/place_order.php",
+                                    type: "POST",
+                                    contentType: "application/json",
+                                    data: JSON.stringify({
+                                        items: cart,
+                                        subtotal: subtotal,
+                                        payment: paymentAmount,
+                                        change: change
+                                    }),
+                                    dataType: "json",
+                                    success: function (response) {
+                                        if (response.success) {
+                                            // Show receipt with order ID and print button
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Order Placed!',
+                                                html: `
+                    <div class="text-center">
+                        <p>Your order has been placed successfully.</p>
+                        <div class="alert alert-success mt-3">
+                            <strong>Order ID:</strong> ${response.orderId}<br>
+                            <strong>Date:</strong> ${response.dateOfOrder}<br>
+                            <strong>Time:</strong> ${response.timeOfOrder}<br>
+                            <strong>Payment:</strong> ₱${paymentAmount.toFixed(2)}<br>
+                            <strong>Change:</strong> ₱${change.toFixed(2)}
+                        </div>
+                        <button id="print-receipt" class="btn btn-sm btn-outline-primary mt-3">
+                            <i class="fas fa-print me-2"></i>Print Receipt
+                        </button>
+                    </div>
+                `,
+                                                didOpen: () => {
+                                                    document
+                                                        .getElementById(
+                                                            'print-receipt'
+                                                        )
+                                                        .addEventListener(
+                                                            'click',
+                                                            function () {
+                                                                // Generate printable receipt
+                                                                const
+                                                                    receiptWindow =
+                                                                        window
+                                                                            .open(
+                                                                                '',
+                                                                                '_blank'
+                                                                            );
+
+                                                                // Create order data for QR code
+                                                                const
+                                                                    orderData =
+                                                                        JSON
+                                                                            .stringify({
+                                                                                orderId: response
+                                                                                    .orderId,
+                                                                                date: response
+                                                                                    .dateOfOrder,
+                                                                                time: response
+                                                                                    .timeOfOrder,
+                                                                                total: subtotal
+                                                                                    .toFixed(
+                                                                                        2
+                                                                                    ),
+                                                                                payment: paymentAmount
+                                                                                    .toFixed(
+                                                                                        2
+                                                                                    ),
+                                                                                change: change
+                                                                                    .toFixed(
+                                                                                        2
+                                                                                    ),
+                                                                                items: cart
+                                                                                    .map(
+                                                                                        item =>
+                                                                                        ({
+                                                                                            name: item
+                                                                                                .name,
+                                                                                            qty: item
+                                                                                                .quantity,
+                                                                                            price: item
+                                                                                                .price
+                                                                                        })
+                                                                                    )
+                                                                            });
+
+                                                                // Properly escape the data for JavaScript
+                                                                const
+                                                                    escapedOrderData =
+                                                                        orderData
+                                                                            .replace(
+                                                                                /\\/g,
+                                                                                "\\\\"
+                                                                            )
+                                                                            .replace(
+                                                                                /'/g,
+                                                                                "\\'"
+                                                                            )
+                                                                            .replace(
+                                                                                /"/g,
+                                                                                '\\"'
+                                                                            );
+
+                                                                receiptWindow
+                                                                    .document
+                                                                    .write(`
+                                                <!DOCTYPE html>
+                                                <html>
+                                                <head>
+                                                    <title>Receipt #${response.orderId}</title>
+                                                    <style>
+                                                        body {
+                                                            font-family: 'Courier New', monospace;
+                                                            width: 300px;
+                                                            margin: 0 auto;
+                                                            padding: 10px;
+                                                        }
+                                                        .receipt-header, .receipt-footer {
+                                                            text-align: center;
+                                                            margin-bottom: 10px;
+                                                        }
+                                                        .divider {
+                                                            border-top: 1px dashed #000;
+                                                            margin: 10px 0;
+                                                        }
+                                                        table {
+                                                            width: 100%;
+                                                            border-collapse: collapse;
+                                                        }
+                                                        th, td {
+                                                            text-align: left;
+                                                            padding: 3px 0;
+                                                        }
+                                                        .amount {
+                                                            text-align: right;
+                                                        }
+                                                        .total {
+                                                            font-weight: bold;
+                                                            border-top: 1px solid #000;
+                                                            padding-top: 5px;
+                                                        }
+                                                        .qr-container {
+                                                            text-align: center;
+                                                            margin: 15px 0;
+                                                        }
+                                                        @media print {
+                                                            .no-print {
+                                                                display: none;
+                                                            }
+                                                        }
+                                                    </style>
+                                                </head>
+                                                <body>
+                                                    <div class="receipt-header">
+                                                        <h2>SHAWARMA POS</h2>
+                                                        <p>Receipt #${response.orderId}</p>
+                                                        <p>${response.dateOfOrder} - ${response.timeOfOrder}</p>
+                                                    </div>
+                                                    
+                                                    <div class="divider"></div>
+                                                    
+                                                    <table>
+                                                        <tr>
+                                                            <th>Item</th>
+                                                            <th>Qty</th>
+                                                            <th class="amount">Price</th>
+                                                            <th class="amount">Total</th>
+                                                        </tr>
+                                            `);
+
+                                                                // Add items to receipt
+                                                                cart.forEach(
+                                                                    item => {
+                                                                        receiptWindow
+                                                                            .document
+                                                                            .write(`
+                                                    <tr>
+                                                        <td>${item.name}</td>
+                                                        <td>${item.quantity}</td>
+                                                        <td class="amount">₱${item.price.toFixed(2)}</td>
+                                                        <td class="amount">₱${item.totalPrice.toFixed(2)}</td>
+                                                    </tr>
+                                                `);
+                                                                    }
+                                                                );
+
+                                                                // Add totals and footer with payment and change
+                                                                receiptWindow
+                                                                    .document
+                                                                    .write(`
+                                                        <tr class="total">
+                                                            <td colspan="2">Total:</td>
+                                                            <td colspan="2" class="amount">₱${subtotal.toFixed(2)}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">Payment:</td>
+                                                            <td colspan="2" class="amount">₱${paymentAmount.toFixed(2)}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">Change:</td>
+                                                            <td colspan="2" class="amount">₱${change.toFixed(2)}</td>
+                                                        </tr>
+                                                    </table>
+                                                    
+                                                    <div class="divider"></div>
+                                                    
+                                                    <!-- QR Code Container -->
+                                                    <div class="qr-container">
+                                                        <div id="qrcode"></div>
+                                                        <p style="font-size: 12px; margin-top: 5px;">Scan to verify order</p>
+                                                    </div>
+
+                                                    <div class="receipt-footer">
+                                                        <p>Thank you for your order!</p>
+                                                        <p>Please come again</p>
+                                                    </div>
+                                                    
+                                                    <div class="no-print" style="text-align: center; margin-top: 20px;">
+                                                        <button onclick="window.print();" style="padding: 8px 16px; cursor: pointer;">
+                                                            Print Receipt
+                                                        </button>
+                                                    </div>
+                                                </body>
+                                                </html>
+                                            `);
+
+                                                                // Add the QR code library and generate the QR code AFTER writing the document
+                                                                receiptWindow
+                                                                    .document
+                                                                    .close();
+
+                                                                // Now add the script to the receipt window
+                                                                const
+                                                                    qrScript =
+                                                                        receiptWindow
+                                                                            .document
+                                                                            .createElement(
+                                                                                'script'
+                                                                            );
+                                                                qrScript
+                                                                    .src =
+                                                                    "assets/qrCode.min.js";
+                                                                qrScript
+                                                                    .onload =
+                                                                    function () {
+                                                                        // Generate QR code after the script has loaded
+                                                                        const
+                                                                            qr =
+                                                                                receiptWindow
+                                                                                    .qrcode(
+                                                                                        0,
+                                                                                        'M'
+                                                                                    );
+                                                                        qr.addData(
+                                                                            escapedOrderData
+                                                                        );
+                                                                        qr
+                                                                            .make();
+                                                                        receiptWindow
+                                                                            .document
+                                                                            .getElementById(
+                                                                                'qrcode'
+                                                                            )
+                                                                            .innerHTML =
+                                                                            qr
+                                                                                .createImgTag(
+                                                                                    4
+                                                                                );
+                                                                    };
+
+                                                                receiptWindow
+                                                                    .document
+                                                                    .head
+                                                                    .appendChild(
+                                                                        qrScript
+                                                                    );
+                                                                receiptWindow
+                                                                    .focus();
+                                                            });
+                                                }
+                                            }).then(() => {
+                                                // Clear cart after order is placed
+                                                clearCart();
+                                            });
+                                        } else {
+                                            // Show error message
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Order Failed',
+                                                text: response
+                                                    .message ||
+                                                    'There was an error processing your order. Please try again.',
+                                            });
+                                        }
+                                    },
+                                    error: function (xhr, status, error) {
+                                        console.error("Error placing order:",
+                                            error);
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Server Error',
+                                            text: 'There was a problem connecting to the server. Please try again later.',
+                                        });
+                                    }
                                 });
                             }
                         });

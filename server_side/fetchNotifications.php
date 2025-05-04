@@ -6,6 +6,7 @@ header('Content-Type: application/json');
 
 // Get user role from session
 $userRole = $_SESSION['user_role'];
+$userId = $_SESSION['user_id'];
 
 // Get filter parameters
 $search = isset($_GET['search']) ? mysqli_real_escape_string($connection, $_GET['search']) : '';
@@ -16,7 +17,9 @@ $query = "SELECT * FROM notifications WHERE notificationFlag = 0";
 
 // If not admin (role != 1), exclude request notifications (type 0)
 if ($userRole != 0) {
-    $query .= " AND (notificationType != 0)";
+    $query .= " AND (notificationType != 0) AND (notificationTarget = $userId OR notificationTarget = 0)";
+} else {
+    $query .= " AND (notificationType != 2 )";
 }
 
 // search filter if provided

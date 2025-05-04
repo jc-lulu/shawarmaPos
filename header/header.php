@@ -1,6 +1,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Styles -->
+<link rel="icon" type="image/png" href="assets/logo.avif">
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="assets/sweetalert.js"></script>

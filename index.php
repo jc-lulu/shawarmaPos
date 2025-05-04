@@ -73,9 +73,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $insertStmt->execute();
                     }
                 }
+                $role = $_SESSION['user_role'];
+                $userId = $_SESSION['user_id'];
 
+                if ($role != 0) {
+                    $notifCountSql = "SELECT COUNT(*) as count FROM notifications WHERE notificationStatus = 0 AND notificationType != 0 AND (notificationTarget = $userId OR notificationTarget = 0)";
+                } else {
+                    $notifCountSql = "SELECT COUNT(*) as count FROM notifications WHERE notificationStatus = 0 AND notificationType != 2";
+                }
                 // Get count of all active notifications
-                $notifCountSql = "SELECT COUNT(*) as count FROM notifications WHERE notificationStatus = 0";
+                // $notifCountSql = "SELECT COUNT(*) as count FROM notifications WHERE notificationStatus = 0";
                 $notifCountResult = $connection->query($notifCountSql);
                 if ($notifCountResult && $notifCountRow = $notifCountResult->fetch_assoc()) {
                     $notificationCount = $notifCountRow['count'];

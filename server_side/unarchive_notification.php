@@ -4,6 +4,9 @@ include('check_session.php');
 
 $response = array('success' => false, 'message' => '');
 
+// Debug output - remove in production
+error_log('POST data: ' . print_r($_POST, true));
+
 // Check if notification ID was provided
 if (!isset($_POST['notificationId']) || empty($_POST['notificationId'])) {
     $response['message'] = 'No notification selected';
@@ -15,11 +18,13 @@ try {
     // Get the notification ID from the POST request
     $notificationId = intval($_POST['notificationId']);
 
-    // Prepare the SQL statement - using id instead of notificationId to match your database schema
-    $sql = "UPDATE notifications SET notificationFlag = 0 WHERE notificationFlag = 1 AND notificationId = ?";
+    // Debug output - remove in production
+    error_log('Notification ID after conversion: ' . $notificationId);
+
+    // The SQL uses notificationId to match your database schema
+    $sql = "UPDATE notifications SET notificationFlag = 0 WHERE notificationId = ?";
 
     $stmt = $connection->prepare($sql);
-    // Just bind the notification ID parameter - no need for userId here
     $stmt->bind_param("i", $notificationId);
 
     // Execute the query
@@ -29,7 +34,9 @@ try {
             $response['success'] = true;
             $response['message'] = 'Notification successfully unarchived';
         } else {
-            $response['message'] = 'Notification not found or already unarchived';
+
+            $response['message'] = 'Notification not found or already unarchived. ID: ' . $notificationId;
+
         }
     } else {
         $response['message'] = 'Error executing query: ' . $stmt->error;

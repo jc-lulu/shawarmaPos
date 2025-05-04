@@ -3,11 +3,25 @@ include('../cedric_dbConnection.php');
 include('check_session.php');
 
 $response = [];
+$userId = $_SESSION['user_id'];
+
 
 try {
+    $sqlSelect = "SELECT role FROM userstable WHERE usersId = $userId";
+    $result = mysqli_query($connection, $sqlSelect);
+    $row = mysqli_fetch_assoc($result);
+    $userRole = $row['role'];
     // Query to get archived notifications
-    $sql = "SELECT * FROM notifications 
-            WHERE notificationFlag = 1";
+
+
+    if ($userRole != 0) {
+        //AND notificationTarget = $userId OR notificationType = 1  //include message type
+        $sql = "SELECT * FROM notifications 
+            WHERE notificationFlag = 1 AND (notificationTarget = $userId OR notificationTarget = 0) AND notificationType != 0 ORDER BY notificationId DESC"; //include message type
+    } else {
+        $sql = "SELECT * FROM notifications 
+            WHERE notificationFlag = 1 AND notificationType != 2"; //exclude message type
+    }
 
     $stmt = $connection->prepare($sql);
     if ($stmt === false) {

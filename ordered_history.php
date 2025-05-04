@@ -20,7 +20,8 @@ include('server_side/check_session.php');
             <h1 class="page-title">ORDER HISTORY</h1>
 
             <div class="data-table">
-                <table id="orderHistoryTable" class="table table-hover text-center display responsive nowrap" style="width:100%">
+                <table id="orderHistoryTable" class="table table-hover text-center display responsive nowrap"
+                    style="width:100%">
                     <thead>
                         <tr>
                             <th>History ID</th>
@@ -53,12 +54,19 @@ include('server_side/check_session.php');
                                     title='View Order Details'>
                                     <i class='fas fa-eye'></i>
                                 </button>";
-                                
+
                                 echo "<button class='btn btn-print btn-action print-receipt-btn' 
                                     data-id='" . $row['orderId'] . "'
                                     data-bs-toggle='tooltip' 
                                     title='Print Receipt'>
                                     <i class='fas fa-print'></i>
+                                </button>";
+
+                                echo "<button class='btn btn-print btn-action archive-btn' 
+                                    data-id='" . $row['orderId'] . "'
+                                    data-bs-toggle='tooltip' 
+                                    title='Archive Receipt'>
+                                    <i class='fas fa-box-archive'></i>
                                 </button>";
 
                                 echo "</td>";
@@ -77,7 +85,8 @@ include('server_side/check_session.php');
     </div>
 
     <!-- Order Details Modal -->
-    <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -97,7 +106,8 @@ include('server_side/check_session.php');
     </div>
 
     <!-- Receipt Print Modal -->
-    <div class="modal fade receipt-modal" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
+    <div class="modal fade receipt-modal" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -125,10 +135,10 @@ include('server_side/check_session.php');
     ?>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Initialize tooltips
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
 
@@ -150,35 +160,35 @@ include('server_side/check_session.php');
             $('.dt-buttons').addClass('mb-3');
 
             // View order details
-            $(document).on('click', '.view-details-btn', function() {
-            const orderId = $(this).data('id');
-    
-             // Fetch order items from orderedItemHistory
-            $.ajax({
-                url: 'server_side/fetchOrderItems.php',
-                type: 'GET',
-                data: {
-                    orderId: orderId
-                },
-                dataType: 'json',
-                success: function(items) {
-                    if (items.length === 0) {
-                        Swal.fire({
-                            icon: 'info',
-                            title: 'No Items Found',
-                            text: `No items found for Order #${orderId}`
-                        });
-                        return;
-                    }
-                    
-                    // Get order details from the table
-                    const orderRow = $(`button[data-id="${orderId}"]`).closest('tr');
-                    const date = orderRow.find('td:eq(3)').text();
-                    const time = orderRow.find('td:eq(4)').text();
-                    const totalCost = orderRow.find('td:eq(2)').text();
-                    
-                    // Create receipt-style HTML for the modal
-                    let receiptHTML = `
+            $(document).on('click', '.view-details-btn', function () {
+                const orderId = $(this).data('id');
+
+                // Fetch order items from orderedItemHistory
+                $.ajax({
+                    url: 'server_side/fetchOrderItems.php',
+                    type: 'GET',
+                    data: {
+                        orderId: orderId
+                    },
+                    dataType: 'json',
+                    success: function (items) {
+                        if (items.length === 0) {
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'No Items Found',
+                                text: `No items found for Order #${orderId}`
+                            });
+                            return;
+                        }
+
+                        // Get order details from the table
+                        const orderRow = $(`button[data-id="${orderId}"]`).closest('tr');
+                        const date = orderRow.find('td:eq(3)').text();
+                        const time = orderRow.find('td:eq(4)').text();
+                        const totalCost = orderRow.find('td:eq(2)').text();
+
+                        // Create receipt-style HTML for the modal
+                        let receiptHTML = `
                         <div class="receipt-print">
                             <div class="receipt-header">
                                 <h2 class="text-center">SHAWARMA POS</h2>
@@ -199,13 +209,14 @@ include('server_side/check_session.php');
                                 </thead>
                                 <tbody>
                     `;
-                    
-                    let totalAmount = 0;
-                    items.forEach(item => {
-                        const itemTotal = parseFloat(item.productPrice) * parseInt(item.Quantity);
-                        totalAmount += itemTotal;
-                        
-                        receiptHTML += `
+
+                        let totalAmount = 0;
+                        items.forEach(item => {
+                            const itemTotal = parseFloat(item.productPrice) * parseInt(
+                                item.Quantity);
+                            totalAmount += itemTotal;
+
+                            receiptHTML += `
                             <tr>
                                 <td class="text-start">${item.productName}</td>
                                 <td class="text-center">${item.Quantity}</td>
@@ -213,9 +224,9 @@ include('server_side/check_session.php');
                                 <td class="text-end">₱${itemTotal.toFixed(2)}</td>
                             </tr>
                         `;
-                    });
-                    
-                    receiptHTML += `
+                        });
+
+                        receiptHTML += `
                                 </tbody>
                             </table>
                             
@@ -229,26 +240,26 @@ include('server_side/check_session.php');
                             </div>
                         </div>
                     `;
-                    
-                    // Update modal content and show
-                    $('.order-items-container').html(receiptHTML);
-                    $('#orderDetailsModal').modal('show');
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error loading order details:", error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Failed to Load Details',
-                        text: 'There was a problem retrieving order details. Please try again later.'
-                    });
-                }
+
+                        // Update modal content and show
+                        $('.order-items-container').html(receiptHTML);
+                        $('#orderDetailsModal').modal('show');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error loading order details:", error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Failed to Load Details',
+                            text: 'There was a problem retrieving order details. Please try again later.'
+                        });
+                    }
+                });
             });
-        });
 
             // Print receipt
-            $(document).on('click', '.print-receipt-btn', function() {
+            $(document).on('click', '.print-receipt-btn', function () {
                 const orderId = $(this).data('id');
-                
+
                 // Fetch order details
                 $.ajax({
                     url: 'server_side/fetchOrderItems.php',
@@ -257,7 +268,7 @@ include('server_side/check_session.php');
                         orderId: orderId
                     },
                     dataType: 'json',
-                    success: function(items) {
+                    success: function (items) {
                         if (items.length === 0) {
                             Swal.fire({
                                 icon: 'info',
@@ -271,11 +282,12 @@ include('server_side/check_session.php');
                         const orderRow = $(`button[data-id="${orderId}"]`).closest('tr');
                         const date = orderRow.find('td:eq(3)').text();
                         const time = orderRow.find('td:eq(4)').text();
-                        
+
                         // Calculate total
                         let totalAmount = 0;
                         items.forEach(item => {
-                            totalAmount += parseFloat(item.productPrice) * parseInt(item.Quantity);
+                            totalAmount += parseFloat(item.productPrice) * parseInt(item
+                                .Quantity);
                         });
 
                         // Create receipt HTML
@@ -308,7 +320,8 @@ include('server_side/check_session.php');
                         `;
 
                         items.forEach(item => {
-                            const itemTotal = parseFloat(item.productPrice) * parseInt(item.Quantity);
+                            const itemTotal = parseFloat(item.productPrice) * parseInt(
+                                item.Quantity);
                             receiptHTML += `
                                 <tr>
                                     <td class="text-start">${item.productName}</td>
@@ -344,7 +357,7 @@ include('server_side/check_session.php');
                         $('#receiptContent').html(receiptHTML);
                         $('#receiptModal').modal('show');
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error("Error loading receipt:", error);
                         Swal.fire({
                             icon: 'error',
@@ -356,7 +369,7 @@ include('server_side/check_session.php');
             });
 
             // Print receipt button
-            $('#printReceipt').on('click', function() {
+            $('#printReceipt').on('click', function () {
                 const printContent = document.getElementById('receiptContent').innerHTML;
                 const originalContent = document.body.innerHTML;
 
@@ -403,7 +416,7 @@ include('server_side/check_session.php');
                 document.body.innerHTML = originalContent;
 
                 // Reattach event handlers after restoring content
-                $(document).ready(function() {
+                $(document).ready(function () {
                     location.reload();
                 });
             });
