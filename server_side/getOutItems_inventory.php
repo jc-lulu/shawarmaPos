@@ -10,7 +10,7 @@ try {
     // Query to get all OUT items (type = 1)
     $query = "SELECT productId, productName, quantity, dateOfIn, dateOfOut, transactionStatus 
               FROM inventory 
-              WHERE type = 1 AND transactionStatus = 1";
+              WHERE type = 1 AND transactionStatus = 1 ORDER BY  dateOfOut DESC";
 
     $result = $connection->query($query);
 
